@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-sm-12">
+       <div class="card">
+          <div class="card-body">
+             <form action="{% url 'scheme' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                   <div class="col-12">
+                      <h5 class="form-title"><span>Add scheme</span></h5>
+                   </div>
+                        {% include 'includes/messages.html' %}
+                        
+                   <div class="col-sm-11">
+                      <div class="form-group">
+                         <label>Scheme Name</label>
+                         <input type="text" class="form-control" name="scheme_name">
+                      </div>
+                   </div>
+                   <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Amount(in percentage)</label>
+                        <input type="number" style="width:110px;" class="form-control" name="scheme" placeholder="%">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>photo</label>
+                        <input type="file" class="form-control" name="scheme_photo">
+                     </div>
+                  </div>
+                 <div class="col-12">
+                      <button type="submit" class="btn btn-primary">Add scheme</button>
+                   </div>
+             </form>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ {% comment %} list {% endcomment %}
+ <div class="row">
+    <div class="col-sm-12">
+       <div class="card card-table">
+          <div class="card-body">
+             <div class="table-responsive">
+                <table class="table table-hover table-center mb-0 datatable" id="table_id">
+                   <thead>
+                      <tr>
+                         <th>ID</th>
+                         <th>scheme Name</th>
+                         <th>Scheme</th>
+                         <th>Created at</th>
+                         <th>Action</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                    {% if schemes %}
+                     {% for i in schemes %}
+                      <tr>
+                         <td>SB{{i.id}}</td>
+                         <td>{{i.name}}</td>
+                         <td>{{ i.scheme }}</td>
+                         <td>{{ i.created_at|date:"F d, Y" }}</td>
+                         <td>
+                            <div class="actions">
+                              {% if user.is_superuser %}
+                            <a href="{% url 'delete_scheme' i.id %}" class="btn btn-sm bg-danger-light" onclick="return confirm('Are you sure you want to delete this item?');">
+                            <i class="fas fa-trash"></i>
+                            </a>
+                            {% endif %}
+                         </div>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                      {% endif %}
+                   </tbody>
+                </table>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+</div>
+
+{% endblock %}

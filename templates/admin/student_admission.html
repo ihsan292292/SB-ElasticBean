@@ -1,0 +1,199 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row">
+    <div class="col-sm-12">
+       <div class="card">
+          <div class="card-body">
+             <form action="{% url 'student_admission' %}" method="post"  enctype="multipart/form-data">
+                {% csrf_token %}
+                   <div class="col-12">
+                      <h5 class="form-title"><span>Add Student</span></h5>
+                   </div>
+                        {% include 'includes/messages.html' %}
+                   <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                         <label>Profile pic</label>
+                         <input type="file" class="form-control" name="profile_pic">
+                      </div>
+                   </div>
+                   <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                         <label>Name(as in SSLC)</label>
+                         <input type="text" class="form-control" name="name">
+                      </div>
+                   </div>
+                   <div class="col-12 col-sm-6">
+                      <div class="form-group">
+                         <label>Name of guardian</label>
+                         <input type="text" class="form-control" name="gaurd_name">
+                      </div>
+                   </div>
+                   <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                       <label>Email</label>
+                       <input type="text" class="form-control" name="email">
+                    </div>
+                 </div>
+                 <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                       <label>Phone</label>
+                       <input type="text" class="form-control" name="phone">
+                    </div>
+                 </div>
+                 <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                     <label>Address</label>
+                     <textarea class="form-control" name="address"></textarea>
+                  </div>
+                 </div>
+                 <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                     <label>Gender</label>
+                     <select class="form-control" name="gender">
+                        <option>Select Gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Others">Others</option>
+                     </select>
+                  </div>
+                 </div>
+                 <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" class="form-control" name="dob" id="dob">
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="text" class="form-control" name="age" id="age" readonly>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                     <label>Branch</label>
+                     <select class="form-control" name="branch_id" id="branch_id">
+                        <option>Select Branch</option>
+                        {% for b in branches %}
+                            <option value="{{ b.id }}">{{ b.branch_name }}</option>
+                        {% endfor %}
+                    </select>
+                  </div>
+                 </div>
+                 <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                     <label>Course</label>
+                     <select class="form-control" name="course_id" id="course_id">
+                        <option>Select Course</option>
+                        {% for i in course %}
+                        <option value="{{ i.id }}" data-duration="{{ i.duration }}" data-fee="{{ i.fee }}">{{ i.name }}</option>
+                        {% endfor %}
+                     </select>
+                  </div>
+                 </div>
+                 <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Duration (in months)</label>
+                        <input type="text" class="form-control" name="duration" id="duration" readonly>
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                      <label>Fee</label>
+                      <input type="text" class="form-control" name="fee" id="fee" readonly>
+                  </div>
+              </div>
+              <div class="col-12 col-sm-6">
+               <div class="form-group">
+                   <label>Scheme</label>
+                   <select class="form-control" name="scheme" id="scheme_id">
+                     <option>Select Scheme</option>
+                     {% for i in schemes %}
+                     <option id="{{i.id}}" data-scheme="{{ i.scheme }}">{{i.name}}</option>
+                     {% endfor %}
+                 </select>
+               </div>
+            </div>
+              <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                      <label>Reduction Fee</label>
+                      <input type="text" class="form-control" id="calculated_fee" readonly>
+                  </div>
+              </div>
+          
+              <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                      <label>Final Fee</label>
+                      <input type="text" class="form-control" name="final_fee" id="final_fee" readonly>
+                  </div>
+              </div>
+              <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                      <label hidden>Schema Amount</label>
+                      <span id="schema_amount" hidden></span>
+                  </div>
+              </div>
+              <div class="col-12">
+                  <button type="submit" class="btn btn-primary">Add Student</button>
+              </div>
+             </form>
+          </div>
+       </div>
+    </div>
+ </div>
+
+ <script>
+   document.getElementById('course_id').addEventListener('change', function() {
+      var selectedOption = this.options[this.selectedIndex];
+      var duration = selectedOption.getAttribute('data-duration');
+      var fee = selectedOption.getAttribute('data-fee');
+      document.getElementById('duration').value = duration;
+      document.getElementById('fee').value = fee;
+  
+      calculateFinalFee();
+  });
+
+    document.getElementById('dob').addEventListener('change', function() {
+        var dob = new Date(this.value);
+        var today = new Date();
+        var age = today.getFullYear() - dob.getFullYear();
+        var m = today.getMonth() - dob.getMonth();
+        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+            age--;
+        }
+        document.getElementById('age').value = age;
+    });
+
+   // Call calculateFinalFee() when schema is changed
+   document.getElementById('scheme_id').addEventListener('change', function() {
+      calculateFinalFee();
+   });
+
+   // Function to calculate both fees
+   function calculateFinalFee() {
+      var selectedOptionId = document.getElementById('scheme_id').id; // Retrieve the value of the selected option (which should be its ID)
+      var selectedSchema = parseFloat(document.getElementById('scheme_id').options[document.getElementById('scheme_id').selectedIndex].dataset.scheme);
+      var courseFee = parseFloat(document.getElementById('fee').value);
+      var schemaAmount = courseFee * selectedSchema;
+      var finalFee = courseFee - schemaAmount;
+
+      // Display calculated fee
+      var calculatedFee = courseFee - finalFee;
+      document.getElementById('calculated_fee').value = calculatedFee.toFixed(2);
+      // Display reduced amount
+      document.getElementById('schema_amount').innerText = schemaAmount.toFixed(2);
+      // Display final fee
+      document.getElementById('final_fee').value = finalFee.toFixed(2);
+
+      // Log final fee for debugging
+      console.log('Final Fee:', finalFee.toFixed(2));
+   }
+
+   // Calculate final fee initially
+   calculateFinalFee();
+
+</script>
+
+{% endblock %}

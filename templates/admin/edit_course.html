@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-sm-12">
+       <div class="card">
+          <div class="card-body">
+             <form action="{% url 'update_course' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                   <div class="col-12">
+                      <h5 class="form-title"><span>Update Course</span></h5>
+                   </div>
+                        {% include 'includes/messages.html' %}
+                        
+                   <div class="col-sm-11">
+                      <div class="form-group">
+                         <label>Course Name</label>
+                         <input type="text" class="form-control" name="course_name" value="{{course.name}}">
+                      </div>
+                   </div>
+                   <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Course Duration</label>
+                        <input type="text" class="form-control" name="course_duration" value="{{course.duration}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Course Fee</label>
+                        <input type="text" class="form-control" name="course_fee" value="{{course.fee}}">
+                     </div>
+                  </div>
+                 <br>
+                 <div class="col-sm-11">
+                  <div class="form-group">
+                     <label>Course Description</label>
+                     <input type="text" class="form-control" name="course_description" value="{{course.description}}">
+                  </div>
+               </div>
+               <div class="col-sm-11">
+                  <div class="form-group">
+                    <label>Photo</label>
+                    {% if course.photo %}
+                        <img src="{{ course.photo.url }}" alt="Profile Picture" style="max-width: 100px;">
+                    {% else %}
+                        <p>No photo selected</p>
+                    {% endif %}
+                    <input type="file" class="form-control-file" name="photo" accept="image/*">
+                    <input type="text" class="form-control" name="course_id" value="{{ course.id }}" hidden>
+                  </div>
+               </div>
+                 <div class="col-12">
+                      <button type="submit" class="btn btn-primary">Update Course</button>
+                   </div>
+             </form>
+          </div>
+       </div>
+    </div>
+ </div>
+
+{% endblock %}

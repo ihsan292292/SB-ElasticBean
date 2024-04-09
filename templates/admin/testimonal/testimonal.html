@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="row">
+   <div class="col-sm-12">
+      <div class="card">
+         <div class="card-body">
+            <form action="{% url 'test' %}" method="post" enctype="multipart/form-data">
+               {% csrf_token %}
+                  <div class="col-12">
+                     <h5 class="form-title"><span>Add Testimonial</span></h5>
+                  </div>
+                       {% include 'includes/messages.html' %}
+                       
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" class="form-control" name="name">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                    <div class="form-group">
+                       <label>Designation</label>
+                       <input type="text" style="width:200px;" class="form-control" name="designation">
+                    </div>
+                 </div>
+                 <div class="col-sm-11">
+                   <div class="form-group">
+                      <label>Message</label>
+                      <input type="text" class="form-control" name="message">
+                   </div>
+                </div>
+                 <div class="col-sm-11">
+                    <div class="form-group">
+                       <label>photo</label>
+                       <input type="file" class="form-control" name="photo">
+                    </div>
+                 </div>
+                <div class="col-12">
+                     <button type="submit" class="btn btn-primary">Add testimonial</button>
+                  </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
+ {% comment %} list {% endcomment %}
+ <div class="row">
+    <div class="col-sm-12">
+       <div class="card card-table">
+          <div class="card-body">
+             <div class="table-responsive">
+                <table class="table table-hover table-center mb-0 datatable" id="table_id">
+                   <thead>
+                      <tr>
+                         <th>ID</th>
+                         <th>Name</th>
+                         <th>Designation</th>
+                         <th>Message</th>
+                         <th>Action</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                     {% for i in tests %}
+                      <tr>
+                         <td>SB{{i.id}}</td>
+                         <td>{{i.name}}</td>
+                         <td>{{i.designation}}</td>
+                         <td>{{i.message }}</td>
+                         <td>
+                            <div class="actions">
+                            <a href="{% url 'delete_testimonial' i.id %}" class="btn btn-sm bg-danger-light" onclick="return confirm('Are you sure you want to delete this item?');">
+                            <i class="fas fa-trash"></i>
+                            </a>
+                         </div>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                   </tbody>
+                </table>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+</div>
+
+{% endblock %}

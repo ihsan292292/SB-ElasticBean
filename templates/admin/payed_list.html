@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="content container-fluid">
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Payed List</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="subjects.html">Payment</a></li>
+                    <li class="breadcrumb-item active">List of Successfull Payment</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% comment %} list {% endcomment %}
+    <div class="row">
+        <div class="col-sm-12">
+           <div class="card card-table">
+              <div class="card-body">
+                 <div class="table-responsive">
+                    <table class="table table-hover table-center mb-0 datatable" id="table_id">
+                       <thead>
+                          <tr>
+                             <th>ID</th>
+                             <th>Name</th>
+                             <th>Payed Amount</th>
+                             <th>Way of Payment</th>
+                             <th>Phone</th>
+                             <th>Payed Date</th>
+                             <th>Balance</th>
+                             <th>Action</th>
+                          </tr>
+                       </thead>
+                       <tbody>
+                         {% for id,student_id,name,payed_amount,way_of_pay,phone,payed_date,branch_code,balance in payments %}
+                          <tr>
+                             <td>SB{{branch_code}}{{student_id}}{{id}}</td>
+                             <td>{{name}}</td>
+                             <td>{{payed_amount}}</td>
+                             <td>{{way_of_pay}}</td>
+                             <td>{% if phone %}{{phone}}{% else %}Not available{% endif %}</td>
+                             <td>{{payed_date|date:"F d, Y" }}</td>
+                             <td>{{balance}}</td>
+                             <td> 
+                                <form action="{% url 'view_receipt' id %}" method="get">
+                                    <button type="submit" class="btn btn-success">View Receipt</button>
+                                </form>
+                                
+                             </td>
+                          </tr>
+                          {% endfor %}
+                       </tbody>
+
+                    </table>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </div>
+</div>
+
+{% endblock %}

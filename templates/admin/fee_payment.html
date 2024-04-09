@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="content container-fluid">
+    <div class="page-header">
+        <div class="row align-items-center">
+            <div class="col">
+                <h3 class="page-title">Fee Payment</h3>
+                <ul class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="subjects.html">Payment</a></li>
+                    <li class="breadcrumb-item active">Fee Payment</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <form method="post" action="{% url 'fee_payment' student.id  %}">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-12">
+                                <h5 class="form-title"><span>Payment Information</span></h5>
+                                {% include 'includes/messages.html' %}
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Amount to Pay</label>
+                                    <input type="text" class="form-control" name="amount_to_pay" value="{{final_fee}}" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Pay</label>
+                                    <input type="text" class="form-control" name="pay" placeholder="₹000" required>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6">
+                                <div class="form-group">
+                                    <label>Payment Option</label>
+                                    <select class="form-control" name="payment_option" id="payment_option" required>
+                                        <option>Select Option</option>
+                                        <option value="online">Online</option>
+                                        <option value="cash">Cash</option>
+                                        <option value="cheque">Cheque</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6" id="phone_number_field" style="display: none;">
+                                <div class="form-group">
+                                    <label>Phone Number</label>
+                                    <input type="text" class="form-control" name="phone">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <button type="submit" class="btn btn-primary" id="makePaymentButton">Make Payment</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %} list {% endcomment %}
+    <div class="row">
+        <div class="col-sm-12">
+           <div class="card card-table">
+              <div class="card-body">
+                 <div class="table-responsive">
+                    <table class="table table-hover table-center mb-0 datatable" id="table_id">
+                       <thead>
+                          <tr>
+                             <th>ID</th>
+                             <th>Name</th>
+                             <th>Payed Amount</th>
+                             <th>Way of Payment</th>
+                             <th>Phone</th>
+                             <th>Payed Date</th>
+                             <th>Action</th>
+                          </tr>
+                       </thead>
+                       <tbody>
+                         {% for i in payments %}
+                          <tr>
+                             <td>SB{{i.student.branch_id.branch_code}}{{i.student.id}}{{i.id}}</td>
+                             <td>{{i.student.name}}</td>
+                             <td>{{i.amount}}</td>
+                             <td>{{i.pay_option}}</td>
+                             <td {{ i.phone_number }}></td>
+                             <td>{{ i.created_at|date:"F d, Y" }}</td>
+                             <td> 
+                                <form action="{% url 'view_receipt' i.id %}" method="get">
+                                    <button type="submit" class="btn btn-success">View Receipt</button>
+                                </form>
+                             </td>
+                          </tr>
+                          {% endfor %}
+                       </tbody>
+
+                    </table>
+                 </div>
+              </div>
+           </div>
+        </div>
+     </div>
+</div>
+
+<script>
+    document.getElementById('payment_option').addEventListener('change', function () {
+        var phoneField = document.getElementById('phone_number_field');
+        if (this.value === 'online') {
+            phoneField.style.display = 'block';
+        } else {
+            phoneField.style.display = 'none';
+        }
+    });
+
+    document.getElementById('makePaymentButton').addEventListener('click', function () {
+        // Display the confirmation dialog
+        if (confirm('Are you sure you want to make payment?')) {
+            // If the user confirms, submit the form
+            document.querySelector('form').submit();
+        }
+    });
+</script>
+
+{% endblock %}

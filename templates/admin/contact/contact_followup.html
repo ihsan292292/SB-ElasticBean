@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-sm-12">
+       <div class="card">
+          <div class="card-body">
+             <form action="{% url 'followup' cuser.id %}" method="post">
+                {% csrf_token %}
+                   <div class="col-12">
+                      <h5 class="form-title"><span>Follow Up</span></h5>
+                   </div>
+                        {% include 'includes/messages.html' %}
+                        
+                   <div class="col-sm-11">
+                      <div class="form-group">
+                         <label>Name</label>
+                          <input type="text" class="form-control" name="name" value="{{cuser.name}}">
+                         <input type="text" class="form-control" name="cuser_id" value="{{cuser.id}}" hidden >
+                      </div>
+                   </div>
+                   <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>email</label>
+                         <input type="text" class="form-control" name="email" value="{{cuser.email}}">
+            
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>phone</label>
+                         <input type="text" class="form-control" name="phone" value="{{cuser.phone}}">
+            
+                     </div>
+                  </div>
+                  <div class="col-12 col-sm-6">
+                     <div class="form-group">
+                           <label>Course</label>
+                           <select class="form-control" name="course_id">
+                              {% if cuser.course %}
+                                  {% for course in courses %}
+                                      {% if course.id == cuser.course %}
+                                          <option value="{{ course.id }}" selected>{{ course.name }}</option>
+                                      {% endif %}
+                                  {% endfor %}
+                                  {% for course in courses %}
+                                      {% if course.id != cuser.course %}
+                                          <option value="{{ course.id }}">{{ course.name }}</option>
+                                      {% endif %}
+                                  {% endfor %}
+                              {% else %}
+                                  <option>Select Course</option>
+                                  {% for course in courses %}
+                                      <option value="{{ course.id }}">{{ course.name }}</option>
+                                  {% endfor %}
+                              {% endif %}
+                          </select>
+                        </div>
+                   </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>message</label>
+                         <input type="text" class="form-control" name="message" value="{{cuser.message}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>remarks</label>
+                         <textarea  class="form-control" name="remarks"></textarea>
+                     </div>
+                  </div>
+                 <br>
+                 <div class="col-12">
+                      <button type="submit" class="btn btn-primary">Updte Info</button>
+                   </div>
+             </form>
+          </div>
+       </div>
+    </div>
+ </div>
+
+{% endblock %}
