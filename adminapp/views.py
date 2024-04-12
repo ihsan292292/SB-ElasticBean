@@ -25,17 +25,20 @@ def login(request):
         
         # Query the database directly
         try:
+            context = {
+                "message":message
+            }
             user = User.objects.get(email=email)
             if user.check_password(password):
                 request.session['user_id'] = user.id
                 return redirect('admin_home')
             else:
-                print("User found but password didn't match:", user)
+                message = "User found but password didn't match:"
         except User.DoesNotExist:
-            print("User not found:", email)
+            message = "User not found for",email
        
             
-    return render(request, 'registration/login.html') 
+    return render(request, 'registration/login.html',context) 
 
 def dologout(request):
     logout(request)
