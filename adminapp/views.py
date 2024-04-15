@@ -440,10 +440,10 @@ def delete_branch(request,id):
 def view_contacts(request):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
-    user = contacted_user.objects.all()
+    user_dtl = contacted_user.objects.all()
     context = {
         'user':user,
-        'user':user
+        'user_dtl':user_dtl
     }
     return render(request,'admin/contact/view_contact.html',context)
 
