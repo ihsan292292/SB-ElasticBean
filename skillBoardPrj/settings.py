@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-)+msqd1z54g6ncq$0i@vk)4^s(eq6*lr(-(xrf!(mav2jxfe!(
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["production.eba-ggt7yk5g.us-west-2.elasticbeanstalk.com","staging.eba-ggt7yk5g.us-west-2.elasticbeanstalk.com","skillboardedu.in"]
+ALLOWED_HOSTS = ["production.eba-ggt7yk5g.us-west-2.elasticbeanstalk.com","staging.eba-ggt7yk5g.us-west-2.elasticbeanstalk.com","skillboardedu.in","www.skillboardedu.in"]
 
 
 # Application definition
