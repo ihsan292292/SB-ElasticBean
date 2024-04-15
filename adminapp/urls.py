@@ -7,7 +7,7 @@ urlpatterns = [
     
     # login
     
-    path('',login, name='login'),
+    path('',custom_login, name='login'),
     path('',logout, name='logout'),
     
     path('admin/home',home,name='admin_home'),

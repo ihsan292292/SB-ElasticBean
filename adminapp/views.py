@@ -6,7 +6,7 @@ from userapp.models import *
 from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login as django_login, logout
+from django.contrib.auth import authenticate, login, logout
 # register,login
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
@@ -14,38 +14,48 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 
 
+
 # Create your views here.
 
 # login 
 
-def login(request):
+def custom_login(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
-        
-        # Query the database directly
+
+        if not email or not password:
+            return render(request, 'registration/login.html', {'error': 'Both email and password are required.'})
+
         try:
-            context = {
-                "message":message
-            }
             user = User.objects.get(email=email)
-            if user.check_password(password):
-                request.session['user_id'] = user.id
-                return redirect('admin_home')
-            else:
-                message = "User found but password didn't match:"
         except User.DoesNotExist:
-            message = "User not found for",email
-       
-            
-    return render(request, 'registration/login.html',context) 
+            return render(request, 'registration/login.html', {'error': 'User does not exist.'})
+
+        if not user.check_password(password):
+            return render(request, 'registration/login.html', {'error': 'Invalid password.'})
+
+        if not user.is_active:
+            return render(request, 'registration/login.html', {'error': 'User account is not active.'})
+
+        # Authenticating the user
+        user = authenticate(request, username=user.username, password=password)
+
+        if user is not None:
+            request.session['user_id'] = user.id
+            login(request, user)
+            return redirect('admin_home')
+        else:
+            return render(request, 'registration/login.html', {'error': 'Unable to log in.'})
+    else:
+        return render(request, 'registration/login.html')
+    
 
 def dologout(request):
     logout(request)
     return redirect('login') 
 
 
-@login_required
 def home(request):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)

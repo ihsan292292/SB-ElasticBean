@@ -13,7 +13,10 @@
             <div class="container">
               <div class="left">
                 <div class="login">Login</div>
-                <div class="eula">By logging in you agree to the ridiculously long terms that you didn't bother to read <h4 style="color:red;">{{message}}</h4></div>
+                <div class="eula">By logging in you agree to the ridiculously long terms that you didn't bother to read <h4 style="color:red;">
+                  {% if error %}
+                  <p>{{error}}</p>
+              {% endif %}</h4></div>
               </div>
               <div class="right">
                 <svg viewBox="0 0 320 300">
