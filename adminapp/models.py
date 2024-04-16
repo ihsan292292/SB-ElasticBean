@@ -15,6 +15,9 @@ class Course(models.Model):
     def __str__(self):
         return self.name
 
+    def delete(self, *args, **kwargs):
+        super().delete(*args, **kwargs)
+
 class Branch(models.Model):
     branch_name = models.CharField(max_length=50)
     branch_code = models.CharField(max_length=10)

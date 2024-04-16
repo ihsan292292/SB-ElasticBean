@@ -27,7 +27,7 @@ urlpatterns = [
     # payment
     path('payment/<str:id>',fee_payment,name='fee_payment'),
     path('view-reciept/<int:id>',view_reciept,name="view_receipt"),
-    path('pdf/<int:id>', generate_pdf, name='download_pdf'),
+    # path('pdf/<int:id>', generate_pdf, name='download_pdf'),
     path('payed-list/',payed_list,name='payed_list'),
     # path('download_receipt/<int:payment_id>/', download_receipt, name='download_receipt'),
     

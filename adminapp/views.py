@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
 from django.contrib import messages
 from datetime import datetime
@@ -285,10 +285,14 @@ def update_course(request):
 
 
 @login_required
-def delete_course(request,id):
-    course = Course.objects.get(id = id)
-    course.delete()
-    messages.success(request,'Course are Successfully Deleted !')
+def delete_course(request, id):
+    course = get_object_or_404(Course, id=id) 
+    try:
+        course.delete()
+        messages.success(request, 'Course has been successfully deleted!')
+    except Exception as e:
+        messages.error(request, f'Error deleting course: {str(e)}')
+    
     return redirect('view_course')
 
 # Fee payment Section 
@@ -347,30 +351,30 @@ def view_reciept(request,id):
     return render(request,'admin/reciept/reciept.html',context=context)
 
 
-@login_required
-def generate_pdf(request, id):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
-    payment = Payment.objects.get(id=id)
-    student_id = payment.student.id
-    branch_code = payment.student.branch_id.branch_code
-    context = {
-        'payment': payment,
-        'student_id': student_id,
-        'branch_code': branch_code,
-        'user': user
-    }
+# @login_required
+# def generate_pdf(request, id):
+#     user_id = request.session['user_id']
+#     user = User.objects.get(id=user_id)
+#     payment = Payment.objects.get(id=id)
+#     student_id = payment.student.id
+#     branch_code = payment.student.branch_id.branch_code
+#     context = {
+#         'payment': payment,
+#         'student_id': student_id,
+#         'branch_code': branch_code,
+#         'user': user
+#     }
 
-    # Render the HTML template to a string
-    receipt_html = render_to_string('admin/view_reciept.html', context=context)
+#     # Render the HTML template to a string
+#     receipt_html = render_to_string('admin/view_reciept.html', context=context)
 
-    # Generate the PDF file
-    pdf = pdfkit.from_string(str(receipt_html), options={"enable-local-file-access": ""})
+#     # Generate the PDF file
+#     pdf = pdfkit.from_string(str(receipt_html), options={"enable-local-file-access": ""})
     
 
-    # Return the PDF file as a response
-    response = HttpResponse(pdf, content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
+#     # Return the PDF file as a response
+#     response = HttpResponse(pdf, content_type='application/pdf')
+#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
     return response
 
 
