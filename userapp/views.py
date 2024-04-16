@@ -10,12 +10,12 @@ def INDEX(request):
     courses = Course.objects.all()
     staffs = Staff.objects.all()
     bgs = Bgimages.objects.all()
-    home = Home.objects.get(id=1)
+    # home = Home.objects.get(id=1)
     context = {
         'courses':courses,
         'staffs':staffs,
         'bgs':bgs,
-        'home':home
+        # 'home':home
     }
 
     return render(request,'index.html',context=context)
