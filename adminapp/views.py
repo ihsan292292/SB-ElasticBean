@@ -12,6 +12,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.contrib.auth.hashers import check_password
+
 
 
 
@@ -32,14 +34,11 @@ def custom_login(request):
         except User.DoesNotExist:
             return render(request, 'registration/login.html', {'error': 'User does not exist.'})
 
-        if not user.password:
+        if not check_password(password, user.password):
             return render(request, 'registration/login.html', {'error': 'Invalid password.'})
 
         if not user.is_active:
             return render(request, 'registration/login.html', {'error': 'User account is not active.'})
-
-        # # Authenticating the user
-        # user = authenticate(request, username=user.username, password=password)
 
         if user is not None:
             request.session['user_id'] = user.id
