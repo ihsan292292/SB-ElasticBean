@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'skillBoardPrj.wsgi.application'
 #     }
 # }
 
-# Replace it with your DATABASES.
+# # Replace it with your DATABASES.
 # DATABASES = {
 #     'default': dj_database_url.config(
 #         default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3")
