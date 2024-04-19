@@ -56,8 +56,17 @@ def dologout(request):
 
 
 def home(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    try:
+        user_id = request.session['user_id']
+        user = User.objects.get(id=user_id)
+    except KeyError:
+        # User_id is not found in session
+        return render(request, 'registration/login.html', {'error': 'User ID not found in session. Please log in.'})
+    except User.DoesNotExist:
+        # User with the provided ID does not exist
+        return render(request, 'registration/login.html', {'error': 'User does not exist.'})
+    
+    # Proceed with other logic if the user is found
     student_count = Student.objects.all().count()
     branch_count = Branch.objects.all().count()
     course_count = Course.objects.all().count()
@@ -65,22 +74,21 @@ def home(request):
     pmna_students = Student.objects.filter(branch_id=2).count()
     student = Student.objects.all()
 
-    student_gender_male = Student.objects.filter(gender = 'Male').count()
-    student_gender_female = Student.objects.filter(gender = 'Female').count()
-
+    student_gender_male = Student.objects.filter(gender='Male').count()
+    student_gender_female = Student.objects.filter(gender='Female').count()
 
     context = {
-        'student_count':student_count,
-        'course_count':course_count,
-        'subject_count':branch_count,
-        'student_gender_male':student_gender_male,
-        'student_gender_female':student_gender_female,
-        'student':student,
-        'pkd_students':pkd_students,
-        'pmna_students':pmna_students,
-        'user':user
+        'student_count': student_count,
+        'course_count': course_count,
+        'subject_count': branch_count,
+        'student_gender_male': student_gender_male,
+        'student_gender_female': student_gender_female,
+        'student': student,
+        'pkd_students': pkd_students,
+        'pmna_students': pmna_students,
+        'user': user
     }
-    return render(request,'admin/home.html',context=context)
+    return render(request, 'admin/home.html', context=context)
 
 
 @login_required
