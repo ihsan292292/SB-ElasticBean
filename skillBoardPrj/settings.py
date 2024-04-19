@@ -108,8 +108,11 @@ DATABASES = {
         'NAME': 'skillboard',
         'USER': 'admin',
         'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': 'sbdb.c3086qmei5az.us-west-2.rds.amazonaws.com',   # Or an IP Address that your DB is hosted on
+        'HOST': 'sbdb.c3086qmei5az.us-west-2.rds.amazonaws.com',
         'PORT': '3306',
+        'OPTIONS': {
+            'sql_mode': 'STRICT_TRANS_TABLES',
+        },
     }
 }
 
