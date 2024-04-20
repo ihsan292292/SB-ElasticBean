@@ -811,20 +811,18 @@ def delete_bg_image(request,id):
 @login_required
 def home_titles(request):
     home_dtl = Home.objects.all()
-    about = None
     if About.objects.first() is not None:
-        about = About.objects.first()
+        ab = About.objects.first()
     if request.method == 'POST':
         qoute1 = request.POST.get('qoute1')
         qoute2 = request.POST.get('qoute2')
         by = request.POST.get('by')
-        about = request.POST.get('about')
+        aboutin = request.POST.get('about')
         home = Home(qoute1=qoute1,qoute2=qoute2,by=by)
-        ab = About.objects.first()
         if ab is None:
-            about_save = About(about=about)
+            about_save = About(about=aboutin)
             about_save.save()
-        ab.about = about
+        ab.about = aboutin
         # Save the updated Home object
         ab.save()
         home.save()
@@ -833,7 +831,7 @@ def home_titles(request):
     
     context = {
         "home_dtl":home_dtl,
-        "about":about
+        "about":ab
     }
     
     return render(request, 'admin/home/home_page_edit.html',context=context)
