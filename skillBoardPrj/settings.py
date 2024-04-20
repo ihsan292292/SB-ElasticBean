@@ -104,15 +104,12 @@ WSGI_APPLICATION = 'skillBoardPrj.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql', 
-        'NAME': 'skillboard',
-        'USER': 'admin',
+        'ENGINE': 'django.db.backends.postgresql', 
+        'NAME': 'postgres',
+        'USER': 'postgres',
         'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': 'sbdb.c3086qmei5az.us-west-2.rds.amazonaws.com',
-        'PORT': '3306',
-        'OPTIONS': {
-            'sql_mode': 'STRICT_TRANS_TABLES',
-        },
+        'HOST': 'database-1.c3086qmei5az.us-west-2.rds.amazonaws.com',
+        'PORT': '5432'
     }
 }
 
