@@ -14,11 +14,13 @@ django-crispy-forms==2.1
 gunicorn==21.2.0
 idna==3.6
 jmespath==1.0.1
-psycopg
+mysql==0.0.3
+mysqlclient==2.2.4
 packaging==24.0
 pathspec==0.10.1
 pillow==10.3.0
 pkgconfig==1.5.5
+psycopg==3.1.18
 python-dateutil==2.9.0.post0
 python-dotenv==1.0.1
 PyYAML==6.0.1
