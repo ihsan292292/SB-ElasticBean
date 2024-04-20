@@ -19,12 +19,18 @@ class contacted_user(models.Model):
         return self.name
     
 class Home(models.Model):
-    title = models.CharField(max_length=50,default="Learning Today, Leading Tomorrow")
-    subtitle = models.CharField(default="Skill Board Education",max_length=50)
-    about = models.TextField(default = "We are making skilled students for future")
+    qoute1 = models.CharField(max_length=50,default="Learning Today, Leading Tomorrow")
+    qoute2 = models.CharField(default="Skill Board Education",max_length=50)
+    by = models.CharField(max_length=50)
     
     def __str__(self):
-        return self.title
+        return self.qoute1
+    
+class About(models.Model):
+    about = models.TextField(default="skillboard education pandikkad",null=True)
+    
+    def __str__(self):
+        return self.about
     
 class Bgimages(models.Model):
     bgimage = models.ImageField(upload_to='Background')

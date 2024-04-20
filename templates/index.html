@@ -16,6 +16,8 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css">
+
 
   <!-- Vendor CSS Files -->
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -23,6 +25,7 @@
   <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet">
   <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet">
   <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet">
+  
 
   <!-- Main CSS File -->
   <link href="{% static 'assets/css/main.css' %}" rel="stylesheet">
@@ -120,16 +123,19 @@
       <img id="backgroundImage" alt="" data-aos="fade-in">
       <div class="container">
         <h2 data-aos="fade-up" data-aos-delay="100">
-            {{ home.title }}
-          <br>
-            {{ home.subtitle }}
+            "<span id="quote1"></span>
+            <br>
+            <span id="quote2"></span>"
         </h2>
-        <p data-aos="fade-up" data-aos-delay="200">
-            {{ home.about }}
-        </p>
-        {% comment %} <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
-          <a href="{% url 'contact' %}" class="btn-get-started">Contact Us</a>
-        </div> {% endcomment %}
+        <p data-aos="fade-up" data-aos-delay="200" style="margin-left:700px;">
+          - <span id="quoteBy"></span>
+      </p>
+      <p data-aos="fade-up" data-aos-delay="200">
+        <span>Learn</span>
+        <span>with</span>
+        <span style="color: #5733FF; font-weight: bold;">Skill</span>
+        <span style="color: #5733FF; font-weight: bold;">Board</span>
+    </p>
       </div>
     </section><!-- /Hero Section -->
 
@@ -231,6 +237,7 @@
       </div>
 
     </section><!-- /Why Us Section --> {% endcomment %}
+    <!-- End Section Title -->
 
     <!-- Courses Section -->
     <section id="courses" class="courses section">
@@ -259,6 +266,37 @@
         </div>
       </div>
     </section><!-- /Courses Section -->
+
+     <!-- Testimonials Section -->
+     <section id="testimonials" class="testimonials section">
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+          <h2>Testimonials</h2>
+          <p class="">What are they saying</p>
+      </div><!-- End Section Title -->
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+          <div class="swiper">
+    
+              <div class="swiper-wrapper">
+                  {% for testimonial in testimonials %}
+                  <div class="swiper-slide">
+                      <div class="testimonial-wrap">
+                          <div class="testimonial-item">
+                              <img src="{{ testimonial.photo.url }}" class="testimonial-img" alt="">
+                              <h3>{{ testimonial.name }}</h3>
+                              <h4>{{ testimonial.designation }}</h4>
+                              <p>{{ testimonial.message }}</p>
+                          </div>
+                      </div>
+                  </div><!-- End testimonial item -->
+                  {% endfor %}
+              </div>
+              <div class="swiper-pagination"></div>
+          </div>
+      </div>
+  </section>
+  <!-- Testimonials Section -->
+
 
     <!-- Trainers Index Section -->
     <section id="trainers-index" class="section trainers-index">
@@ -334,11 +372,20 @@
   <script src="{% static 'assets/vendor/glightbox/js' %}/glightbox.min.js' %}"></script>
   <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
   <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
+  <!-- Include Swiper library JS -->
+  <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 
   <!-- Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
 
   <script>
+    // Define quotes array with objects containing quote and author
+    const quotes = [
+      {% for ho in home %}
+        { quote: "{{ho.qoute1}}\n{{ho.qoute2}}", author: "{{ho.by}}" },
+      {% endfor %}
+    ];
+
     const images = [
       {% for bg in bgs %}
       "{{ bg.bgimage.url }}",
@@ -347,14 +394,22 @@
 
     let currentIndex = 0;
     const backgroundImage = document.getElementById('backgroundImage');
+    const quote1Element = document.getElementById('quote1');
+    const quote2Element = document.getElementById('quote2');
+    const quoteByElement = document.getElementById('quoteBy');
 
     function changeBackgroundImage() {
-      backgroundImage.style.opacity = 0;
-      setTimeout(() => {
-        currentIndex = (currentIndex + 1) % images.length;
-        backgroundImage.src = images[currentIndex];
-        backgroundImage.style.opacity = 1;
-      }, 1000);
+        backgroundImage.style.opacity = 0;
+        setTimeout(() => {
+            currentIndex = (currentIndex + 1) % images.length;
+            backgroundImage.src = images[currentIndex];
+            backgroundImage.style.opacity = 1;
+            // Update quotes based on current index
+            const currentQuote = quotes[currentIndex];
+            quote1Element.textContent = currentQuote.quote.split('\n')[0];
+            quote2Element.textContent = currentQuote.quote.split('\n')[1];
+            quoteByElement.textContent = currentQuote.author;
+        }, 1000);
     }
 
     // Change background image immediately upon page load
@@ -362,7 +417,34 @@
 
     // Change background image every 3 seconds
     setInterval(changeBackgroundImage, 3000);
-  </script>
+</script>
+
+<script>
+        var swiper = new Swiper('.swiper', {
+            loop: true,
+            speed: 600,
+            autoplay: {
+                delay: 5000,
+            },
+            slidesPerView: 'auto',
+            pagination: {
+                el: '.swiper-pagination',
+                type: 'bullets',
+                clickable: true,
+            },
+            breakpoints: {
+                320: {
+                    slidesPerView: 1,
+                    spaceBetween: 40
+                },
+                1200: {
+                    slidesPerView: 2,
+                    spaceBetween: 20
+                }
+            }
+        });
+</script>
+
 
 </body>
 

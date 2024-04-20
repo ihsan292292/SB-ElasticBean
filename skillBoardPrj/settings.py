@@ -96,22 +96,22 @@ WSGI_APPLICATION = 'skillBoardPrj.wsgi.application'
 # }
 
 # # Replace it with your DATABASES.
-# DATABASES = {
-#     'default': dj_database_url.config(
-#         default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3")
-#     )
-# }
-
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql', 
-        'NAME': 'postgres',
-        'USER': 'postgres',
-        'PASSWORD': os.getenv('PASSWORD'),
-        'HOST': 'database-1.c3086qmei5az.us-west-2.rds.amazonaws.com',
-        'PORT': '5432'
-    }
+    'default': dj_database_url.config(
+        default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3")
+    )
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql', 
+#         'NAME': 'postgres',
+#         'USER': 'postgres',
+#         'PASSWORD': os.getenv('PASSWORD'),
+#         'HOST': 'database-1.c3086qmei5az.us-west-2.rds.amazonaws.com',
+#         'PORT': '5432'
+#     }
+# }
 
 
 # Password validation

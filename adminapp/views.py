@@ -784,3 +784,63 @@ def delete_testimonal(request,id):
     test.delete()
     messages.success(request,'testimonall Deleted !!')
     return redirect('test')
+
+
+@login_required
+def add_bg_image(request):
+    bgs = Bgimages.objects.all()
+    context = {
+        'bgs':bgs
+    }
+    if request.method == 'POST':
+        image = request.FILES.get('image')
+        print("imagesssss",image)
+        bgimages = Bgimages(bgimage = image)
+        bgimages.save()
+        messages.success(request,"Background image added successfully!!")
+        return redirect('add_bg_image')
+    return render(request,'admin/home/bg_image.html',context=context)
+
+@login_required
+def delete_bg_image(request,id):
+    bg = Bgimages.objects.get(id = id)
+    bg.delete()
+    messages.success(request,'Image Deleted !!')
+    return redirect('add_bg_image')
+
+@login_required
+def home_titles(request):
+    home_dtl = Home.objects.all()
+    about = None
+    if About.objects.first() is not None:
+        about = About.objects.first()
+    if request.method == 'POST':
+        qoute1 = request.POST.get('qoute1')
+        qoute2 = request.POST.get('qoute2')
+        by = request.POST.get('by')
+        about = request.POST.get('about')
+        home = Home(qoute1=qoute1,qoute2=qoute2,by=by)
+        ab = About.objects.first()
+        if ab is None:
+            about_save = About(about=about)
+            about_save.save()
+        ab.about = about
+        # Save the updated Home object
+        ab.save()
+        home.save()
+        messages.success(request, "Changes saved successfully!")
+        return redirect('home_titles')
+    
+    context = {
+        "home_dtl":home_dtl,
+        "about":about
+    }
+    
+    return render(request, 'admin/home/home_page_edit.html',context=context)
+
+@login_required
+def delete_home_qoute(request,id):
+    home = Home.objects.get(id = id)
+    home.delete()
+    messages.success(request,'Qoute in Home deleted!!')
+    return redirect('home_titles')

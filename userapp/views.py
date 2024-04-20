@@ -10,12 +10,15 @@ def INDEX(request):
     courses = Course.objects.all()
     staffs = Staff.objects.all()
     bgs = Bgimages.objects.all()
+    home = Home.objects.all()
+    testimonials = Testimonal.objects.all()
     # home = Home.objects.get(id=1)
     context = {
         'courses':courses,
         'staffs':staffs,
         'bgs':bgs,
-        # 'home':home
+        'home':home,
+        'testimonials':testimonials
     }
 
     return render(request,'index.html',context=context)
@@ -49,14 +52,16 @@ def about(request):
     courses = Course.objects.all().count()
     branches = Branch.objects.all().count()
     testimonials = Testimonal.objects.all()
-    about = Home.objects.all()
+    about = About.objects.first()
+    team = Staff.objects.all()
     context = {
         'testimonials':testimonials,
         'about':about,
         'students':students,
         'staffs':staffs,
         'courses':courses,
-        'branches':branches
+        'branches':branches,
+        'team':team
     }
     return render(request,'about.html',context=context)
 
@@ -69,45 +74,3 @@ def course(request):
         'about':about
     }
     return render(request,'courses.html',context=context)
-
-
-def add_bg_image(request):
-    bgs = Bgimages.objects.all()
-    context = {
-        'bgs':bgs
-    }
-    if request.method == 'POST':
-        image = request.FILES.get('image')
-        print("imagesssss",image)
-        bgimages = Bgimages(bgimage = image)
-        bgimages.save()
-        messages.success(request,"Background image added successfully!!")
-        return redirect('add_bg_image')
-    return render(request,'admin/home/bg_image.html',context=context)
-
-
-def delete_bg_image(request,id):
-    bg = Bgimages.objects.get(id = id)
-    bg.delete()
-    messages.success(request,'Image Deleted !!')
-    return redirect('add_bg_image')
-
-
-def home_titles(request):
-    home = Home.objects.get(id=1)
-    context = {
-        'home':home
-    }
-    # home edit
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        subtitle = request.POST.get('subtitle')
-        about = request.POST.get('about')
-        home.title = title
-        home.subtitle = subtitle
-        home.about = about
-        home.save()
-        messages.success(request,"successfully changed!!")
-        return redirect('home_titles')
-    return render(request,'admin/home/home_page_edit.html',context=context)
-        

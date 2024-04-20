@@ -16,23 +16,29 @@
                        
                   <div class="col-sm-11">
                      <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" class="form-control" name="title" value="{{home.title}}">
+                        <label>Qoute first line</label>
+                        <input type="text" class="form-control" name="qoute1">
                      </div>
                   </div>
                   <div class="col-sm-11">
                     <div class="form-group">
-                       <label>Sub title</label>
-                       <input type="text" class="form-control" name="subtitle" value="{{home.subtitle}}">
+                       <label>2nd Line</label>
+                       <input type="text" class="form-control" name="qoute2">
                     </div>
                  </div>
                  <div class="col-sm-11">
-                   <div class="form-group">
-                      <label>About</label>
-                      <textarea class="form-control" name="about">{{home.about}}</textarea>
-                   </div>
-                </div>
-
+                  <div class="form-group">
+                     <label>by</label>
+                     <textarea class="form-control" name="by"></textarea>
+                  </div>
+               </div>
+                  <div class="col-sm-11" style="background: lightgreen;height:100px;">
+                     <div class="form-group">
+                        <label>About</label>
+                        <textarea class="form-control" name="about">{{about.about}}</textarea>
+                     </div>
+                  </div>
+                  <br>
                 <div class="col-12">
                      <button type="submit" class="btn btn-primary">Make Changes</button>
                   </div>
@@ -40,6 +46,50 @@
          </div>
       </div>
    </div>
+</div>
+
+{% comment %} list {% endcomment %}
+
+<div class="row">
+   <div class="col-sm-12">
+      <div class="card card-table">
+         <div class="card-body">
+            <div class="table-responsive">
+               <table class="table table-hover table-center mb-0 datatable" id="table_id">
+                  <thead>
+                     <tr>
+                        <th>ID</th>
+                        <th>Qoute</th>
+                        <th>By</th>
+                        <th>Action</th>
+                     </tr>
+                  </thead>
+                  <tbody>
+                   {% if home_dtl %}
+                    {% for i in home_dtl %}
+                     <tr>
+                        <td>SB{{i.id}}</td>
+                        <td>{{i.qoute1}},{{i.qoute2}}</td>
+                        <td>{{i.by}}</td>
+                        <td>
+                           <div class="actions">
+                             {% if user.is_superuser %}
+                           <a href="{% url 'delete_home_qoute' i.id %}" class="btn btn-sm bg-danger-light" onclick="return confirm('Are you sure you want to delete this item?');">
+                           <i class="fas fa-trash"></i>
+                           </a>
+                           {% endif %}
+                        </div>
+                       </td>
+                     </tr>
+                     {% endfor %}
+                     {% endif %}
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
 </div>
 
 {% endblock %}
