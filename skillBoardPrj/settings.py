@@ -102,27 +102,27 @@ WSGI_APPLICATION = 'skillBoardPrj.wsgi.application'
 #     )
 # }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql', 
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': os.getenv('PASSWORD'),
-#         'HOST': 'database-1.c3086qmei5az.us-west-2.rds.amazonaws.com',
-#         'PORT': '5432'
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql', 
-        'NAME': 'sbdb1',
-        'USER': 'psqlihsan',
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
+        'NAME': 'postgres',
+        'USER': 'postgres',
+        'PASSWORD': os.getenv('PASSWORD'),
+        'HOST': 'database-1.c3086qmei5az.us-west-2.rds.amazonaws.com',
         'PORT': '5432'
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql', 
+#         'NAME': 'sbdb1',
+#         'USER': 'psqlihsan',
+#         'PASSWORD': 'postgres',
+#         'HOST': 'localhost',
+#         'PORT': '5432'
+#     }
+# }
 
 
 # Password validation
