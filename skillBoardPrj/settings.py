@@ -46,7 +46,8 @@ INSTALLED_APPS = [
     'adminapp',
     'active_link',
     'crispy_forms',
-    'crispy_bootstrap4'
+    'crispy_bootstrap4',
+    'storages'
 ]
 
 MIDDLEWARE = [
@@ -180,13 +181,36 @@ MEDIA_URL = '/media/'
 
 WKHTMLTOPDF_PATH = os.path.join(BASE_DIR, 'Reciept', 'wkhtmltopdf')
 
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_USE_TLS = True
-# EMAIL_PORT = 587
-# EMAIL_HOST_USER = 'skillboardeducationpandikkad@gmail.com'
-# EMAIL_HOST_PASSWORD ='lxxovbvgsmovdnkx'
+AWS_STORAGE_BUCKET_NAME = 'skibbloard2008'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+AWS_S3_OBJECT_PARAMETERS = {'CacheControl':'max:age=86400'}
+AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = 'public-read'
+
+# Static files (CSS, JavaScript, Images)
+AWS_LOCATION = 'assets'
+STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{AWS_LOCATION}/'
+STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+
+
+DEFAULT_FILE_STORAGE = 'skillBoardPrj.storages.MediaStore'
+
+
+# STORAGES = {
+
+#     # Media file (image) management   
+#     "default": {
+#         "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+#     },
+    
+#     # CSS and JS file management
+#     "staticfiles": {
+#         "BACKEND": "storages.backends.s3boto3.S3StaticStorage",
+#     },
+# }
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
