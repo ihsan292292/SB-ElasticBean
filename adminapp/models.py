@@ -8,7 +8,7 @@ class Course(models.Model):
     duration = models.CharField(max_length=50)
     fee = models.IntegerField()
     photo = models.ImageField(upload_to='courses',null=True)
-    description = models.CharField(max_length=50,null=True)
+    description = models.TextField(null=True)
     # created_at = models.DateTimeField(auto_now_add=True)
     # updated_at = models.DateTimeField(auto_now=True)
     
