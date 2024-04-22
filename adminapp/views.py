@@ -594,6 +594,7 @@ def view_staff(request):
 def edit_staff(request,id):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
+    print("user  :",user_id)
     staff = Staff.objects.get(id=id)
     departments = Department.objects.all()
     branches = Branch.objects.all()
@@ -619,15 +620,17 @@ def update_staff(request):
         department_id = request.POST.get('department_id')
         phone = request.POST.get('phone')
         password_in = request.POST.get('password')
-        print("Password:",password_in)
+        print("Password:",staff_id)
 
+        staff = Staff.objects.get(id = staff_id)
         department = Department.objects.get(id=department_id)
-        user = User.objects.get(id=staff_id)
+        user = User.objects.get(id=staff.user.id)
+        print("staff.user.id",staff.user.id)
         user.email = email
         user.is_staff = True
         user.is_superuser = False
         
-        staff = Staff.objects.get(id = staff_id)
+        
         
         if password_in is None or password_in == '':
             password = name
@@ -654,7 +657,7 @@ def update_staff(request):
         messages.success(request,"Record Are Successfully Updated !")
         return redirect('view_staff')
         
-    return render(request,'admin/edit_staff.html')
+    return render(request,'admin/staff/edit_staff.html')
 
 
 @login_required
@@ -794,7 +797,6 @@ def add_bg_image(request):
     }
     if request.method == 'POST':
         image = request.FILES.get('image')
-        print("imagesssss",image)
         bgimages = Bgimages(bgimage = image)
         bgimages.save()
         messages.success(request,"Background image added successfully!!")

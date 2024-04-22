@@ -47,7 +47,7 @@
                      {% for i in bgs %}
                       <tr>
                          <td>SB{{i.id}}</td>
-                         <td><img src="/media/{{i.bgimage}}" width="100px" height="50px"></td>
+                         <td><img src="{{i.bgimage.url}}" width="100px" height="50px"></td>
                          <td>
                             <div class="actions">
                             <a href="{% url 'delete_bg_image' i.id %}" class="btn btn-sm bg-danger-light" onclick="return confirm('Are you sure you want to delete this item?');">
