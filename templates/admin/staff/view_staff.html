@@ -49,7 +49,9 @@
                             <td>{{i.id}}</td>
                             <td>
                                <h2 class="table-avatar">
-                                  <a href="staff-details.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="/media/{{i.profile_pic}}"></a>
+                                 {% if i.profile_pic %}
+                                  <a href="staff-details.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{i.profile_pic.url}}"></a>
+                                  {% endif %}
                                   <a href="staff-details.html">{{i.name}}</a>
                                </h2>
                             </td>
