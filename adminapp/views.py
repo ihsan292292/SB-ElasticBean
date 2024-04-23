@@ -250,11 +250,6 @@ def view_course(request):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
     course = Course.objects.all()
-    photo = []
-    for i in course:
-        photo.append(i.photo)
-    print("phooo",photo)
-    print("urll",photo.url)
     context = {
         'course':course,
         "user":user
