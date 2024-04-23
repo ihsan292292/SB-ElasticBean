@@ -303,26 +303,35 @@
 
 
     <!-- Trainers Index Section -->
-    <section id="trainers-index" class="section trainers-index">
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Our Team</h2>
-        <p class="">Our Team</p>
-      </div>
+    <section id="courses-list" class="section courses-list">
       <div class="container">
         <div class="row">
-          {% for staff in staffs %}
-          <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}">
-            <div class="member">
-              {% if staff.profile_pic %}
-              <img src="{{staff.profile_pic.url}}" class="img-fluid" alt="">
+          {% for course in courses %}
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch course-item
+              {% if not 'accounting' in course.description|lower %}
+                {% if 'html' not in course.description|lower and
+                      'css' not in course.description|lower and
+                      'python' not in course.description|lower and
+                      'c++' not in course.description|lower %}
+                  hidden
+                {% endif %}
+            " data-aos="zoom-in" data-aos-delay="{{ forloop.counter }}">
+            <div class="course-item">
+              {% if course.photo %}
+                <img src="{{ course.photo.url }}" class="img-fluid" alt="...">
+              {% else %}
+                <img src="https://skibbloard2008.s3.eu-north-1.amazonaws.com/media/courses/logo.jpg" class="img-fluid" alt="...">
               {% endif %}
-              <div class="member-content">
-                <h4>{{ staff.name }}</h4>
-                <span>{{ staff.department }}</span>
-                <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
+              <div class="course-content">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <p class="category">{{ course.duration }}</p>
+                  <p class="price">₹{{ course.fee }}</p>
+                </div>
+                <h3><a href="{{ course.url }}">{{ course.name }}</a></h3>
+                <p class="description">{{ course.description }}</p>
               </div>
             </div>
-          </div><!-- End Team Member -->
+          </div>
           {% endfor %}
         </div>
       </div>
@@ -396,7 +405,9 @@
 
     const images = [
       {% for bg in bgs %}
-      "{{ bg.bgimage.url }}",
+        {% if bg.bgimage %}
+          "{{ bg.bgimage.url }}",
+        {% endif %}
       {% endfor %}
     ];
 
@@ -452,6 +463,74 @@
             }
         });
 </script>
+
+<script>
+  const searchInput = document.getElementById('courseSearchInput');
+  const filterSelect = document.getElementById('courseFilterSelect');
+
+  searchInput.addEventListener('input', filterCourses);
+  filterSelect.addEventListener('change', filterCourses);
+
+  function filterCourses() {
+    const searchText = searchInput.value.toLowerCase();
+    const selectedCategory = filterSelect.value.toLowerCase();
+
+    const courseItems = document.querySelectorAll('.course-item');
+
+    courseItems.forEach(function(courseItem) {
+      const courseName = courseItem.querySelector('h3 a').textContent.toLowerCase();
+      const courseDescription = courseItem.querySelector('.description').textContent.toLowerCase();
+      const isMatch = courseName.includes(searchText) || courseDescription.includes(searchText);
+
+      let isVisible = true;
+
+      if (selectedCategory && selectedCategory !== 'all courses') {
+        if (selectedCategory === 'accounting') {
+          isVisible = courseDescription.includes('accounting');
+        } else if (selectedCategory === 'software') {
+          isVisible = courseDescription.includes('Html') || 
+                      courseDescription.includes('Css') || 
+                      courseDescription.includes('Python') || 
+                      courseDescription.includes('c++');
+        }
+        // Add more conditions for other categories if needed
+      }
+
+      if (isMatch && isVisible) {
+        courseItem.classList.remove('hidden'); // Show the course
+      } else {
+        courseItem.classList.add('hidden'); // Hide the course
+      }
+    });
+  }
+</script>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      const viewAllButton = document.getElementById("viewAllButton");
+      const hiddenCourses = document.querySelectorAll(".course-item.hidden");
+
+      // Initially show only the first 2 rows of courses
+      hiddenCourses.forEach((course, index) => {
+        if (index < 8) { // 4 courses in each row, show first 2 rows (total 8 courses)
+          course.classList.remove("hidden");
+        }
+      });
+
+      viewAllButton.addEventListener("click", function() {
+        hiddenCourses.forEach(course => {
+          course.classList.remove("hidden");
+        });
+        viewAllButton.style.display = "none"; // Hide the "View All" button after clicking
+      });
+    });
+  </script>
+
+  <style>
+    .hidden {
+      display: none;
+    }
+  </style>
 
 
 </body>
