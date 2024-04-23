@@ -137,25 +137,23 @@
     <!-- Courses List Section -->
     <section id="courses-list" class="section courses-list">
       <div class="container">
-        <div class="container section-title" data-aos="fade-up">
-          <h2>Courses</h2>
-          <p class="">Popular Courses</p>
-        </div>
         <div class="row">
           {% for course in courses %}
           <div class="col-lg-4 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="{{ forloop.counter }}">
             <div class="course-item">
-              <img src="/media/{{course.photo}}" class="img-fluid" alt="...">
+              {% if course.photo %}
+                <img src="{{ course.photo.url }}" class="img-fluid" alt="...">
+              {% endif %}
               <div class="course-content">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                  <p class="category">{{ course.duration }} months</p>
+                  <p class="category">{{ course.duration }}</p>
                   <p class="price">₹{{ course.fee }}</p>
                 </div>
                 <h3><a href="{{ course.url }}">{{ course.name }}</a></h3>
-                <p class="description">{{ course.description }} <br>{{course.photo}}</p>
+                <p class="description">{{ course.description }}</p>
               </div>
             </div>
-          </div> <!-- End Course Item-->
+          </div>
           {% endfor %}
         </div>
       </div>

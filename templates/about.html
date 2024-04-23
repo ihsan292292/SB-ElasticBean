@@ -177,16 +177,14 @@
       </div>
       <div class="container">
         <div class="row">
-          {% for staff in staffs %}
+          {% for tm in team %}
           <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}">
             <div class="member">
-              {% if staff.profile_pic %}
-              <img src="{{staff.profile_pic.url}}" class="img-fluid" alt="">
-              {% endif %}
+              <img src="{{tm.profile_pic.url}}" class="img-fluid" alt="">
               <div class="member-content">
-                <h4>{{ staff.name }}</h4>
-                <span>{{ staff.department }}</span>
-                <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
+                <h4>{{ tm.name }}</h4>
+                <span>{{ tm.department }}</span>
+                <p>{{ tm.user.email }}<br>phone: {{ tm.phone }}</p>
               </div>
             </div>
           </div><!-- End Team Member -->
@@ -238,8 +236,6 @@
   <!-- Preloader -->
   <div id="preloader"></div>
 
-  <script src="https://kit.fontawesome.com/e81d17d39f.js" crossorigin="anonymous"></script>
-  
   <!-- Vendor JS Files -->
   <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
   <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
