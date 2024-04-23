@@ -41,7 +41,7 @@ def contact(request):
         user_object = contacted_user(name=name, email=email, phone=phone, course=course, message=message)
         user_object.save()
         
-        messages.success(request,"message sent successfully!!")
+        messages.success(request,"Thank You for contacting us!!, we will contact you as soon as possible")
         return redirect('contact')
     else:
         return render(request,'contact.html',context=context)
