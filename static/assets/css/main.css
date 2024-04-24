@@ -820,9 +820,9 @@ section,
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  object-fit: contain; /* Maintain aspect ratio and show entire image */
   transition: opacity 1s ease-in-out;
 }
 
@@ -876,12 +876,21 @@ section,
 }
 
 @media (max-width: 768px) {
+  .hero {
+    min-height: 35vh; /* Adjust the height for mobile */
+  }
+
+  .hero img {
+    height: auto; /* Make the image responsive */
+  }
+
   .hero h2 {
     font-size: 32px;
   }
 
   .hero p {
     font-size: 18px;
+    margin-left: 0; /* Adjust margin for mobile */
   }
 }
 
