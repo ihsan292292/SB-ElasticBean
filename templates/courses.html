@@ -41,9 +41,9 @@
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid container-xl position-relative d-flex align-items-center">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto">
-        <img src="{% static 'assets/img/LOGO-head.png' %}" alt="" >
-        <img src="{% static 'assets/img/LOGO-foot.png' %}" alt="" >
+      <a href="{% url 'home' %}" class="logo d-flex align-items-center me-auto">
+        <img src="{% static 'assets/img/LOGO-head.png' %}" alt="" href="{% url 'home' %}" >
+        <img src="{% static 'assets/img/LOGO-foot.png' %}" alt=""  href="{% url 'home' %}">
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -127,7 +127,7 @@
       <nav class="breadcrumbs">
         <div class="container">
           <ol>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="{% url 'home' %}">Home</a></li>
             <li class="current">Courses</li>
           </ol>
         </div>
@@ -190,14 +190,7 @@
         </div>
       </div>
     </section>
-    
-    <div class="container mt-4 mb-4">
-      <div class="row">
-        <div class="col-md-12 text-center">
-          <button id="viewAllButton" class="btn btn-primary">View All</button>
-        </div>
-      </div>
-    </div><!-- /Courses List Section -->
+    <!-- /Courses List Section -->
 
   </main>
 
@@ -292,27 +285,6 @@
         }
       });
     }
-  </script>
-
-  <script>
-    document.addEventListener("DOMContentLoaded", function() {
-      const viewAllButton = document.getElementById("viewAllButton");
-      const hiddenCourses = document.querySelectorAll(".course-item.hidden");
-  
-      // Initially show only the first 2 rows of courses
-      hiddenCourses.forEach((course, index) => {
-        if (index < 8) { // 4 courses in each row, show first 2 rows (total 8 courses)
-          course.classList.remove("hidden");
-        }
-      });
-  
-      viewAllButton.addEventListener("click", function() {
-        hiddenCourses.forEach(course => {
-          course.classList.remove("hidden");
-        });
-        viewAllButton.style.display = "none"; // Hide the "View All" button after clicking
-      });
-    });
   </script>
   
   <style>
