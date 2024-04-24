@@ -809,7 +809,6 @@ section,
   align-items: center;
   justify-content: center;
   color: var(--default-color);
-  overflow: hidden; /* Ensures video doesn't overflow */
   position: relative;
   overflow: hidden;
   height: 500px;
