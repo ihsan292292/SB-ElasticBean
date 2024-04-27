@@ -14,6 +14,8 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.contrib.auth.hashers import check_password
 
+from django.contrib.auth.hashers import make_password
+
 
 
 
@@ -30,11 +32,11 @@ def custom_login(request):
             return render(request, 'registration/login.html', {'error': 'Both email and password are required.'})
 
         try:
-            user = User.objects.get(email=email,password=password)
+            user = User.objects.get(email=email)
         except User.DoesNotExist:
             return render(request, 'registration/login.html', {'error': 'User does not exist.'})
 
-        if password != user.password:
+        if not check_password(password, user.password):
             print("pass1",password,"user.password",user.password)
             return render(request, 'registration/login.html', {'error': 'Invalid password.'})
 
@@ -44,6 +46,7 @@ def custom_login(request):
         if user is not None:
             request.session['user_id'] = user.id
             login(request, user)
+            print("pass1",password,"user.password",user.password)
             return redirect('admin_home')
         else:
             return render(request, 'registration/login.html', {'error': 'Unable to log in.'})
@@ -631,25 +634,24 @@ def update_staff(request):
         user.is_staff = True
         user.is_superuser = False
         
-        
-        
         if password_in is None or password_in == '':
             password = name
-            user.password = password
-              
+            staff.user.password = password
         
         staff.name = name
         staff.gaurd_name = gaurd_name
         staff.address = address
         staff.gender = gender
         staff.phone = phone
+        staff.user.email = email
         staff.department = department
         staff.user = user
-        staff.user.password = password_in
+        staff.user.password = make_password(password_in)
 
         if profile_pic:
             staff.profile_pic = profile_pic
         staff.save()
+        staff.user.save()
         print(staff.user.password)
         
         messages.success(request,"Record Are Successfully Updated !")
