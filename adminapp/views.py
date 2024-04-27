@@ -30,11 +30,12 @@ def custom_login(request):
             return render(request, 'registration/login.html', {'error': 'Both email and password are required.'})
 
         try:
-            user = User.objects.get(email=email)
+            user = User.objects.get(email=email,password=password)
         except User.DoesNotExist:
             return render(request, 'registration/login.html', {'error': 'User does not exist.'})
 
-        if not check_password(password, user.password):
+        if password != user.password:
+            print("pass1",password,"user.password",user.password)
             return render(request, 'registration/login.html', {'error': 'Invalid password.'})
 
         if not user.is_active:
@@ -635,11 +636,6 @@ def update_staff(request):
         if password_in is None or password_in == '':
             password = name
             user.password = password
-            user.save()
-        else:
-            user.password = password_in
-            staff.access_to_web = True
-            user.save()
               
         
         staff.name = name
@@ -649,10 +645,12 @@ def update_staff(request):
         staff.phone = phone
         staff.department = department
         staff.user = user
+        staff.user.password = password_in
 
         if profile_pic:
             staff.profile_pic = profile_pic
         staff.save()
+        print(staff.user.password)
         
         messages.success(request,"Record Are Successfully Updated !")
         return redirect('view_staff')
