@@ -126,7 +126,31 @@
       </div><!-- End Section Title -->
       <div class="container" data-aos="fade-up" data-aos-delay="100">
           <div class="swiper">
-    
+            <script type="application/json" class="swiper-config">
+              {
+                "loop": true,
+                "speed": 600,
+                "autoplay": {
+                  "delay": 5000
+                },
+                "slidesPerView": "auto",
+                "pagination": {
+                  "el": ".swiper-pagination",
+                  "type": "bullets",
+                  "clickable": true
+                },
+                "breakpoints": {
+                  "320": {
+                    "slidesPerView": 1,
+                    "spaceBetween": 40
+                  },
+                  "1200": {
+                    "slidesPerView": 2,
+                    "spaceBetween": 20
+                  }
+                }
+              }
+            </script>
               <div class="swiper-wrapper">
                   {% for testimonial in testimonials %}
                   <div class="swiper-slide">
@@ -135,7 +159,15 @@
                               <img src="{{ testimonial.photo.url }}" class="testimonial-img" alt="">
                               <h3>{{ testimonial.name }}</h3>
                               <h4>{{ testimonial.designation }}</h4>
-                              <p>{{ testimonial.message }}</p>
+                              <div class="stars">
+                                <i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i>
+                              </div>
+                              <p>
+                                <i class="bi bi-quote quote-icon-left"></i>
+                                <span>{{ testimonial.message }}</span>
+                                <i class="bi bi-quote quote-icon-right"></i>
+                              </p>
+                
                           </div>
                       </div>
                   </div><!-- End testimonial item -->
