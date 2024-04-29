@@ -31,7 +31,6 @@
          <div class="content container-fluid">
 
         {% block content %}
-        
         {% endblock %}
         {% include 'includes/footer.html' %}
 
@@ -45,6 +44,9 @@
       <script src="{% static 'assets_admin/plugins/apexchart/chart-data.js' %}"></script>
       <script src="{% static 'assets_admin/js/script.js' %}"></script>
       <script src="{% static 'assets_admin/plugins/datatables/datatables.min.js'%}"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.0/xlsx.full.min.js"></script>
+
       <script src="https://cdn.datatables.net/1.10.4/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {

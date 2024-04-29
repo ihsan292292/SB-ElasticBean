@@ -12,7 +12,7 @@
              </ul>
           </div>
           <div class="col-auto text-right float-right ml-auto">
-             <a href="#" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> Download</a>
+             <a href="#" id="downloadBtn" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> Download</a>
              <a href="{% url 'add_course' %}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
           </div>
        </div>
@@ -62,5 +62,67 @@
        </div>
     </div>
  </div>
+
+ <script>
+   document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById('downloadBtn').addEventListener('click', function(event) {
+          event.preventDefault(); // Prevent default behavior
+          
+          // Fetch data from all pages
+          var allCourses = [];
+          var currentPage = 1;
+          
+          function fetchCourses(page) {
+              fetch('your-backend-url?page=' + page)
+                  .then(response => response.json())
+                  .then(data => {
+                      allCourses.push(...data.courses);
+                      if (data.has_next_page) {
+                          currentPage++;
+                          fetchCourses(currentPage);
+                      } else {
+                          generateExcelFile(allCourses);
+                      }
+                  })
+                  .catch(error => console.error('Error fetching courses:', error));
+          }
+          
+          fetchCourses(currentPage);
+      });
+      
+      function generateExcelFile(coursesData) {
+          // Create a table element
+          var table = document.createElement('table');
+          table.innerHTML = '<thead><tr><th>ID</th><th>Name</th><th>Duration</th><th>Fee</th></tr></thead><tbody></tbody>';
+          var tbody = table.querySelector('tbody');
+          
+          // Populate table with data
+          coursesData.forEach(function(course) {
+              var row = document.createElement('tr');
+              row.innerHTML = `<td>${course.id}</td><td>${course.name}</td><td>${course.duration}</td><td>${course.fee}</td>`;
+              tbody.appendChild(row);
+          });
+          
+          // Convert table to Excel sheet
+          var workbook = XLSX.utils.table_to_book(table);
+  
+          // Generate Excel file
+          var excelFile = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+  
+          // Convert binary string to Blob
+          var blob = new Blob([s2ab(excelFile)], { type: "application/octet-stream" });
+  
+          // Trigger download
+          saveAs(blob, 'courses.xlsx');
+      }
+      
+      function s2ab(s) {
+          var buf = new ArrayBuffer(s.length);
+          var view = new Uint8Array(buf);
+          for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+          return buf;
+      }
+  });
+</script>
 
 {% endblock %}

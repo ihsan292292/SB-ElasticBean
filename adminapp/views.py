@@ -16,9 +16,6 @@ from django.contrib.auth.hashers import check_password
 
 from django.contrib.auth.hashers import make_password
 
-
-
-
 # Create your views here.
 
 # login 
@@ -44,8 +41,8 @@ def custom_login(request):
             return render(request, 'registration/login.html', {'error': 'User account is not active.'})
 
         if user is not None:
-            request.session['user_id'] = user.id
             login(request, user)
+            request.session['user_id'] = user.id
             print("pass1",password,"user.password",user.password)
             return redirect('admin_home')
         else:
@@ -112,6 +109,7 @@ def student_admission(request):
         phone = request.POST.get('phone')
         address = request.POST.get('address')
         gender = request.POST.get('gender')
+        other_fee = request.POST.get('other_fee', 0)
         course_id = request.POST.get('course_id')
         branch_id = request.POST.get('branch_id')
         scheme_id = request.POST.get('scheme')
@@ -123,11 +121,14 @@ def student_admission(request):
         course = Course.objects.get(id=course_id)
         branch = Branch.objects.get(id=branch_id)
         scheme = Scheme.objects.get(name=scheme_id)
+        
+        
 
         # Calculate final fee based on selected schema
         course_fee = course.fee
         final_fee = course_fee * scheme.scheme
-        
+        print("otherfeee ",final_fee)
+        final_fee+=float(other_fee)
 
         student = Student(
             profile_pic=profile_pic,
@@ -142,7 +143,8 @@ def student_admission(request):
             phone=phone,
             dob=dob,
             age=age,
-            final_fee=final_fee 
+            final_fee=final_fee,
+            other_fee = other_fee
         )
         student.save()
 
@@ -195,6 +197,20 @@ def update_student(request):
         gender = request.POST.get('gender')
         course_id = request.POST.get('course_id')
         phone = request.POST.get('phone')
+        
+        course_completed = request.POST.get('course_completed')
+        certificate_issued = request.POST.get('certificate_issued')
+        examination_date = request.POST.get('examination_date')
+        
+        if course_completed == 'on':
+            course_completed = True
+        else:
+            course_completed = False
+            
+        if certificate_issued == 'on':
+            certificate_issued = True
+        else:
+            certificate_issued = False
 
 
         student = Student.objects.get(id = student_id)
@@ -204,6 +220,10 @@ def update_student(request):
         student.address = address
         student.gender = gender
         student.phone = phone
+        
+        student.course_completed = course_completed
+        student.certificate_issued = certificate_issued
+        student.examination_date = examination_date
 
         if profile_pic:
             student.profile_pic = profile_pic
@@ -403,6 +423,7 @@ def payed_list(request):
     payed_date = []
     branch_code = []
     balance = []
+    branch = []
     for i in payments:
         id.append(i.id)
         student_id.append(i.student.id)
@@ -413,8 +434,9 @@ def payed_list(request):
         phone.append(i.phone_number)
         payed_date.append(i.created_at)
         balance.append(i.student.final_fee)
+        branch.append(i.student.branch_id.branch_name)
         
-    payments = zip(id,student_id,name,payed_amount,way_of_pay,phone,payed_date,branch_code,balance)
+    payments = zip(id,student_id,name,payed_amount,way_of_pay,phone,payed_date,branch_code,balance,branch)
     context = {
         'payments':payments,
         'user':user

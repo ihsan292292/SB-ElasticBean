@@ -122,13 +122,28 @@
                       <input type="text" class="form-control" id="calculated_fee" readonly>
                   </div>
               </div>
-          
+
               <div class="col-12 col-sm-6">
                   <div class="form-group">
                       <label>Final Fee</label>
                       <input type="text" class="form-control" name="final_fee" id="final_fee" readonly>
                   </div>
               </div>
+
+              <div class="col-12 col-sm-6">
+               <div class="form-group">
+                   <label>Other Fee</label>
+                   <input type="number" class="form-control" name="other_fee" id="other_fee">
+               </div>
+               </div>
+               
+               <div class="col-12 col-sm-6">
+                     <div class="form-group">
+                        <label>Final Fee to Pay</label>
+                        <input type="text" class="form-control" name="fee_to_pay" id="fee_to_pay" readonly>
+                     </div>
+               </div>
+
               <div class="col-12 col-sm-6">
                   <div class="form-group">
                       <label hidden>Schema Amount</label>
@@ -145,55 +160,73 @@
  </div>
 
  <script>
-   document.getElementById('course_id').addEventListener('change', function() {
-      var selectedOption = this.options[this.selectedIndex];
-      var duration = selectedOption.getAttribute('data-duration');
-      var fee = selectedOption.getAttribute('data-fee');
-      document.getElementById('duration').value = duration;
-      document.getElementById('fee').value = fee;
-  
-      calculateFinalFee();
-  });
-
-    document.getElementById('dob').addEventListener('change', function() {
-        var dob = new Date(this.value);
-        var today = new Date();
-        var age = today.getFullYear() - dob.getFullYear();
-        var m = today.getMonth() - dob.getMonth();
-        if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
-            age--;
-        }
-        document.getElementById('age').value = age;
-    });
-
-   // Call calculateFinalFee() when schema is changed
-   document.getElementById('scheme_id').addEventListener('change', function() {
-      calculateFinalFee();
+      document.getElementById('course_id').addEventListener('change', function() {
+         var selectedOption = this.options[this.selectedIndex];
+         var duration = selectedOption.getAttribute('data-duration');
+         var fee = selectedOption.getAttribute('data-fee');
+         document.getElementById('duration').value = duration;
+         document.getElementById('fee').value = fee;
+   
+         calculateFinalFee();
    });
 
-   // Function to calculate both fees
-   function calculateFinalFee() {
-      var selectedOptionId = document.getElementById('scheme_id').id; // Retrieve the value of the selected option (which should be its ID)
-      var selectedSchema = parseFloat(document.getElementById('scheme_id').options[document.getElementById('scheme_id').selectedIndex].dataset.scheme);
-      var courseFee = parseFloat(document.getElementById('fee').value);
-      var schemaAmount = courseFee * selectedSchema;
-      var finalFee = courseFee - schemaAmount;
+      document.getElementById('dob').addEventListener('change', function() {
+         var dob = new Date(this.value);
+         var today = new Date();
+         var age = today.getFullYear() - dob.getFullYear();
+         var m = today.getMonth() - dob.getMonth();
+         if (m < 0 || (m === 0 && today.getDate() < dob.getDate())) {
+               age--;
+         }
+         document.getElementById('age').value = age;
+      });
 
-      // Display calculated fee
-      var calculatedFee = courseFee - finalFee;
-      document.getElementById('calculated_fee').value = calculatedFee.toFixed(2);
-      // Display reduced amount
-      document.getElementById('schema_amount').innerText = schemaAmount.toFixed(2);
-      // Display final fee
-      document.getElementById('final_fee').value = finalFee.toFixed(2);
+      // Call calculateFinalFee() when schema is changed
+      document.getElementById('scheme_id').addEventListener('change', function() {
+         calculateFinalFee();
+      });
 
-      // Log final fee for debugging
-      console.log('Final Fee:', finalFee.toFixed(2));
-   }
+      // Function to calculate both fees
+      function calculateFinalFee() {
+         var selectedOptionId = document.getElementById('scheme_id').id; // Retrieve the value of the selected option (which should be its ID)
+         var selectedSchema = parseFloat(document.getElementById('scheme_id').options[document.getElementById('scheme_id').selectedIndex].dataset.scheme);
+         var courseFee = parseFloat(document.getElementById('fee').value);
+         var schemaAmount = courseFee * selectedSchema;
+         var finalFee = courseFee - schemaAmount;
 
-   // Calculate final fee initially
-   calculateFinalFee();
+         // Display calculated fee
+         var calculatedFee = courseFee - finalFee;
+         document.getElementById('calculated_fee').value = calculatedFee.toFixed(2);
+         // Display reduced amount
+         document.getElementById('schema_amount').innerText = schemaAmount.toFixed(2);
+         // Display final fee
+         document.getElementById('final_fee').value = finalFee.toFixed(2);
 
-</script>
+         // Log final fee for debugging
+         console.log('Final Fee:', finalFee.toFixed(2));
+      }
+
+      // Calculate final fee initially
+      calculateFinalFee();
+
+   </script>
+   <script>
+      // Function to calculate final fee to pay
+      function calculateFinalFeeToPay() {
+         var finalFee = parseFloat(document.getElementById('final_fee').value);
+         var otherFee = parseFloat(document.getElementById('other_fee').value);
+         var feeToPay = finalFee + otherFee;
+         document.getElementById('fee_to_pay').value = feeToPay.toFixed(2);
+      }
+
+      // Call calculateFinalFeeToPay() when other fee is changed
+      document.getElementById('other_fee').addEventListener('input', function() {
+         calculateFinalFeeToPay();
+      });
+
+      // Calculate final fee to pay initially
+      calculateFinalFeeToPay();
+   </script>
+
 
 {% endblock %}

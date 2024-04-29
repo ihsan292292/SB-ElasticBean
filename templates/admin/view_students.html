@@ -12,7 +12,7 @@
              </ul>
           </div>
           <div class="col-auto text-right float-right ml-auto">
-             <a href="#" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> Download</a>
+            <a href="#" id="downloadBtn" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> Download</a>
              <a href="{% url 'student_admission' %}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
           </div>
        </div>
@@ -38,6 +38,11 @@
                             <th>Date of Birth</th>
                             <th>Age</th>
                             <th>Fee</th>
+
+                            <th>Course Completed</th>
+                            <th>Certificate Issued</th>
+                            <th>Date Of Examination</th>
+      
                             <th>Created at</th>
                             <th>Updated at</th>
                             <th class="text-right">Action</th>
@@ -65,6 +70,11 @@
                             <td>{{i.dob}}</td>
                             <td>{{i.age}}</td>
                             <td>{{i.final_fee}}</td>
+
+                            <td>{% if i.course_completed %}Yes{% else %}No{% endif %}</td>
+                            <td>{% if i.certificate_issued %}Yes{% else %}No{% endif %}</td>
+                            <td>{% if i.examination_date %}{{i.examination_date}}{% else %}Not Updated{% endif %}</td>
+
                             <td>{{i.created_at}}</td>
                             <td>{{i.updated_at}}</td>
                             <td class="text-right">
@@ -91,5 +101,37 @@
        </div>
     </div>
  </div>
+
+ <script>
+   document.addEventListener("DOMContentLoaded", function() {
+       // Add event listener to the download button
+       document.getElementById('downloadBtn').addEventListener('click', function(event) {
+           event.preventDefault(); // Prevent default behavior
+
+           // Select the table
+           var table = document.getElementById('table_id');
+
+           // Convert table to Excel sheet
+           var workbook = XLSX.utils.table_to_book(table);
+
+           // Generate Excel file
+           var excelFile = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
+
+           // Convert binary string to Blob
+           var blob = new Blob([s2ab(excelFile)], { type: "application/octet-stream" });
+
+           // Trigger download
+           saveAs(blob, 'students.xlsx');
+       });
+
+       // Utility function to convert string to array buffer
+       function s2ab(s) {
+           var buf = new ArrayBuffer(s.length);
+           var view = new Uint8Array(buf);
+           for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+           return buf;
+       }
+   });
+</script>
 
 {% endblock %}

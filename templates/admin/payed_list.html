@@ -9,7 +9,7 @@
                 <h3 class="page-title">Payed List</h3>
                 <ul class="breadcrumb">
                     <li class="breadcrumb-item"><a href="subjects.html">Payment</a></li>
-                    <li class="breadcrumb-item active">List of Successfull Payment</li>
+                    <li class="breadcrumb-item active">List of Successful Payment</li>
                 </ul>
             </div>
         </div>
@@ -20,11 +20,12 @@
            <div class="card card-table">
               <div class="card-body">
                  <div class="table-responsive">
-                    <table class="table table-hover table-center mb-0 datatable" id="table_id">
+                    <table class="table table-hover table-center mb-0 datatable" id="payment_table">
                        <thead>
                           <tr>
                              <th>ID</th>
                              <th>Name</th>
+                             <th>Branch</th>
                              <th>Payed Amount</th>
                              <th>Way of Payment</th>
                              <th>Phone</th>
@@ -34,31 +35,104 @@
                           </tr>
                        </thead>
                        <tbody>
-                         {% for id,student_id,name,payed_amount,way_of_pay,phone,payed_date,branch_code,balance in payments %}
+                         {% for id, student_id, name, payed_amount, way_of_pay, phone, payed_date, branch_code, balance, branch in payments %}
                           <tr>
-                             <td>SB{{branch_code}}{{student_id}}{{id}}</td>
-                             <td>{{name}}</td>
-                             <td>{{payed_amount}}</td>
-                             <td>{{way_of_pay}}</td>
-                             <td>{% if phone %}{{phone}}{% else %}Not available{% endif %}</td>
-                             <td>{{payed_date|date:"F d, Y" }}</td>
-                             <td>{{balance}}</td>
+                             <td>SB{{ branch_code }}{{ student_id }}{{ id }}</td>
+                             <td>{{ name }}</td>
+                             <td>{{ branch }}</td>
+                             <td>{{ payed_amount }}</td>
+                             <td>{{ way_of_pay }}</td>
+                             <td>{% if phone %}{{ phone }}{% else %}Not available{% endif %}</td>
+                             <td>{{ payed_date|date:"F d, Y" }}</td>
+                             <td>{{ balance }}</td>
                              <td> 
                                 <form action="{% url 'view_receipt' id %}" method="get">
                                     <button type="submit" class="btn btn-success">View Receipt</button>
                                 </form>
-                                
                              </td>
                           </tr>
                           {% endfor %}
                        </tbody>
-
                     </table>
                  </div>
               </div>
            </div>
         </div>
      </div>
+
+    <!-- Separate table for displaying total paid amount by branch -->
+    <div class="row">
+        <div class="col-sm-12">
+           <div class="card card-table">
+              <div class="card-body">
+                 <h4>Total Paid Amount by Branch</h4>
+                 <table class="table table-hover table-center mb-0" id="total_paid_amount_table">
+                     <thead>
+                         <tr>
+                             <th>Branch</th>
+                             <th>Total Paid Amount</th>
+                         </tr>
+                     </thead>
+                     <tbody id="total_paid_amount_body">
+                         <!-- Total paid amount for each branch will be added dynamically here -->
+                     </tbody>
+                 </table>
+              </div>
+           </div>
+        </div>
+     </div>
 </div>
+
+
+<script>
+   // Function to calculate total paid amount by branch
+   function calculateTotalPaidAmountByBranch() {
+       var tableRows = document.querySelectorAll("#payment_table tbody tr");
+       var branchTotalPaidAmount = {};
+
+       // Loop through each row and sum up the paid amounts for each branch
+       tableRows.forEach(function(row) {
+           var branchName = row.querySelector("td:nth-child(3)").innerText;
+           var paidAmount = parseFloat(row.querySelector("td:nth-child(4)").innerText);
+
+           if (!branchTotalPaidAmount[branchName]) {
+               branchTotalPaidAmount[branchName] = paidAmount;
+           } else {
+               branchTotalPaidAmount[branchName] += paidAmount;
+           }
+       });
+
+       return branchTotalPaidAmount;
+   }
+
+   // Function to display total paid amount by branch in separate table
+   function displayTotalPaidAmountByBranch() {
+       var branchTotalPaidAmount = calculateTotalPaidAmountByBranch();
+       var totalPaidAmountBody = document.getElementById("total_paid_amount_body");
+
+       // Clear existing rows
+       totalPaidAmountBody.innerHTML = "";
+
+       // Add new rows for each branch
+       Object.keys(branchTotalPaidAmount).forEach(function(branchName) {
+           var row = document.createElement("tr");
+           var branchCell = document.createElement("td");
+           var amountCell = document.createElement("td");
+
+           branchCell.textContent = branchName;
+           amountCell.textContent = branchTotalPaidAmount[branchName].toFixed(2);
+
+           row.appendChild(branchCell);
+           row.appendChild(amountCell);
+
+           totalPaidAmountBody.appendChild(row);
+       });
+   }
+
+   // Call displayTotalPaidAmountByBranch() when the document is loaded
+   document.addEventListener("DOMContentLoaded", function() {
+       displayTotalPaidAmountByBranch();
+   });
+</script>
 
 {% endblock %}

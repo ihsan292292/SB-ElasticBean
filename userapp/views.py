@@ -4,17 +4,24 @@ from .forms import *
 from .models import contacted_user
 from django.contrib import messages
 from adminapp.models import *
+from django.db.models import Q
 # Create your views here.
 
 def INDEX(request):
-    courses = Course.objects.all()
+    selected_courses = Course.objects.filter(
+        Q(name__icontains='ADVANCE HOSPITAL ADMINISTRATION&FRONT OFFICE MANAGEMENT') |
+        Q(name__icontains='IDBA (INTERNATIONAL DIPLOMA IN BUSINESS ACCOUNTING') |
+        Q(name__icontains='HOSPITAL ADMINISTRATION&FRONT OFFICE MANAGEMENT')  |
+        Q(name__icontains='OFFICE ADMINISTRATION') |
+        Q(name__icontains='Python Django- Full Stack Web Development') 
+    )
     staffs = Staff.objects.all()
     bgs = Bgimages.objects.all()
     home = Home.objects.all()
     testimonials = Testimonal.objects.all()
     # home = Home.objects.get(id=1)
     context = {
-        'courses':courses,
+        'courses':selected_courses,
         'staffs':staffs,
         'bgs':bgs,
         'home':home,
