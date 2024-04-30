@@ -34,3 +34,4 @@ wcwidth==0.1.9
 whitenoise==6.6.0
 django-storages==1.14.2
 boto3
+twilio
