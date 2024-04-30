@@ -138,7 +138,7 @@
                   <div class="col-12 col-sm-6">
                      <div class="form-group">
                         <label>Examination date</label>
-                        <input type="date" class="form-control" name="examination_date">
+                        <input type="date" class="form-control" name="examination_date" value="{% if student.examination_date %}{{ student.examination_date|date:'Y-m-d' }}{% endif %}">
                      </div>
                   </div>
                    

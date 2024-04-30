@@ -12,9 +12,8 @@
              </ul>
           </div>
           <div class="col-auto text-right float-right ml-auto">
-             <a href="#" id="downloadBtn" class="btn btn-outline-primary mr-2"><i class="fas fa-download"></i> Download</a>
-             <a href="{% url 'add_course' %}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
-          </div>
+            <a href="{% url 'add_course' %}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+        </div>
        </div>
     </div>
     {% include 'includes/messages.html' %}
@@ -23,38 +22,40 @@
           <div class="card card-table">
              <div class="card-body">
                 <div class="table-responsive">
-                   <table class="table table-hover table-center mb-0 datatable" id="table_id">
-                      <thead>
+                 
+                 <table class="table table-hover table-center mb-0 datatable" id="table_id">
+                     <thead>
                          <tr>
-                            <th>ID</th>
-                            <th>Name</th>
-                            <th>Duration</th>
-                            <th>Fee</th>
-                            <th>Action</th>
+                             <th>ID</th>
+                             <th>Name</th>
+                             <th>Duration</th>
+                             <th>Description</th>
+                             <th>Fee</th>
+                             <th>Action</th>
                          </tr>
-                      </thead>
-                      <tbody>
-                        {% for i in course %}
+                     </thead>
+                     <tbody>
+                         {% for i in course %}
                          <tr>
-                            <td>{{i.id}}</td>
-                            <td>{{i.name}}</td>
-                            <td>{{i.duration}}</td>
-                            <td>{{i.fee}}</td>
-                            {% comment %} <td>{{i.created_at}}</td>
-                            <td>{{i.updated_at}}</td> {% endcomment %}
-                            <td>
-                               <div class="actions">
-                                  <a href="{% url 'edit_course' i.id %}" class="btn btn-sm bg-success-light mr-2">
-                                  <i class="fas fa-pen"></i>
-                                  </a>
-                                  <a href="{% url 'delete_course' i.id %}" class="btn btn-sm bg-danger-light" onclick="return confirm('Are you sure you want to delete this item?');">
-                                  <i class="fas fa-trash"></i>
-                                  </a>
-                               </div>
-                            </td>
+                             <td>{{i.id}}</td>
+                             <td>{{i.name}}</td>
+                             <td>{{i.duration}}</td>
+                             <td class="description-column">{{ i.description|default:""|striptags }}</td>
+                             <td>{{i.fee}}</td>
+                             <td>
+                                 <div class="actions">
+                                     <a href="{% url 'edit_course' i.id %}" class="btn btn-sm bg-success-light mr-2">
+                                         <i class="fas fa-pen"></i>
+                                     </a>
+                                     <a href="{% url 'delete_course' i.id %}" class="btn btn-sm bg-danger-light" onclick="return confirm('Are you sure you want to delete this item?');">
+                                         <i class="fas fa-trash"></i>
+                                     </a>
+                                 </div>
+                             </td>
                          </tr>
                          {% endfor %}
-                      </tbody>
+                     </tbody>
+                 </table>
                    </table>
                 </div>
              </div>
@@ -63,48 +64,39 @@
     </div>
  </div>
 
+
  <script>
    document.addEventListener("DOMContentLoaded", function() {
+      // Add event listener to the download button
       document.getElementById('downloadBtn').addEventListener('click', function(event) {
           event.preventDefault(); // Prevent default behavior
-          
-          // Fetch data from all pages
-          var allCourses = [];
-          var currentPage = 1;
-          
-          function fetchCourses(page) {
-              fetch('your-backend-url?page=' + page)
-                  .then(response => response.json())
-                  .then(data => {
-                      allCourses.push(...data.courses);
-                      if (data.has_next_page) {
-                          currentPage++;
-                          fetchCourses(currentPage);
-                      } else {
-                          generateExcelFile(allCourses);
-                      }
-                  })
-                  .catch(error => console.error('Error fetching courses:', error));
-          }
-          
-          fetchCourses(currentPage);
-      });
-      
-      function generateExcelFile(coursesData) {
-          // Create a table element
-          var table = document.createElement('table');
-          table.innerHTML = '<thead><tr><th>ID</th><th>Name</th><th>Duration</th><th>Fee</th></tr></thead><tbody></tbody>';
-          var tbody = table.querySelector('tbody');
-          
-          // Populate table with data
-          coursesData.forEach(function(course) {
-              var row = document.createElement('tr');
-              row.innerHTML = `<td>${course.id}</td><td>${course.name}</td><td>${course.duration}</td><td>${course.fee}</td>`;
-              tbody.appendChild(row);
+  
+          // Select the table
+          var table = document.getElementById('table_id');
+  
+          // Collect all rows in the table
+          var allRows = table.querySelectorAll('tr');
+  
+          // Create an empty array to store table data
+          var tableData = [];
+  
+          // Iterate over each row in the table
+          allRows.forEach(function(row) {
+              var rowData = [];
+  
+              // Iterate over each cell in the row
+              row.querySelectorAll('td').forEach(function(cell) {
+                  rowData.push(cell.innerText); // Collect cell data
+              });
+  
+              // Push row data to the table data array
+              tableData.push(rowData);
           });
-          
-          // Convert table to Excel sheet
-          var workbook = XLSX.utils.table_to_book(table);
+  
+          // Convert table data to Excel sheet
+          var worksheet = XLSX.utils.aoa_to_sheet(tableData);
+          var workbook = XLSX.utils.book_new();
+          XLSX.utils.book_append_sheet(workbook, worksheet, 'Courses');
   
           // Generate Excel file
           var excelFile = XLSX.write(workbook, { bookType: 'xlsx', type: 'binary' });
@@ -114,8 +106,9 @@
   
           // Trigger download
           saveAs(blob, 'courses.xlsx');
-      }
-      
+      });
+  
+      // Utility function to convert string to array buffer
       function s2ab(s) {
           var buf = new ArrayBuffer(s.length);
           var view = new Uint8Array(buf);
@@ -124,5 +117,13 @@
       }
   });
 </script>
+
+<style>
+   .description-column {
+       max-height: 100px; /* Adjust the maximum height as needed */
+       overflow-y: auto;
+       word-wrap: break-word; /* Allow long words to break and wrap */
+   }
+</style>
 
 {% endblock %}

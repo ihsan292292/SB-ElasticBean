@@ -42,7 +42,7 @@
                         <div class="text-muted">
                             <p class="mb-1">2nd Floor City Tower</p>
                             <p class="mb-1"><i class="uil uil-envelope-alt me-1"></i>Perinthalmanna Road, PANDIKKAD</p>
-                            <p><i class="uil uil-phone me-1"></i> 9846428151, 9562798151</p>
+                            <p><i class="uil uil-phone me-1"></i> +91 6238 627 545, +91 79074 99500</p>
                         </div>
                     </div>
 
@@ -90,6 +90,7 @@
                                         <th>Amount</th>
                                         <th>Way of Payment</th>
                                         <th class="text-end" style="width: 120px;">Total</th>
+                                        <th class="text-end" style="width: 120px;">Balance</th>
                                     </tr>
                                 </thead><!-- end thead -->
                                 <tbody>
@@ -105,6 +106,7 @@
                                         <td>₹{{payment.amount}}</td>
                                         <td>{{payment.pay_option}}</td>
                                         <td class="text-end">₹ {{payment.amount}}</td>
+                                        <td class="text-end">₹ {{payment.student.final_fee}}</td>
                                     </tr>
                                     <!-- end tr -->
                                 </tbody><!-- end tbody -->

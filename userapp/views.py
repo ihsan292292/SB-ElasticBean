@@ -5,6 +5,7 @@ from .models import contacted_user
 from django.contrib import messages
 from adminapp.models import *
 from django.db.models import Q
+
 # Create your views here.
 
 def INDEX(request):

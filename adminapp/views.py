@@ -12,9 +12,11 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.contrib.auth.hashers import check_password
+from django.contrib.auth.hashers import check_password,make_password
 
-from django.contrib.auth.hashers import make_password
+from twilio.rest import Client
+import os
+from django.utils import timezone
 
 # Create your views here.
 
@@ -99,6 +101,7 @@ def student_admission(request):
     course = Course.objects.all()
     branches = Branch.objects.all()
     schemes = Scheme.objects.all()
+    
     if request.method == 'POST':
         profile_pic = request.FILES.get('profile_pic')
         name = request.POST.get('name')
@@ -113,7 +116,7 @@ def student_admission(request):
         course_id = request.POST.get('course_id')
         branch_id = request.POST.get('branch_id')
         scheme_id = request.POST.get('scheme')
-        print("iddddd",scheme_id)
+        
 
         # Convert dob_str to date object
         dob = datetime.strptime(dob_str, '%Y-%m-%d').date()
@@ -121,14 +124,13 @@ def student_admission(request):
         course = Course.objects.get(id=course_id)
         branch = Branch.objects.get(id=branch_id)
         scheme = Scheme.objects.get(name=scheme_id)
-        
-        
 
         # Calculate final fee based on selected schema
+        print("scheme.scheme::",scheme.scheme)
         course_fee = course.fee
-        final_fee = course_fee * scheme.scheme
+        final_fee = course_fee - (course_fee * scheme.scheme)
         print("otherfeee ",final_fee)
-        final_fee+=float(other_fee)
+        final_fee += float(other_fee)
 
         student = Student(
             profile_pic=profile_pic,
@@ -144,9 +146,22 @@ def student_admission(request):
             dob=dob,
             age=age,
             final_fee=final_fee,
-            other_fee = other_fee
+            other_fee=other_fee
         )
         student.save()
+
+        # Sending WhatsApp message
+        try:
+            # Sending WhatsApp message
+            client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
+            message = client.messages.create(
+                from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
+                body=f'Hi *{name}*,\n*Welcome to Skillboard Family*🎓!!\n\nHere is your enrolled course in detail\n\n*{student.course_id.name}*\nDuration : {student.course_id.duration}\nYou will Learn : {student.course_id.description}\n\n*Fee Details*\n\nTution Fee : ₹{student.course_id.fee}\nOther Fee : ₹{student.other_fee}\nFinal Fee to pay after scheme reduction :₹{student.final_fee}\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nHappy Learning ☺️📚📚!!',
+                to=f'whatsapp:+91{phone}'  # Phone number of the student
+            )
+            print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging
+        except Exception as e:
+            print("Error sending WhatsApp message:", e)
 
         messages.success(request, "Student details added successfully!!")
         return redirect('student_admission')
@@ -231,6 +246,20 @@ def update_student(request):
         student.course_id = course
         student.save()
         
+        if student.examination_date:
+            try:
+                # Sending WhatsApp message
+                client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
+            
+                message = client.messages.create(
+                    from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
+                    body = f'Hi *{name}*,\nYour Exams for {student.course_id.name} is Scheduled on\n\n*{student.examination_date}*\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nBe prepared, All the best! 🌟\n\n*SKILL BOARD EDUCATION 🎓*',
+                    to=f'whatsapp:+91{phone}'  # Phone number of the student
+                )
+                print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging
+            except Exception as e:
+                print("Error sending WhatsApp message:", e)
+            
         messages.success(request,"Record Are Successfully Updated !")
         return redirect('view_student')
         
@@ -239,6 +268,7 @@ def update_student(request):
 
 @login_required
 def delete_student(request,admin):
+    
     student = Student.objects.get(id = admin)
     student.delete()
     messages.success(request,'Record are Successfully Deleted !')
@@ -360,6 +390,18 @@ def fee_payment(request,id):
             phone_number = phone
         )
         payment.save()
+        if payment:
+            try:
+                client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
+                message = client.messages.create(
+                    from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
+                    body=f'Hi *{payment.student.name}*,\nYour payment of *₹{payment.amount}* has been successfully processed!!. please collect your reciept.\n\nBalance amount to Pay : *₹{payment.student.final_fee}*\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nThank You! 🌟\n\n*SKILL BOARD EDUCATION 🎓*',
+                    to=f'whatsapp:+91{payment.student.phone}'  # Phone number of the student
+                )
+                print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging
+            except Exception as e:
+                print("Error sending WhatsApp message:", e)
+        
         messages.success(request, "Payment Success !!")
         return redirect('fee_payment',id=student.id)
       
@@ -380,33 +422,6 @@ def view_reciept(request,id):
         'user':user
     }
     return render(request,'admin/reciept/reciept.html',context=context)
-
-
-# @login_required
-# def generate_pdf(request, id):
-#     user_id = request.session['user_id']
-#     user = User.objects.get(id=user_id)
-#     payment = Payment.objects.get(id=id)
-#     student_id = payment.student.id
-#     branch_code = payment.student.branch_id.branch_code
-#     context = {
-#         'payment': payment,
-#         'student_id': student_id,
-#         'branch_code': branch_code,
-#         'user': user
-#     }
-
-#     # Render the HTML template to a string
-#     receipt_html = render_to_string('admin/view_reciept.html', context=context)
-
-#     # Generate the PDF file
-#     pdf = pdfkit.from_string(str(receipt_html), options={"enable-local-file-access": ""})
-    
-
-#     # Return the PDF file as a response
-#     response = HttpResponse(pdf, content_type='application/pdf')
-#     response['Content-Disposition'] = 'attachment; filename="receipt.pdf"'
-    return response
 
 
 @login_required
@@ -760,6 +775,16 @@ def scheme(request):
     schemes = Scheme.objects.all()
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
+    scheme_id = []
+    scheme_names = []
+    scheme_amount = []
+    scheme_created = []
+    for i in schemes:
+        scheme_id.append(i.id)
+        scheme_names.append(i.name)
+        scheme_amount.append(i.scheme*100)
+        scheme_created.append(i.created_at)
+    display_scheme = zip(scheme_id,scheme_names,scheme_amount,scheme_created)
     if request.method == "POST":
         scheme_name  = request.POST.get('scheme_name')
         scheme = request.POST.get('scheme')
@@ -771,15 +796,20 @@ def scheme(request):
         return redirect('scheme')
     context = {
         'schemes':schemes,
-        'user':user
+        'user':user,
+        'display_scheme':display_scheme
     }
     return render(request,'admin/add_scheme.html',context=context)
 
 @login_required
 def delete_scheme(request,id):
-    scheme = Scheme.objects.get(id = id)
-    scheme.delete()
-    messages.success(request,'Scheme Deleted !!')
+    try:
+        scheme = Scheme.objects.get(id = id)
+        scheme.delete()
+        messages.success(request,'Scheme Deleted !!')
+    except Exception:
+        messages.error(request,'You Cant Delete this scheme because this scheme is used by students, please add new scheme and change scheme in student edit section!!')
+    
     return redirect('scheme')
 
 @login_required
