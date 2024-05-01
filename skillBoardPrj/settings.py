@@ -196,7 +196,7 @@ MEDIA_URL = '/media/'
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 
-DEFAULT_FILE_STORAGE = 'skillBoardPrj.storages.MediaStore'
+# DEFAULT_FILE_STORAGE = 'skillBoardPrj.storages.MediaStore'
 
 
 # STORAGES = {
