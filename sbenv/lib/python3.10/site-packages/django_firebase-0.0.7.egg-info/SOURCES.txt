@@ -1,0 +1,12 @@
+LICENSE
+setup.cfg
+setup.py
+django_firebase/__init__.py
+django_firebase/apps.py
+django_firebase/storage.py
+django_firebase.egg-info/PKG-INFO
+django_firebase.egg-info/SOURCES.txt
+django_firebase.egg-info/dependency_links.txt
+django_firebase.egg-info/not-zip-safe
+django_firebase.egg-info/requires.txt
+django_firebase.egg-info/top_level.txt

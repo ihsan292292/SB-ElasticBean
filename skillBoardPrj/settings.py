@@ -14,6 +14,8 @@ from pathlib import Path
 import  os
 import dj_database_url
 from dotenv import load_dotenv
+import pyrebase
+import dj_database_url
 
 load_dotenv()
 
@@ -25,7 +27,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-)+msqd1z54g6ncq$0i@vk)4^s(eq6*lr(-(xrf!(mav2jxfe!('
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -47,7 +49,7 @@ INSTALLED_APPS = [
     'active_link',
     'crispy_forms',
     'crispy_bootstrap4',
-    'storages'
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -99,31 +101,69 @@ WSGI_APPLICATION = 'skillBoardPrj.wsgi.application'
 # Replace it with your DATABASES.
 DATABASES = {
     'default': dj_database_url.config(
-        default="sqlite:///" + os.path.join(BASE_DIR, "db.sqlite3")
+        # Replace this value with your local database's connection string.
+        default='postgres://sbedu_user:RTsD6LvMenKvjWKWDV6GPbeX658SwmY6@dpg-cop7kda0si5c73brs2sg-a.oregon-postgres.render.com/sbedu',
+        conn_max_age=600
     )
 }
 
+# FIREBASE_CONFIG = {
+#   "apiKey": "AIzaSyAa4X4V1sz1xF_VLX0r62fmi0Pu6ddjK7s",
+#   "authDomain": "skillboardedu-e32ab.firebaseapp.com",
+#   "databaseURL":"https://skillboardedu-e32ab-default-rtdb.firebaseio.com",
+#   "projectId": "skillboardedu-e32ab",
+#   "storageBucket": "skillboardedu-e32ab.appspot.com",
+#   "messagingSenderId": "43876404679",
+#   "appId": "1:43876404679:web:2ee5ee4ecdc6007bcddde2",
+#   "measurementId": "G-4F98N2ZHC1"
+# }
+
+# firebase = pyrebase.initialize_app(FIREBASE_CONFIG)
+
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql', 
-#         'NAME': 'postgres',
-#         'USER': 'postgres',
-#         'PASSWORD': os.getenv('PASSWORD'),
-#         'HOST': 'database-1.c3086qmei5az.us-west-2.rds.amazonaws.com',
-#         'PORT': '5432'
+#         'ENGINE': 'django_firebase_app.firebase',
+#         'CREDENTIALS': firebase.auth(),
+#         # 'NAME': 'default',
 #     }
+# }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         # Replace this value with your local database's connection string.
+#         default='postgres://sbedu_user:RTsD6LvMenKvjWKWDV6GPbeX658SwmY6@dpg-cop7kda0si5c73brs2sg-a/sbedu',
+#         conn_max_age=600
+#     )
 # }
 
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql', 
-#         'NAME': 'sbdb1',
+#         'NAME': 'sbdb',
 #         'USER': 'psqlihsan',
 #         'PASSWORD': 'postgres',
 #         'HOST': 'localhost',
 #         'PORT': '5432'
 #     }
 # }
+# DATABASES = {
+
+#      'default': {
+
+#          'ENGINE': 'django.db.backends.postgresql',
+
+#          'NAME': 'sbedu',
+
+#          'USER': 'sbedu_user',
+
+#          'PASSWORD': os.getenv('PASSWORD'),
+
+#          'HOST': 'dpg-cop7kda0si5c73brs2sg-a',
+
+#          'PORT': '5432',
+
+#      }
+#  }
 
 
 # Password validation

@@ -1,5 +1,4 @@
 asgiref==3.8.1
-awsebcli==3.20.10
 blessed==1.20.0
 botocore==1.31.85
 cement==2.8.2
@@ -33,5 +32,6 @@ urllib3==1.26.18
 wcwidth==0.1.9
 whitenoise==6.6.0
 django-storages==1.14.2
-boto3
 twilio
+pyrebase
+requests-toolbelt==0.10.1
