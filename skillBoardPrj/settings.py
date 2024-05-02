@@ -14,7 +14,6 @@ from pathlib import Path
 import  os
 import dj_database_url
 from dotenv import load_dotenv
-import pyrebase
 import dj_database_url
 
 load_dotenv()
@@ -48,8 +47,7 @@ INSTALLED_APPS = [
     'adminapp',
     'active_link',
     'crispy_forms',
-    'crispy_bootstrap4',
-    'storages',
+    'crispy_bootstrap4'
 ]
 
 MIDDLEWARE = [
