@@ -18,6 +18,8 @@ from twilio.rest import Client
 import os
 from django.utils import timezone
 
+import pandas as pd
+
 # Create your views here.
 
 # login 
@@ -278,25 +280,55 @@ def delete_student(request,admin):
 # course
 @login_required
 def add_course(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user_id = request.session.get('user_id')
+    if user_id:
+        user = User.objects.get(id=user_id)
+    else:
+        user = None
+    
     if request.method == 'POST':
+        if 'course_file' in request.FILES:  # Check if a file is uploaded
+            course_file = request.FILES['course_file']
+            if course_file.name.endswith('.xlsx'):
+                try:
+                    df = pd.read_excel(course_file)  # Read Excel file
+                    print("columns  :",df.columns)
+                    for index, row in df.iterrows():
+                        course = Course(
+                            name=row['COURSE NAME'],  # Ensure column names match exactly
+                            duration=row['DURATION'],
+                            fee=row['FEE'],
+                            photo=None,  # Adjust based on your photo handling logic
+                            description=row['COURSE DECRIPTION']  # Fix typo in column name
+                        )
+                        course.save()
+                    messages.success(request, 'Bulk Courses Successfully Added!')
+                    return redirect('add_course')
+                except Exception as e:
+                    messages.error(request, f'Error processing file: {e}')
+                    return redirect('add_course')
+            else:
+                messages.error(request, 'Please upload a valid Excel file.')
+                return redirect('add_course')
+        
+        # Process single course addition as before if no file uploaded
         course_name = request.POST.get('course_name')
         course_duration = request.POST.get('course_duration')
         course_fee = request.POST.get('course_fee')
         photo = request.FILES.get('photo')
         description = request.POST.get('course_description')
         course = Course(
-            name = course_name,
-            duration = course_duration,
-            fee = course_fee,
-            photo = photo,
-            description = description
+            name=course_name,
+            duration=course_duration,
+            fee=course_fee,
+            photo=photo,
+            description=description
         )
         course.save()
-        messages.success(request,'Course Are Successfully Created !')
+        messages.success(request, 'Course Successfully Created!')
         return redirect('add_course')
-    return render(request,'admin/add_course.html',{'user':user})
+    
+    return render(request, 'admin/add_course.html', {'user': user})
 
 
 @login_required
@@ -867,6 +899,7 @@ def home_titles(request):
     home_dtl = Home.objects.all()
     if About.objects.first() is not None:
         ab = About.objects.first()
+    ab=""
     if request.method == 'POST':
         qoute1 = request.POST.get('qoute1')
         qoute2 = request.POST.get('qoute2')
