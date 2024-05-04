@@ -821,7 +821,7 @@ section,
   left: 0;
   width: 100%; /* Full width */
   height: 100%; /* Full height */
-  object-fit: contain; /* Maintain aspect ratio and show entire image */
+ /* Maintain aspect ratio and show entire image */
   transition: opacity 1s ease-in-out;
 }
 

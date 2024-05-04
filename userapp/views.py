@@ -5,6 +5,8 @@ from .models import contacted_user
 from django.contrib import messages
 from adminapp.models import *
 from django.db.models import Q
+from twilio.rest import Client
+import os 
 
 # Create your views here.
 
@@ -50,6 +52,19 @@ def contact(request):
         user_object.save()
         
         messages.success(request,"Thank You for contacting us!!, we will contact you as soon as possible")
+        try:
+            # Sending WhatsApp message
+            client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
+            message = client.messages.create(
+                from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
+                ody=f'Hi *{name}*,\n*Thank You for Contacting Us!!\n\nHere is your enquiry course in Detail \n\n*{course.name}*\nDuration : {course.duration}\nYou will Learn : {course.description}\n\nFor Fee Details and any other Query\nfeel free to contact :+91 6238 627 545 \n\nHappy Learning ☺️📚📚!!',
+                to=f'whatsapp:+91{phone}'  # Phone number of the student
+            )
+            print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging
+        except Exception as e:
+            print("Error sending WhatsApp message:", e)
+
+        messages.success(request, "Student details added successfully!!")
         return redirect('contact')
     else:
         return render(request,'contact.html',context=context)

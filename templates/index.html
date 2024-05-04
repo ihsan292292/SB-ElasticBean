@@ -90,11 +90,11 @@
       <div class="container">
         <div class="row" id="courseRow"> <!-- Changed ID to courseRow for easier targeting -->
           {% for course in courses|slice:":4" %}
-          <div class="col-lg-3 col-md-6 d-flex align-items-stretch course-item {% if not 'accounting' in course.description|lower %}{% if 'html' not in course.description|lower and 'css' not in course.description|lower and 'python' not in course.description|lower and 'c++' not in course.description|lower %}hidden{% endif %}{% endif %}" data-aos="zoom-in" data-aos-delay="{{ forloop.counter }}">
+          <div class="col-lg-3 col-md-6 d-flex align-items-stretch" data-aos="zoom-in" data-aos-delay="{{ forloop.counter }}">
             <div class="course-item">
               {% if course.photo %}
                 <img src="{{ course.photo.url }}" class="img-fluid" alt="...">
-              {% elif course.photo == none %}
+              {% else %}
                 <img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1714761941/ybo2zytk1tltdi6hxzvc.jpg" class="img-fluid" alt="...">
               {% endif %}
 
@@ -108,15 +108,15 @@
               </div>
             </div>
           </div>
-        {% endfor %}
-        </div>
-      
-        <!-- Add "View All" button -->
-        <div class="text-center">
-          <a href="{% url 'course' %}" class="btn btn-primary mt-4">View All</a>
+          {% endfor %}
         </div>
       </div>
-    </section><!-- /Courses Section -->
+    
+    </section>
+    <div class="text-center">
+      <a href="{% url 'course' %}" class="btn btn-primary mt-4">View All</a>
+    </div>
+    <!-- /Courses Section -->
 
      <!-- Testimonials Section -->
      <section id="testimonials" class="testimonials section">
