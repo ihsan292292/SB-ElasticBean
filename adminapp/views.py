@@ -158,7 +158,7 @@ def student_admission(request):
             client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
             message = client.messages.create(
                 from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
-                body=f'Hi *{name}*,\n*Welcome to Skillboard Family*🎓!!\n\nHere is your enrolled course in detail\n\n*{student.course_id.name}*\nDuration : {student.course_id.duration}\nYou will Learn : {student.course_id.description}\n\n*Fee Details*\n\nTution Fee : ₹{student.course_id.fee}\nOther Fee : ₹{student.other_fee}\nFinal Fee to pay after scheme reduction :₹{student.final_fee}\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nHappy Learning ☺️📚📚!!',
+                body=f'Hi *{name}*,\n*Welcome to Skillboard Family*🎓!!\n\nHere is your enrolled course in detail\n\n*{student.course_id.name}*\nDuration : {student.course_id.duration}\nYou will Learn : {student.course_id.description}\n\n*Fee Details*\n\nTution Fee : ₹{student.course_id.fee}\nOther Fee : ₹{student.other_fee}\nFinal Fee to pay after scheme reduction :₹{student.final_fee}\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nHappy Learning ☺️📚📚!!\n\n*SKILLBOARD EDUCATION {student.branch_id.branch_name.upper()} 🎓*',
                 to=f'whatsapp:+91{phone}'  # Phone number of the student
             )
             print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging
@@ -255,7 +255,7 @@ def update_student(request):
             
                 message = client.messages.create(
                     from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
-                    body = f'Hi *{name}*,\nYour Exams for {student.course_id.name} is Scheduled on\n\n*{student.examination_date}*\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nBe prepared, All the best! 🌟\n\n*SKILL BOARD EDUCATION 🎓*',
+                    body = f'Hi *{name}*,\nYour Exams for {student.course_id.name} is Scheduled on\n\n*{student.examination_date}*\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nBe prepared, All the best! 🌟*\n\n*SKILLBOARD EDUCATION {student.branch_id.branch_name.upper()} 🎓*',
                     to=f'whatsapp:+91{phone}'  # Phone number of the student
                 )
                 print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging
@@ -427,7 +427,7 @@ def fee_payment(request,id):
                 client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
                 message = client.messages.create(
                     from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
-                    body=f'Hi *{payment.student.name}*,\nYour payment of *₹{payment.amount}* has been successfully processed!!. please collect your reciept.\n\nBalance amount to Pay : *₹{payment.student.final_fee}*\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nThank You! 🌟\n\n*SKILL BOARD EDUCATION 🎓*',
+                    body=f'Hi *{payment.student.name}*,\nYour payment of *₹{payment.amount}* has been successfully processed!!. please collect your reciept.\n\nBalance amount to Pay : *₹{payment.student.final_fee}*\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nThank You! 🌟\n\n*SKILLBOARD EDUCATION {payment.student.branch_id.branch_name.upper()} 🎓*',
                     to=f'whatsapp:+91{payment.student.phone}'  # Phone number of the student
                 )
                 print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging

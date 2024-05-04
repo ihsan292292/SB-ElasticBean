@@ -50,21 +50,19 @@ def contact(request):
         course = Course.objects.get(id=course_id)
         user_object = contacted_user(name=name, email=email, phone=phone, course=course, message=message)
         user_object.save()
-        
-        messages.success(request,"Thank You for contacting us!!, we will contact you as soon as possible")
         try:
             # Sending WhatsApp message
             client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
             message = client.messages.create(
                 from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
-                ody=f'Hi *{name}*,\n*Thank You for Contacting Us!!\n\nHere is your enquiry course in Detail \n\n*{course.name}*\nDuration : {course.duration}\nYou will Learn : {course.description}\n\nFor Fee Details and any other Query\nfeel free to contact :+91 6238 627 545 \n\nHappy Learning ☺️📚📚!!',
+                body=f'Hi *{name}*,\n*Thank You for Contacting Us!!\n\nHere is your enquiry course in Detail \n\n*{course.name}*\nDuration : {course.duration}\nYou will Learn : {course.description}\n\nFor Fee Details and any other Query\nfeel free to contact :+91 6238 627 545 \n\nHappy Learning ☺️📚📚!!\n\n*SKILLBOARD EDUCATION**',
                 to=f'whatsapp:+91{phone}'  # Phone number of the student
             )
             print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging
         except Exception as e:
             print("Error sending WhatsApp message:", e)
 
-        messages.success(request, "Student details added successfully!!")
+        messages.success(request,"Thank You for contacting us!!, we will contact you as soon as possible")
         return redirect('contact')
     else:
         return render(request,'contact.html',context=context)
