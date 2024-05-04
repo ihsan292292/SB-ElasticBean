@@ -35,3 +35,7 @@ django-storages==1.14.2
 twilio
 pyrebase4
 requests-toolbelt==0.10.1
+django-cloudinary-storage==0.3.0
+cloudinary==1.40.0
+pandas==2.2.2
+numpy==1.26.4

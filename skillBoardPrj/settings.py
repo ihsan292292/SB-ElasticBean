@@ -16,6 +16,8 @@ import dj_database_url
 from dotenv import load_dotenv
 import dj_database_url
 
+import cloudinary_storage
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -47,7 +49,10 @@ INSTALLED_APPS = [
     'adminapp',
     'active_link',
     'crispy_forms',
-    'crispy_bootstrap4'
+    'crispy_bootstrap4',
+    
+    'cloudinary_storage',
+    'cloudinary'
 ]
 
 MIDDLEWARE = [
@@ -250,5 +255,12 @@ MEDIA_URL = '/media/'
 #     },
 # }
 
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dbcmhstkl',
+    'API_KEY': '447872273448818',
+    'API_SECRET': os.getenv('CLOUDINARY_SECRET')
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

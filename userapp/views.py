@@ -77,6 +77,10 @@ def about(request):
 def course(request):
     about = Home.objects.all()
     courses = Course.objects.all()
+    pho = []
+    for i in courses:
+        pho.append(i.photo)
+    print(pho)
     context = {
         'courses':courses,
         'about':about
