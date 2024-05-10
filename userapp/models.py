@@ -19,8 +19,8 @@ class contacted_user(models.Model):
         return self.name
     
 class Home(models.Model):
-    qoute1 = models.CharField(max_length=50,default="Learning Today, Leading Tomorrow")
-    qoute2 = models.CharField(default="Skill Board Education",max_length=50)
+    qoute1 = models.CharField(max_length=80,default="Learning Today, Leading Tomorrow")
+    qoute2 = models.CharField(default="Skill Board Education",max_length=80)
     by = models.CharField(max_length=50)
     
     def __str__(self):
@@ -28,6 +28,8 @@ class Home(models.Model):
     
 class About(models.Model):
     about = models.TextField(default="skillboard education pandikkad",null=True)
+    mission = models.TextField(default="skillboard education pandikkad",null=True)
+    vision = models.TextField(default="skillboard education pandikkad",null=True)
     
     def __str__(self):
         return self.about

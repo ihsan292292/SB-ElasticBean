@@ -71,6 +71,14 @@
             <div class="col-lg-8">
               <h1 class="">About Us<br></h1>
               <p class="mb-0">{{about.about}}</p>
+            </div><hr>
+            <div class="col-lg-8">
+              <h1 class="" style="color:#378394">Mission<br></h1>
+              <p class="mb-0">{{about.mission}}</p>
+            </div><hr>
+            <div class="col-lg-8">
+              <h1 class="" style="color:#ffff99">Vision<br></h1>
+              <p class="mb-0">{{about.vision}}</p>
             </div>
           </div>
         </div>
@@ -89,15 +97,15 @@
 
           <div class="col-lg-3 col-md-6">
             <div class="stats-item text-center w-100 h-100">
-              <span data-purecounter-start="0" data-purecounter-end="200" data-purecounter-duration="1" class="purecounter"></span>
+              <span data-purecounter-start="0" data-purecounter-end="1000" data-purecounter-duration="1" class="purecounter"></span>
               <p class="">Students</p>
             </div>
           </div><!-- End Stats Item -->
 
           <div class="col-lg-3 col-md-6">
             <div class="stats-item text-center w-100 h-100">
-              <span data-purecounter-start="0" data-purecounter-end="{{courses}}" data-purecounter-duration="1" class="purecounter"></span>
-              <p class="">Courses</p>
+                <span data-purecounter-start="0" data-purecounter-end="{{ courses }}" data-purecounter-duration="1" class="purecounter"></span>
+                <p class="">Courses <i class="fas fa-plus">+</i></p>
             </div>
           </div><!-- End Stats Item -->
 
@@ -224,6 +232,13 @@
 
   <!-- Main JS File -->
   <script src="{% static 'assets/js/main.js' %}"></script>
+
+  <style>
+    .plus-icon {
+      font-size: 16px; /* Adjust the size as needed */
+      color: green; /* Adjust the color as needed */
+    }
+  </style>
 
 </body>
 

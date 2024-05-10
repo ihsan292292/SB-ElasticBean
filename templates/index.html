@@ -189,27 +189,87 @@
       </div>
       <div class="container">
         <div id="trainersRow" class="row trainers-row second-row"> <!-- Changed ID to trainersRow for easier targeting -->
-          {% for staff in staffs|slice:":4" %}
-          <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}">
-            <div class="member">
-              {% if staff.profile_pic %}
-                <img src="{{staff.profile_pic.url}}" class="img-fluid" alt="">
-              {% endif %}
-              <div class="member-content">
-                <h4>{{ staff.name }}</h4>
-                <span>{{ staff.department }}</span>
-                <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
-              </div>
-            </div>
-          </div><!-- End Team Member -->
+          
+          <!-- Display Jayadhas P -->
+          {% for staff in staffs %}
+            {% if staff.name == "Jayadhas V" %}
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up">
+                <div class="member">
+                  {% if staff.profile_pic %}
+                    <img src="{{ staff.profile_pic.url }}" class="img-fluid" alt="">
+                  {% endif %}
+                  <div class="member-content">
+                    <h4>{{ staff.name }}</h4>
+                    <span>{{ staff.department }}</span>
+                    <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
+                  </div>
+                </div>
+              </div><!-- End Team Member -->
+            {% endif %}
           {% endfor %}
+          
+          <!-- Display Prajeesh V -->
+          {% for staff in staffs %}
+            {% if staff.name == "Prajeesh V" %}
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up">
+                <div class="member">
+                  {% if staff.profile_pic %}
+                    <img src="{{ staff.profile_pic.url }}" class="img-fluid" alt="">
+                  {% endif %}
+                  <div class="member-content">
+                    <h4>{{ staff.name }}</h4>
+                    <span>{{ staff.department }}</span>
+                    <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
+                  </div>
+                </div>
+              </div><!-- End Team Member -->
+            {% endif %}
+          {% endfor %}
+    
+          <!-- Display Dhanalakshmi -->
+          {% for staff in staffs %}
+            {% if staff.name == "Dhanalakshmi" %}
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up">
+                <div class="member">
+                  {% if staff.profile_pic %}
+                    <img src="{{ staff.profile_pic.url }}" class="img-fluid" alt="">
+                  {% endif %}
+                  <div class="member-content">
+                    <h4>{{ staff.name }}</h4>
+                    <span>{{ staff.department }}</span>
+                    <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
+                  </div>
+                </div>
+              </div><!-- End Team Member -->
+            {% endif %}
+          {% endfor %}
+    
+          <!-- Display Rest of the Staff Members -->
+          {% for staff in staffs %}
+            {% if staff.name != "Jayadhas V" and staff.name != "Prajeesh V" and staff.name != "Dhanalakshmi" %}
+              <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up">
+                <div class="member">
+                  {% if staff.profile_pic %}
+                    <img src="{{ staff.profile_pic.url }}" class="img-fluid" alt="">
+                  {% endif %}
+                  <div class="member-content">
+                    <h4>{{ staff.name }}</h4>
+                    <span>{{ staff.department }}</span>
+                    <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
+                  </div>
+                </div>
+              </div><!-- End Team Member -->
+            {% endif %}
+          {% endfor %}
+    
         </div>
         <!-- Add "View All" button -->
         <div class="text-center mt-4">
           <a href="{% url 'about' %}" class="btn btn-primary">View All</a>
         </div>
       </div>
-    </section><!-- /Trainers Index Section -->
+    </section>
+    <!-- /Trainers Index Section -->
 
 </main>
 

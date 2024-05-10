@@ -12,8 +12,7 @@
                   <div class="col-12">
                      <h5 class="form-title"><span>Home Page</span></h5>
                   </div>
-                       {% include 'includes/messages.html' %}
-                       
+                       {% include 'includes/messages.html' %}    
                   <div class="col-sm-11">
                      <div class="form-group">
                         <label>Qoute first line</label>
@@ -32,17 +31,43 @@
                      <textarea class="form-control" name="by"></textarea>
                   </div>
                </div>
-                  <div class="col-sm-11" style="background: lightgreen;height:100px;">
-                     <div class="form-group">
-                        <label>About</label>
-                        <textarea class="form-control" name="about">{{about.about}}</textarea>
-                     </div>
-                  </div>
-                  <br>
-                <div class="col-12">
-                     <button type="submit" class="btn btn-primary">Make Changes</button>
-                  </div>
+               <div class="col-12">
+                  <button type="submit" class="btn btn-primary" name="add_qoute">Add Qoute</button>
+               </div>
             </form>
+
+            <form action="{% url 'home_titles' %}" method="post" enctype="multipart/form-data">
+               {% csrf_token %}
+               <div class="col-sm-11 mt-5" style="background: lightblue;height:150px;">
+                   <div class="form-group">
+                       <label><b>About</b></label>
+                       <textarea class="form-control" name="about">{{ about.about }}</textarea>
+                   </div>
+                   <button type="submit" class="btn btn-info" name="about_submit">Update</button>
+               </div>
+           </form>
+           
+           <form action="{% url 'home_titles' %}" method="post" enctype="multipart/form-data">
+               {% csrf_token %}
+               <div class="col-sm-11 mt-5" style="background: lightblue;height:150px;">
+                   <div class="form-group">
+                       <label><b>Mission</b></label>
+                       <textarea class="form-control" name="mission">{{ about.mission }}</textarea>
+                   </div>
+                   <button type="submit" class="btn btn-info" name="mission_submit">Update</button>
+               </div>
+           </form>
+           
+           <form action="{% url 'home_titles' %}" method="post" enctype="multipart/form-data">
+               {% csrf_token %}
+               <div class="col-sm-11 mt-5" style="background: lightblue;height:150px;">
+                   <div class="form-group">
+                       <label><b>Vision</b></label>
+                       <textarea class="form-control" name="vision">{{ about.vision }}</textarea>
+                   </div>
+                   <button type="submit" class="btn btn-info" name="vision_submit">Update</button>
+               </div> 
+           </form>
          </div>
       </div>
    </div>
@@ -91,5 +116,6 @@
    </div>
 </div>
 </div>
+
 
 {% endblock %}

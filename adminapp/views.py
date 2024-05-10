@@ -897,28 +897,46 @@ def delete_bg_image(request,id):
 @login_required
 def home_titles(request):
     home_dtl = Home.objects.all()
-    if About.objects.first() is not None:
-        ab = About.objects.first()
-    ab=""
+    about_instance, created = About.objects.get_or_create(pk=1)
+    print("vvvv,",about_instance.about,"\n",about_instance.mission,"\n",about_instance.vision)
     if request.method == 'POST':
-        qoute1 = request.POST.get('qoute1')
-        qoute2 = request.POST.get('qoute2')
-        by = request.POST.get('by')
-        aboutin = request.POST.get('about')
-        home = Home(qoute1=qoute1,qoute2=qoute2,by=by)
-        if ab is None:
-            about_save = About(about=aboutin)
-            about_save.save()
-        ab.about = aboutin
-        # Save the updated Home object
-        ab.save()
-        home.save()
-        messages.success(request, "Changes saved successfully!")
-        return redirect('home_titles')
+        if 'add_qoute' in request.POST:
+            qoute1 = request.POST.get('qoute1')
+            qoute2 = request.POST.get('qoute2')
+            by = request.POST.get('by')
+            home = Home(qoute1=qoute1,qoute2=qoute2,by=by)
+            home.save()
+            messages.success(request, "Qoute Added successfully!")
+            return redirect('home_titles')
+        
+        elif 'about_submit' in request.POST:
+            aboutin = request.POST.get('about')
+            print("in:::",aboutin)
+            about_instance.about=aboutin
+            about_instance.save()
+            print("about_instance.about",about_instance.about)
+            messages.success(request, "About Changed successfully!")
+            return redirect('home_titles')
+        
+        elif 'vision_submit' in request.POST:
+            vision = request.POST.get('vision')
+            print("in:::", vision)
+            about_instance.vision = vision
+            about_instance.save()
+            messages.success(request, "Vision Changed successfully!")
+            return redirect('home_titles')
+        
+        elif 'mission_submit' in request.POST:
+            mission = request.POST.get('mission')
+            print("in:::",mission)
+            about_instance.mission=mission
+            about_instance.save()
+            messages.success(request, "Mission Changed successfully!")
+            return redirect('home_titles')
     
     context = {
         "home_dtl":home_dtl,
-        "about":ab
+        "about":about_instance
     }
     
     return render(request, 'admin/home/home_page_edit.html',context=context)
