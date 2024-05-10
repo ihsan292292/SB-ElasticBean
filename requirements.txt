@@ -39,3 +39,4 @@ django-cloudinary-storage==0.3.0
 cloudinary==1.40.0
 pandas==2.2.2
 numpy==1.26.4
+django_check_seo==1.0.1

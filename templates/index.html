@@ -245,7 +245,7 @@
           {% endfor %}
     
           <!-- Display Rest of the Staff Members -->
-          {% for staff in staffs %}
+          {% comment %} {% for staff in staffs %}
             {% if staff.name != "Jayadhas V" and staff.name != "Prajeesh V" and staff.name != "Dhanalakshmi" %}
               <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up">
                 <div class="member">
@@ -260,7 +260,7 @@
                 </div>
               </div><!-- End Team Member -->
             {% endif %}
-          {% endfor %}
+          {% endfor %} {% endcomment %}
     
         </div>
         <!-- Add "View All" button -->

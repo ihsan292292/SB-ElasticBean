@@ -52,7 +52,13 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     
     'cloudinary_storage',
-    'cloudinary'
+    'cloudinary',
+    
+    'django.contrib.sites',
+    'cms',
+    'menus',
+    'treebeard',
+    'django_check_seo'
 ]
 
 MIDDLEWARE = [

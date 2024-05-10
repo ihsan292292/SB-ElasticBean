@@ -130,27 +130,99 @@
     </section><!-- /Trainers -->
 
     <section id="trainers" class="section trainers">
-
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Our Team</h2>
+        <p class="">Our team</p>
+      </div>
       <div class="container">
-
+    
         <div class="row gy-5">
+          <!-- Display Jayadhas P -->
           {% for tm in team %}
-          <div class="col-lg-4 col-md-6 member" data-aos="fade-up" data-aos-delay="{{ forloop.counter }}">
-            <div class="member-img">
-              <img src="{{tm.profile_pic.url}}" class="img-fluid" alt="">
-              <div class="social">
-                <a href="#"><i class="bi bi-twitter"></i></a>
-                <a href="#"><i class="bi bi-facebook"></i></a>
-                <a href="#"><i class="bi bi-instagram"></i></a>
-                <a href="#"><i class="bi bi-linkedin"></i></a>
+            {% if tm.name == "Jayadhas V" %}
+              <div class="col-lg-4 col-md-6 member" data-aos="fade-up">
+                <div class="member-img">
+                  <img src="{{ tm.profile_pic.url }}" class="img-fluid" alt="">
+                  <div class="social">
+                    <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                  </div>
+                </div>
+                <div class="member-info text-center">
+                  <h4>{{ tm.name }}</h4>
+                  <span class="">{{ tm.department }}</span>
+                  <p>{{ tm.user.email }}<br>phone: {{ tm.phone }}</p>
+                </div>
               </div>
-            </div>
-            <div class="member-info text-center">
-              <h4>{{ tm.name }}</h4>
-              <span class="">{{ tm.department }}</span>
-              <p>{{ tm.user.email }}<br>phone: {{ tm.phone }}</p>
-            </div>
-          </div>
+            {% endif %}
+          {% endfor %}
+          
+          <!-- Display Prajeesh V -->
+          {% for tm in team %}
+            {% if tm.name == "Prajeesh V" %}
+              <div class="col-lg-4 col-md-6 member" data-aos="fade-up">
+                <div class="member-img">
+                  <img src="{{ tm.profile_pic.url }}" class="img-fluid" alt="">
+                  <div class="social">
+                    <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                  </div>
+                </div>
+                <div class="member-info text-center">
+                  <h4>{{ tm.name }}</h4>
+                  <span class="">{{ tm.department }}</span>
+                  <p>{{ tm.user.email }}<br>phone: {{ tm.phone }}</p>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+    
+          <!-- Display Dhanalakshmi -->
+          {% for tm in team %}
+            {% if tm.name == "Dhanalakshmi" %}
+              <div class="col-lg-4 col-md-6 member" data-aos="fade-up">
+                <div class="member-img">
+                  <img src="{{ tm.profile_pic.url }}" class="img-fluid" alt="">
+                  <div class="social">
+                    <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a>
+                  </div>
+                </div>
+                <div class="member-info text-center">
+                  <h4>{{ tm.name }}</h4>
+                  <span class="">{{ tm.department }}</span>
+                  <p>{{ tm.user.email }}<br>phone: {{ tm.phone }}</p>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+    
+          <!-- Display Rest of the Team Members -->
+          {% for tm in team %}
+            {% if tm.name != "Jayadhas V" and tm.name != "Prajeesh V" and tm.name != "Dhanalakshmi" %}
+              <div class="col-lg-4 col-md-6 member" data-aos="fade-up">
+                <div class="member-img">
+                  <img src="{{ tm.profile_pic.url }}" class="img-fluid" alt="">
+                  <div class="social">
+                    {% comment %} <a href="#"><i class="bi bi-twitter"></i></a>
+                    <a href="#"><i class="bi bi-facebook"></i></a>
+                    <a href="#"><i class="bi bi-instagram"></i></a>
+                    <a href="#"><i class="bi bi-linkedin"></i></a> {% endcomment %}
+                  </div>
+                </div>
+                <div class="member-info text-center">
+                  <h4>{{ tm.name }}</h4>
+                  <span class="">{{ tm.department }}</span>
+                  <p>{{ tm.user.email }}<br>phone: {{ tm.phone }}</p>
+                </div>
+              </div>
+            {% endif %}
           {% endfor %}
         </div>
       </div>
