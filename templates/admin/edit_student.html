@@ -68,23 +68,10 @@
                      <div class="form-group">
                            <label>Branch</label>
                            <select class="form-control" name="branch_id">
-                              {% if student.branch_id %}
-                                  {% for branch in branches %}
-                                      {% if branch.id == student.branch_id %}
-                                          <option value="{{ branch.id }}" selected>{{ branch.branch_name }}</option>
-                                      {% endif %}
-                                  {% endfor %}
-                                  {% for branch in branches %}
-                                      {% if branch.id != student.branch_id %}
-                                          <option value="{{ branch.id }}">{{ branch.branch_name }}</option>
-                                      {% endif %}
-                                  {% endfor %}
-                              {% else %}
-                                  <option>Select Branch</option>
-                                  {% for branch in branches %}
-                                      <option value="{{ branch.id }}">{{ branch.branch_name }}</option>
-                                  {% endfor %}
-                              {% endif %}
+                              <option value= "{{branch.id}}">{{branch.branch_name}}</option>
+                              {% for branch in branches %}
+                                  <option value="{{ branch.id }}" {% if branch.id == student.branch_id %} selected {% endif %}>{{ branch.branch_name }}</option>
+                              {% endfor %}
                           </select>
                         </div>
                    </div>
@@ -92,25 +79,12 @@
                    <div class="form-group">
                          <label>Course</label>
                          <select class="form-control" name="course_id">
-                            {% if student.course_id %}
-                                {% for course in courses %}
-                                    {% if course.id == student.course_id %}
-                                        <option value="{{ course.id }}" selected>{{ course.name }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for course in courses %}
-                                    {% if course.id != student.course_id %}
-                                        <option value="{{ course.id }}">{{ course.name }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                <option>Select Course</option>
-                                {% for course in courses %}
-                                    <option value="{{ course.id }}">{{ course.name }}</option>
-                                {% endfor %}
-                            {% endif %}
-                        </select>
-                      </div>
+                           <option value="{{course.id}}">{{course.name}}</option>
+                           {% for course in courses %}
+                               <option value="{{ course.id }}">{{ course.name }}</option>
+                           {% endfor %}
+                         </select>
+                     </div>
                   </div>
                  <div class="col-12 col-sm-6">
                     <div class="form-group">

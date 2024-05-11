@@ -40,3 +40,5 @@ cloudinary==1.40.0
 pandas==2.2.2
 numpy==1.26.4
 django_check_seo==1.0.1
+django-cms
+openpyxl==3.1.2

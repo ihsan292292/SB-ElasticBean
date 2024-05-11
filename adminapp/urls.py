@@ -65,5 +65,11 @@ urlpatterns = [
     path('add-bgimage/',add_bg_image,name='add_bg_image'),
     path('title-change/',home_titles,name='home_titles'),
     path('delete-home-qoute/<int:id>',delete_home_qoute,name='delete_home_qoute'),
-    path('delete-bgimage/<int:id>',delete_bg_image,name='delete_bg_image')
+    path('delete-bgimage/<int:id>',delete_bg_image,name='delete_bg_image'),
+    
+    # enquiry
+    path('add-enquiry/',add_enquiry,name='enquiry'),
+    path('edit-enquiry/<int:id>',edit_enquiry,name='edit-enquiry'),
+    path('delete-enquiry/<int:id>',delete_enquiry,name='delete-enquiry'),
+    path('enquiry-admission/<int:id>',enq_to_admission,name='enq_to_admission')
 ] 

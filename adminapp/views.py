@@ -157,7 +157,7 @@ def student_admission(request):
             # Sending WhatsApp message
             client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
             message = client.messages.create(
-                from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
+                from_='whatsapp:+13612641426',  # Your Twilio WhatsApp number
                 body=f'Hi *{name}*,\n*Welcome to Skillboard Family*🎓!!\n\nHere is your enrolled course in detail\n\n*{student.course_id.name}*\nDuration : {student.course_id.duration}\nYou will Learn : {student.course_id.description}\n\n*Fee Details*\n\nTution Fee : ₹{student.course_id.fee}\nOther Fee : ₹{student.other_fee}\nFinal Fee to pay after scheme reduction :₹{student.final_fee}\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nHappy Learning ☺️📚📚!!\n\n*SKILLBOARD EDUCATION {student.branch_id.branch_name.upper()} 🎓*',
                 to=f'whatsapp:+91{phone}'  # Phone number of the student
             )
@@ -191,12 +191,16 @@ def edit_student(request,id):
     student = Student.objects.get(id=id)
     courses = Course.objects.all()
     branches = Branch.objects.all()
+    branch = student.branch_id
+    course = student.course_id
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
     context = {
         "student":student,
         "courses":courses,
         "branches":branches,
+        "branch":branch,
+        "course":course,
         "user":user
     }
     return render(request,'admin/edit_student.html',context)
@@ -947,3 +951,92 @@ def delete_home_qoute(request,id):
     home.delete()
     messages.success(request,'Qoute in Home deleted!!')
     return redirect('home_titles')
+
+# Enquiry
+
+@login_required
+def add_enquiry(request):
+    enq = Enquiry.objects.all()
+    course = Course.objects.all()
+    
+    if request.method == 'POST':
+        if 'enquiry_file' in request.FILES:  # Check if a file is uploaded
+            enquiry_file = request.FILES['enquiry_file']
+            if enquiry_file.name.endswith('.xlsx'):
+                try:
+                    df = pd.read_excel(enquiry_file,header=0)  # Read Excel file
+                    print("columns  :",df.columns)
+                    for index, row in df.iterrows():
+                        name = row['NAME']
+                        phone = row['PHONE']
+                        enquiry = Enquiry(name=name, phone=phone)
+                        enquiry.save()
+                    messages.success(request, 'Bulk Enquiries Successfully Added!')
+                    return redirect('enquiry')
+                except Exception as e:
+                    messages.error(request, f'Error processing file: {e}')
+                    return redirect('enquiry')
+            else:
+                messages.error(request, 'Please upload a valid Excel file.')
+                return redirect('enquiry')
+        
+        # Process single enquiry addition as before if no file uploaded
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        remarks = request.POST.get('remarks')
+        course_id = request.POST.get('course_id')
+        selected_course = Course.objects.get(id=course_id)
+        
+        enquiry = Enquiry(name=name, phone=phone, remarks=remarks, course=selected_course)
+        enquiry.save()
+        messages.success(request, 'Enquiry Added successfully!!')
+        return redirect('enquiry')
+
+    context = {
+        'enq': enq,
+        'course': course
+    }
+    
+    return render(request, 'staff/enquiry_form.html', context=context)
+
+@login_required
+def edit_enquiry(request,id):
+    courses = Course.objects.all()
+    enq = Enquiry.objects.get(id=id)
+    if request.method == 'POST':
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        remarks = request.POST.get('remarks')
+        course = request.POST.get('course_id')
+        selected_course = Course.objects.get(id=course)
+        
+        enq.name = name
+        enq.phone = phone
+        enq.remarks = remarks
+        enq.course = selected_course
+        enq.save()
+        messages.success(request,"Enquiry Updated Successfully!!")
+        return redirect('enquiry')
+    context = {
+        'enq':enq,
+        'courses':courses
+    }
+    return render(request,'staff/edit_enquiry.html',context=context)
+
+@login_required
+def delete_enquiry(request,id):
+    enq = Enquiry.objects.get(id=id)
+    enq.delete()
+    messages.success(request,'Enquiry Deleted!!')
+    return redirect('enquiry')
+
+
+@login_required
+def enq_to_admission(request,id):
+    enq = Enquiry.objects.get(id=id)
+    course = Course.objects.all()
+    context = {
+        'enq':enq,
+        'course':course
+    }
+    return render(request,'admin/student_admission.html',context=context)

@@ -9,8 +9,6 @@ class Course(models.Model):
     fee = models.IntegerField()
     photo = models.ImageField(upload_to='courses',null=True)
     description = models.TextField(null=True)
-    # created_at = models.DateTimeField(auto_now_add=True)
-    # updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
         return self.name
@@ -49,13 +47,13 @@ class Scheme(models.Model):
 class Student(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pic')
     name = models.CharField(max_length=50)
-    email = models.EmailField(max_length=254)
-    gaurd_name = models.CharField(max_length=50)
-    address = models.TextField()
+    email = models.EmailField(max_length=254,null=True)
+    gaurd_name = models.CharField(max_length=50,null=True)
+    address = models.TextField(null=True)
     gender = models.CharField(max_length=100)
     phone = models.CharField(max_length=50)
-    dob = models.DateField()
-    age = models.TextField(max_length=20)
+    dob = models.DateField(null=True)
+    age = models.TextField(max_length=20,null=True)
     other_fee = models.IntegerField(null=True)
     course_id = models.ForeignKey(Course,on_delete=models.DO_NOTHING)
     branch_id = models.ForeignKey(Branch,on_delete=models.DO_NOTHING)
@@ -99,4 +97,17 @@ class Staff(models.Model):
     
     def __str__(self):
         return self.name 
+    
+
+class Enquiry(models.Model):
+    name = models.CharField(max_length=30)
+    phone = models.CharField(max_length=20)
+    course = models.ForeignKey(Course,on_delete=models.CASCADE,null=True)
+    remarks = models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.name 
+    
     

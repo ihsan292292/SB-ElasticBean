@@ -25,6 +25,6 @@ urlpatterns = [
     path('',include('userapp.urls')),
     path('admin1/',include('adminapp.urls')),
     
-    path('django-seo-check/',include('django_check_seo.urls'))
+    path("django-check-seo/", include("django_check_seo.urls")),
 ]+ static(settings.MEDIA_URL,document_root= settings.MEDIA_ROOT)
 
