@@ -16,6 +16,8 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+
 
   <!-- Vendor CSS Files -->
   <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
@@ -90,43 +92,38 @@
 
     <!-- Stats About Section -->
     <section id="stats-about" class="stats-about section">
-
       <div class="container" data-aos="fade-up" data-aos-delay="100">
-
         <div class="row gy-4">
-
           <div class="col-lg-3 col-md-6">
-            <div class="stats-item text-center w-100 h-100">
+            <div class="stats-item text-center w-150 h-100">
               <span data-purecounter-start="0" data-purecounter-end="1000" data-purecounter-duration="1" class="purecounter"></span>
+              <i class="fas fa-plus" style="color: #4fa8d3;font-size: 20px;"></i>
               <p class="">Students</p>
             </div>
           </div><!-- End Stats Item -->
-
           <div class="col-lg-3 col-md-6">
-            <div class="stats-item text-center w-100 h-100">
-                <span data-purecounter-start="0" data-purecounter-end="{{ courses }}" data-purecounter-duration="1" class="purecounter"></span>
-                <p class="">Courses <i class="fas fa-plus">+</i></p>
+            <div class="stats-item text-center w-150 h-100">
+              <span data-purecounter-start="0" data-purecounter-end="{{ courses }}" data-purecounter-duration="1" class="purecounter"></span>
+              <i class="fas fa-plus" style="color: #4fa8d3;font-size: 20px;"></i>
+              <p class="">Courses</p>
             </div>
           </div><!-- End Stats Item -->
-
           <div class="col-lg-3 col-md-6">
             <div class="stats-item text-center w-100 h-100">
-              <span data-purecounter-start="0" data-purecounter-end="{{branches}}" data-purecounter-duration="1" class="purecounter"></span>
+              <span data-purecounter-start="0" data-purecounter-end="{{ branches }}" data-purecounter-duration="1" class="purecounter"></span>
+              <i class="fas fa-plus" style="color: #4fa8d3;font-size: 20px;"></i>
               <p class="">Branches</p>
             </div>
           </div><!-- End Stats Item -->
-
           <div class="col-lg-3 col-md-6">
             <div class="stats-item text-center w-100 h-100">
               <span data-purecounter-start="0" data-purecounter-end="20" data-purecounter-duration="1" class="purecounter"></span>
+              <i class="fas fa-plus" style="color: #4fa8d3;font-size: 20px;"></i>
               <p class="">Staffs</p>
             </div>
           </div><!-- End Stats Item -->
-
         </div>
-
       </div>
-
     </section><!-- /Trainers -->
 
     <section id="trainers" class="section trainers">
