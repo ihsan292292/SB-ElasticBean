@@ -15,6 +15,7 @@
         </div>
     </div>
     {% comment %} list {% endcomment %}
+    
     <div class="row">
         <div class="col-sm-12">
            <div class="card card-table">
@@ -61,6 +62,7 @@
      </div>
 
     <!-- Separate table for displaying total paid amount by branch -->
+    {% if user.is_authenticated and user.is_superuser %}
     <div class="row">
         <div class="col-sm-12">
            <div class="card card-table">
@@ -81,6 +83,7 @@
            </div>
         </div>
      </div>
+     {% endif %}
 </div>
 
 

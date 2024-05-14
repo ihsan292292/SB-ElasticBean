@@ -177,7 +177,12 @@ def student_admission(request):
 def view_student(request):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
-    student = Student.objects.all()
+    if user.is_superuser:
+        student = Student.objects.all()
+    else:
+        staff= Staff.objects.get(user = user.id)
+        staff_branch = staff.branch_id
+        student = Student.objects.filter(branch_id=staff_branch)
     
     context = {
         "student":student,
@@ -464,7 +469,17 @@ def view_reciept(request,id):
 def payed_list(request):
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
-    payments = Payment.objects.all()
+    if user.is_superuser:
+        payments = Payment.objects.all()
+    
+    else:
+        staff = Staff.objects.get(user=user)  # Assuming staff is related to the branch
+        staff_branch = staff.branch_id
+        # Filter students based on the staff's branch
+        students = Student.objects.filter(branch_id=staff_branch)
+
+        # Filter payments based on the students belonging to the staff's branch
+        payments = Payment.objects.filter(student__in=students)
     id = []
     student_id = []
     name = []
@@ -956,7 +971,7 @@ def delete_home_qoute(request,id):
 
 @login_required
 def add_enquiry(request):
-    enq = Enquiry.objects.all()
+    enq = Enquiry.objects.filter(created_by=request.user)
     course = Course.objects.all()
     
     if request.method == 'POST':
@@ -969,7 +984,7 @@ def add_enquiry(request):
                     for index, row in df.iterrows():
                         name = row['NAME']
                         phone = row['PHONE']
-                        enquiry = Enquiry(name=name, phone=phone)
+                        enquiry = Enquiry(name=name, phone=phone, created_by=request.user)
                         enquiry.save()
                     messages.success(request, 'Bulk Enquiries Successfully Added!')
                     return redirect('enquiry')

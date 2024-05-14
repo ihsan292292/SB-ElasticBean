@@ -148,7 +148,7 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql', 
-#         'NAME': 'sbdb',
+#         'NAME': 'sbdb1',
 #         'USER': 'psqlihsan',
 #         'PASSWORD': 'postgres',
 #         'HOST': 'localhost',
