@@ -560,10 +560,22 @@ def update_branch(request,id):
         insta = request.POST.get('insta')
         linkdn = request.POST.get('linkdn')
         photo = request.FILES.get('branch_photo')
-        branch = Branch(branch_name=name,branch_code=code,photo=photo,address1=address1,address2=address2,address3=address3,mail=mail,contact_no1=contact1,contact_no2=contact2,facebook=fb,instagram=insta,linkedin=linkdn)
+        
+        branch.branch_name=name
+        branch.branch_code=code
+        branch.photo=photo
+        branch.address1=address1
+        branch.address2=address2
+        branch.address3=address3
+        branch.mail=mail
+        branch.contact_no1=contact1
+        branch.contact_no2=contact2
+        branch.facebook=fb
+        branch.instagram=insta
+        branch.linkedin=linkdn
         branch.save()
         messages.success(request, "Branch Updated Successfully !!",{'user':request.session['user_id']})
-        return redirect('update_branch')
+        return redirect('add_branch')
     context = {
         'branch':branch,
         'user':user

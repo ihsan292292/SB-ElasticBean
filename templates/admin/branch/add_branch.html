@@ -129,7 +129,7 @@
                          <td>{{i.branch_name}}</td>
                          <td>{{i.branch_code}}</td>
                          <td>{% if i.address1 or i.address2 or i.address3 %}{{i.address1}},{{i.address2}},{{i.address3}}{% endif %}</td>
-                         <td>{% if i.contact1 or i.contact2 %}{{i.contact1}},{{i.contact2}}{% endif %}</td>
+                         <td>{% if i.contact_no1 or i.contact_no2 %}{{i.contact_no1}},{{i.contact_no1}}{% endif %}</td>
                          <td>{{ i.created_at|date:"F d, Y" }}</td>
                          <td>{{ i.updated_at|date:"F d, Y" }}</td>
                          <td>
