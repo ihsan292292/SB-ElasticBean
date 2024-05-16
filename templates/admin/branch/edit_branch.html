@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="row">
+    <div class="col-sm-12">
+       <div class="card">
+          <div class="card-body">
+             <form action="{% url 'update_branch' branch.id %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                   <div class="col-12">
+                      <h5 class="form-title"><span>Update Branch</span></h5>
+                   </div>
+                        {% include 'includes/messages.html' %}
+                        
+                   <div class="col-sm-11">
+                      <div class="form-group">
+                         <label>Branch Name</label>
+                         <input type="text" class="form-control" name="branch_name" value="{{branch.branch_name}}">
+                      </div>
+                   </div>
+                   <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Branch Code('PKD' for PANDIKKAD)</label>
+                        <input type="text" style="width:90px;" class="form-control" name="branch_code" value="{{branch.branch_code}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Address line 1</label>
+                        <input type="text" class="form-control" name="address1" value="{{branch.address1}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Address line 2</label>
+                        <input type="text" class="form-control" name="address2" value="{{branch.address2}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Address line 3</label>
+                        <input type="text" class="form-control" name="address3" value="{{branch.address3}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Contact number 1</label>
+                        <input type="text" class="form-control" name="contact1" value="{{branch.contact_no1}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Contact number 2</label>
+                        <input type="text" class="form-control" name="contact2" value="{{branch.contact_no2}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>mail</label>
+                        <input type="mail" class="form-control" name="mail" value="{{branch.mail}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>facebook</label>
+                        <input type="mail" class="form-control" name="fb" value="{{branch.facebook}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>instagram</label>
+                        <input type="mail" class="form-control" name="insta" value="{{branch.instagram}}">
+                     </div>
+                  </div>
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>linkedin</label>
+                        <input type="mail" class="form-control" name="linkdn" value="{{branch.linkedin}}">
+                     </div>
+                  </div>
+
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        <label>Gmap Embedded Link</label>
+                        <input type="text" class="form-control" name="gmap" value="{{branch.gmap}}">
+                     </div>
+                  </div>
+
+                  <div class="col-sm-11">
+                     <div class="form-group">
+                        {% if branch.photo %}
+                            <img src="{{ branch.photo.url }}" style="max-width: 100px;">
+                        {% else %}
+                            <p>No photo selected</p>
+                        {% endif %}
+                        <label>photo</label>
+                        <input type="file" class="form-control" name="branch_photo">
+                     </div>
+                  </div>
+                 <div class="col-12">
+                      <button type="submit" class="btn btn-primary">Update Branch</button>
+                   </div>
+             </form>
+          </div>
+       </div>
+    </div>
+ </div>
+
+{% endblock %}

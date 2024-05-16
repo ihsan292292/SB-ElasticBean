@@ -22,13 +22,15 @@ def INDEX(request):
     bgs = Bgimages.objects.all()
     home = Home.objects.all()
     testimonials = Testimonal.objects.all()
+    branches = Branch.objects.all()
     # home = Home.objects.get(id=1)
     context = {
         'courses':selected_courses,
         'staffs':staffs,
         'bgs':bgs,
         'home':home,
-        'testimonials':testimonials
+        'testimonials':testimonials,
+        'branches':branches
     }
 
     return render(request,'index.html',context=context)

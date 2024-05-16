@@ -33,6 +33,7 @@ urlpatterns = [
     
     # branch
     path('add-branch/',add_branch,name='add_branch'),
+    path('update-branch/<int:id>',update_branch,name='update_branch'),
     path('branch/delete/<str:id>',delete_branch,name='delete_branch'),
     
     # view_contacs

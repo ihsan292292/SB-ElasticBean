@@ -78,6 +78,7 @@ def home(request):
     pkd_students = Student.objects.filter(branch_id=1).count()
     pmna_students = Student.objects.filter(branch_id=2).count()
     student = Student.objects.all()
+    branch = Branch.objects.all()
 
     student_gender_male = Student.objects.filter(gender='Male').count()
     student_gender_female = Student.objects.filter(gender='Female').count()
@@ -170,7 +171,7 @@ def student_admission(request):
     else:
         # Handle other request methods (e.g., GET)
         # You might want to render a template or redirect to another URL
-        return render(request, 'admin/student_admission.html', {'course': course,'branches':branches,'schemes':schemes,'user':user})
+        return render(request, 'admin/student/student_admission.html', {'course': course,'branches':branches,'schemes':schemes,'user':user})
 
 
 @login_required    
@@ -188,7 +189,7 @@ def view_student(request):
         "student":student,
         "user":user
     }
-    return render(request,'admin/view_students.html',context)
+    return render(request,'admin/student/view_students.html',context)
 
 
 @login_required
@@ -208,7 +209,7 @@ def edit_student(request,id):
         "course":course,
         "user":user
     }
-    return render(request,'admin/edit_student.html',context)
+    return render(request,'admin/student/edit_student.html',context)
 
 
 @login_required
@@ -274,7 +275,7 @@ def update_student(request):
         messages.success(request,"Record Are Successfully Updated !")
         return redirect('view_student')
         
-    return render(request,'admin/edit_student.html')
+    return render(request,'admin/student/edit_student.html')
 
 
 @login_required
@@ -337,7 +338,7 @@ def add_course(request):
         messages.success(request, 'Course Successfully Created!')
         return redirect('add_course')
     
-    return render(request, 'admin/add_course.html', {'user': user})
+    return render(request, 'admin/course/add_course.html', {'user': user})
 
 
 @login_required
@@ -349,7 +350,7 @@ def view_course(request):
         'course':course,
         "user":user
     }
-    return render(request,'admin/view_course.html',context)
+    return render(request,'admin/course/view_course.html',context)
 
 
 @login_required
@@ -361,7 +362,7 @@ def edit_course(request,id):
         'course':course,
         "user":user
     }
-    return render(request,'admin/edit_course.html',context)
+    return render(request,'admin/course/edit_course.html',context)
 
 
 @login_required
@@ -383,7 +384,7 @@ def update_course(request):
        course.save()
        messages.success(request,'Course updated successfully !')
        return redirect('view_course')
-    return render(request,'admin/edit_course.html')
+    return render(request,'admin/course/edit_course.html')
 
 
 @login_required
@@ -446,7 +447,7 @@ def fee_payment(request,id):
         messages.success(request, "Payment Success !!")
         return redirect('fee_payment',id=student.id)
       
-    return render(request,'admin/fee_payment.html',context=context)
+    return render(request,'admin/payment/fee_payment.html',context=context)
 
 
 @login_required
@@ -507,7 +508,7 @@ def payed_list(request):
         'payments':payments,
         'user':user
     }
-    return render(request,'admin/payed_list.html',context=context)
+    return render(request,'admin/payment/payed_list.html',context=context)
 
 
 
@@ -520,7 +521,17 @@ def add_branch(request):
         name  = request.POST.get('branch_name')
         code = request.POST.get('branch_code')
         photo = request.FILES.get('branch_photo')
-        branch = Branch(branch_name=name,branch_code=code,photo=photo)
+        address1  = request.POST.get('address1')
+        address2 = request.POST.get('address2')
+        address3 = request.POST.get('address3')
+        contact1 = request.POST.get('contact1')
+        contact2 = request.POST.get('contact2')
+        mail = request.POST.get('mail')
+        fb = request.POST.get('fb')
+        insta = request.POST.get('insta')
+        linkdn = request.POST.get('linkdn')
+        photo = request.FILES.get('branch_photo')
+        branch = Branch(branch_name=name,branch_code=code,photo=photo,address1=address1,address2=address2,address3=address3,mail=mail,contact_no1=contact1,contact_no2=contact2,facebook=fb,instagram=insta,linkedin=linkdn)
         branch.save()
         messages.success(request, "Branch Added Successfully !!",{'user':request.session['user_id']})
         return redirect('add_branch')
@@ -528,7 +539,36 @@ def add_branch(request):
         'branches':branches,
         'user':user
     }
-    return render(request,'admin/add_branch.html',context=context)
+    return render(request,'admin/branch/add_branch.html',context=context)
+
+@login_required
+def update_branch(request,id):
+    branch = Branch.objects.get(id=id)
+    user_id = request.session['user_id']
+    user = User.objects.get(id=user_id)
+    if request.method == "POST":
+        name  = request.POST.get('branch_name')
+        code = request.POST.get('branch_code')
+        photo = request.FILES.get('branch_photo')
+        address1  = request.POST.get('address1')
+        address2 = request.POST.get('address2')
+        address3 = request.POST.get('address3')
+        contact1 = request.POST.get('contact1')
+        contact2 = request.POST.get('contact2')
+        mail = request.POST.get('mail')
+        fb = request.POST.get('fb')
+        insta = request.POST.get('insta')
+        linkdn = request.POST.get('linkdn')
+        photo = request.FILES.get('branch_photo')
+        branch = Branch(branch_name=name,branch_code=code,photo=photo,address1=address1,address2=address2,address3=address3,mail=mail,contact_no1=contact1,contact_no2=contact2,facebook=fb,instagram=insta,linkedin=linkdn)
+        branch.save()
+        messages.success(request, "Branch Updated Successfully !!",{'user':request.session['user_id']})
+        return redirect('update_branch')
+    context = {
+        'branch':branch,
+        'user':user
+    }
+    return render(request,'admin/branch/edit_branch.html',context=context)
 
 
 @login_required
@@ -850,7 +890,7 @@ def scheme(request):
         'user':user,
         'display_scheme':display_scheme
     }
-    return render(request,'admin/add_scheme.html',context=context)
+    return render(request,'admin/scheme/add_scheme.html',context=context)
 
 @login_required
 def delete_scheme(request,id):
@@ -1054,4 +1094,4 @@ def enq_to_admission(request,id):
         'enq':enq,
         'course':course
     }
-    return render(request,'admin/student_admission.html',context=context)
+    return render(request,'admin/student/student_admission.html',context=context)
