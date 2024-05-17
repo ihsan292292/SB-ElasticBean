@@ -57,6 +57,7 @@ urlpatterns = [
     
     # scheme
     path('scheme/',scheme,name='scheme'),
+    path('edit-scheme/<int:id>',edit_scheme, name="update_scheme"),
     path('delete-scheme/<int:id>',delete_scheme,name='delete_scheme'),
     
     # testimonals

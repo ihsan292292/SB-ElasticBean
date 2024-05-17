@@ -79,6 +79,13 @@ def home(request):
     pmna_students = Student.objects.filter(branch_id=2).count()
     student = Student.objects.all()
     branch = Branch.objects.all()
+    
+    # Fetching student count per branch for the bar chart
+    student_branch_counts = Student.objects.values('branch_id__branch_name').annotate(student_count=Count('id')).order_by('branch_id__branch_name')
+
+    branch_names = [item['branch_id__branch_name'] for item in student_branch_counts]
+    student_counts = [item['student_count'] for item in student_branch_counts]
+
 
     student_gender_male = Student.objects.filter(gender='Male').count()
     student_gender_female = Student.objects.filter(gender='Female').count()
@@ -86,13 +93,17 @@ def home(request):
     context = {
         'student_count': student_count,
         'course_count': course_count,
-        'subject_count': branch_count,
+        'branch_count': branch_count,
         'student_gender_male': student_gender_male,
         'student_gender_female': student_gender_female,
         'student': student,
         'pkd_students': pkd_students,
         'pmna_students': pmna_students,
-        'user': user
+        'user': user,
+        'branch':branch,
+        'branch_names':branch_names,
+        'student_counts':student_counts
+        
     }
     return render(request, 'admin/home.html', context=context)
 
@@ -531,7 +542,8 @@ def add_branch(request):
         insta = request.POST.get('insta')
         linkdn = request.POST.get('linkdn')
         photo = request.FILES.get('branch_photo')
-        branch = Branch(branch_name=name,branch_code=code,photo=photo,address1=address1,address2=address2,address3=address3,mail=mail,contact_no1=contact1,contact_no2=contact2,facebook=fb,instagram=insta,linkedin=linkdn)
+        gmap = request.POST.get('gmap')
+        branch = Branch(branch_name=name,branch_code=code,photo=photo,address1=address1,address2=address2,address3=address3,mail=mail,contact_no1=contact1,contact_no2=contact2,facebook=fb,instagram=insta,linkedin=linkdn,gmap=gmap)
         branch.save()
         messages.success(request, "Branch Added Successfully !!",{'user':request.session['user_id']})
         return redirect('add_branch')
@@ -555,6 +567,7 @@ def update_branch(request,id):
         address3 = request.POST.get('address3')
         contact1 = request.POST.get('contact1')
         contact2 = request.POST.get('contact2')
+        gmap = request.POST.get('gmap')
         mail = request.POST.get('mail')
         fb = request.POST.get('fb')
         insta = request.POST.get('insta')
@@ -573,6 +586,7 @@ def update_branch(request,id):
         branch.facebook=fb
         branch.instagram=insta
         branch.linkedin=linkdn
+        branch.gmap = gmap
         branch.save()
         messages.success(request, "Branch Updated Successfully !!",{'user':request.session['user_id']})
         return redirect('add_branch')
@@ -903,6 +917,28 @@ def scheme(request):
         'display_scheme':display_scheme
     }
     return render(request,'admin/scheme/add_scheme.html',context=context)
+
+@login_required
+def edit_scheme(request,id):
+    schemes = Scheme.objects.get(id=id)
+    user_id = request.session['user_id']
+    user = User.objects.get(id=user_id)
+    if request.method == "POST":
+        scheme_name  = request.POST.get('scheme_name')
+        scheme = request.POST.get('scheme')
+        photo = request.FILES.get('scheme_photo')
+        schemed = float(scheme)*(1/100)
+        schemes.name=scheme_name
+        schemes.scheme=schemed
+        schemes.photo=photo
+        schemes.save()
+        messages.success(request, "Scheme Updated Successfully !!",{'user':request.session['user_id']})
+        return redirect('scheme')
+    context = {
+        'schemes':schemes,
+        'user':user
+    }
+    return render(request,'admin/scheme/edit_scheme.html',context=context)
 
 @login_required
 def delete_scheme(request,id):

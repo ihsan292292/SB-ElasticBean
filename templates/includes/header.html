@@ -103,11 +103,10 @@
                 <div class="avatar avatar-sm">
                   <h6>{{user.username}}</h6>
                 </div>
-                <div class="user-text">
-                   <h6>{% if user.is_superuser %}Admin{% else %}Staff{%endif%}</h6>
+                <div>
+                   <p style="margin-left:80px;">{% if user.is_superuser %}Admin{% else %}Staff{%endif%}</p>
                 </div>
              </div>
-              {% comment %} <a class="dropdown-item" href="{% url 'profile'%}">My Profile Update</a> {% endcomment %}
              <a class="dropdown-item" href="{% url 'logout' %}">Logout</a> 
           </div>
        </li>
