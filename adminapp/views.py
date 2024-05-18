@@ -72,6 +72,7 @@ def home(request):
         return render(request, 'registration/login.html', {'error': 'User does not exist.'})
     
     # Proceed with other logic if the user is found
+    staff_count = Staff.objects.all().count()
     student_count = Student.objects.all().count()
     branch_count = Branch.objects.all().count()
     course_count = Course.objects.all().count()
@@ -94,6 +95,7 @@ def home(request):
         'student_count': student_count,
         'course_count': course_count,
         'branch_count': branch_count,
+        'subject_count':staff_count,
         'student_gender_male': student_gender_male,
         'student_gender_female': student_gender_female,
         'student': student,
@@ -951,6 +953,8 @@ def delete_scheme(request,id):
     
     return redirect('scheme')
 
+
+# testimonals
 @login_required
 def testimonals(request):
     tests = Testimonal.objects.all()
@@ -979,6 +983,8 @@ def delete_testimonal(request,id):
     messages.success(request,'testimonall Deleted !!')
     return redirect('test')
 
+
+# bg image
 
 @login_required
 def add_bg_image(request):
@@ -1054,6 +1060,32 @@ def delete_home_qoute(request,id):
     home.delete()
     messages.success(request,'Qoute in Home deleted!!')
     return redirect('home_titles')
+
+
+# Logos 
+
+@login_required
+def add_logo(request):
+    log = AffLogo.objects.all()
+    context = {
+        'log':log
+    }
+    if request.method == 'POST':
+        image = request.FILES.get('image')
+        logo = AffLogo(logo = image)
+        logo.save()
+        messages.success(request,"New logo added successfully!!")
+        return redirect('logo_index')
+    return render(request,'admin/home/logos.html',context=context)
+
+
+@login_required
+def delete_logo(request,id):
+    logo = AffLogo.objects.get(id = id)
+    logo.delete()
+    messages.success(request,'Logo deleted!!')
+    return redirect('logo_index')
+
 
 # Enquiry
 

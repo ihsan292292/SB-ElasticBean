@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="row">
+   <div class="col-sm-12">
+      <div class="card">
+         <div class="card-body">
+            <form action="{% url 'logo_index' %}" method="post" enctype="multipart/form-data">
+               {% csrf_token %}
+                  <div class="col-12">
+                     <h5 class="form-title"><span>Add Affiliated Logos</span></h5>
+                  </div>
+                       {% include 'includes/messages.html' %}
+                       
+                 <div class="col-sm-11">
+                    <div class="form-group">
+                       <label>Logo</label>
+                       <input type="file" class="form-control" name="image">
+                    </div>
+                 </div>
+                <div class="col-12">
+                     <button type="submit" class="btn btn-primary">Add Logo</button>
+                  </div>
+            </form>
+         </div>
+      </div>
+   </div>
+</div>
+
+ {% comment %} list {% endcomment %}
+ <div class="row">
+    <div class="col-sm-12">
+       <div class="card card-table">
+          <div class="card-body">
+             <div class="table-responsive">
+                <table class="table table-hover table-center mb-0 datatable" id="table_id">
+                   <thead>
+                      <tr>
+                         <th>ID</th>
+                         <th>Image</th>
+                         <th>Action</th>
+                      </tr>
+                   </thead>
+                   <tbody>
+                     {% for i in log %}
+                      <tr>
+                         <td>SB{{i.id}}</td>
+                         <td>
+                           {% if i.logo %}
+                           <img src="{{i.logo.url}}" width="100px" height="50px"></td>
+                           {% endif %}
+                         <td>
+                            <div class="actions">
+                            <a href="{% url 'delete_logo' i.id %}" class="btn btn-sm bg-danger-light" onclick="return confirm('Are you sure you want to delete this item?');">
+                            <i class="fas fa-trash"></i>
+                            </a>
+                         </div>
+                        </td>
+                      </tr>
+                      {% endfor %}
+                   </tbody>
+                </table>
+             </div>
+          </div>
+       </div>
+    </div>
+ </div>
+</div>
+
+{% endblock %}

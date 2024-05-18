@@ -27,9 +27,7 @@ urlpatterns = [
     # payment
     path('payment/<str:id>',fee_payment,name='fee_payment'),
     path('view-reciept/<int:id>',view_reciept,name="view_receipt"),
-    # path('pdf/<int:id>', generate_pdf, name='download_pdf'),
     path('payed-list/',payed_list,name='payed_list'),
-    # path('download_receipt/<int:payment_id>/', download_receipt, name='download_receipt'),
     
     # branch
     path('add-branch/',add_branch,name='add_branch'),
@@ -64,10 +62,13 @@ urlpatterns = [
     path('testimonals/',testimonals,name='test'),
     path('delete-testimonal/<int:id>',delete_testimonal,name='delete_testimonial'),
     
+    # home page
     path('add-bgimage/',add_bg_image,name='add_bg_image'),
+    path('delete-bgimage/<int:id>',delete_bg_image,name='delete_bg_image'),
     path('title-change/',home_titles,name='home_titles'),
     path('delete-home-qoute/<int:id>',delete_home_qoute,name='delete_home_qoute'),
-    path('delete-bgimage/<int:id>',delete_bg_image,name='delete_bg_image'),
+    path('add-logo/',add_logo,name='logo_index'),
+    path('delete-logo/<int:id>',delete_logo,name='delete_logo'),
     
     # enquiry
     path('add-enquiry/',add_enquiry,name='enquiry'),

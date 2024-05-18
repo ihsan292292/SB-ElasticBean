@@ -815,7 +815,6 @@ section,
   height: 500px;
 }
 
-
 .hero img {
   position: absolute;
   top: 0;
@@ -843,6 +842,7 @@ section,
 .hero .container {
   position: relative;
   z-index: 3;
+  text-align: center; /* Center text for better mobile layout */
 }
 
 .hero h2 {
@@ -875,13 +875,28 @@ section,
   border: 2px solid var(--accent-color);
 }
 
+/* Media Queries for Mobile Responsiveness */
 @media (max-width: 768px) {
+  .hero {
+    height: 228px; /* Allow height to adjust based on content */
+  }
+
   .hero h2 {
-    font-size: 32px;
+    font-size: 32px; /* Smaller font size for smaller screens */
   }
 
   .hero p {
-    font-size: 18px;
+    font-size: 18px; /* Smaller font size for smaller screens */
+  }
+
+  .hero .btn-get-started {
+    font-size: 14px;
+    padding: 6px 25px 8px 25px;
+    margin-top: 20px;
+  }
+
+  .hero img {
+    height: 500px; /* Ensure the image adjusts its height */
   }
 }
 

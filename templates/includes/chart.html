@@ -1,184 +1,140 @@
 <script>
-    $(document).ready(function() {
-
-        // Area chart
-
-            var options = {
-                series: [{{student_count}}, {{branch_count}}, {{course_count}}],
-                chart: {
-                width: 460,
-                type: 'pie',
-              },
-              labels: ['Student', 'Branch', 'Course'],
-              responsive: [{
-                breakpoint: 480,
-                options: {
+  $(document).ready(function() {
+      // Pie chart for All Data
+      var optionsAllDetails = {
+          series: [{{ student_count }}, {{ branch_count }}, {{ course_count }}],
+          chart: {
+              width: 460,
+              type: 'pie',
+          },
+          labels: ['Student', 'Branch', 'Course'],
+          responsive: [{
+              breakpoint: 480,
+              options: {
                   chart: {
-                    width: 200
+                      width: 200
                   },
                   legend: {
-                    position: 'bottom'
-                  }
-                }
-              }]
-              };
-      
-              var chart = new ApexCharts(document.querySelector("#all_details"), options);
-              chart.render();
-    
-        // Pie chart
-        
-        if ($('#stud_gender').length > 0) {
-        // Pie chart options
-            var pieOptions = {
-              series: [{{ student_count }}, {{ branch_count }}, {{ course_count }}],
-              chart: {
-                  width: 460,
-                  type: 'pie',
-              },
-              labels: ['Student', 'Branch', 'Course'],
-              responsive: [{
-                  breakpoint: 480,
-                  options: {
-                      chart: {
-                          width: 200
-                      },
-                      legend: {
-                          position: 'bottom'
-                      }
-                  }
-              }]
-          };
-
-          var pieChart = new ApexCharts(document.querySelector("#all_details"), pieOptions);
-          pieChart.render();
-
-          // Bar chart options
-          var barOptions = {
-              series: [{
-                  name: 'Students',
-                  data: {{ student_counts|safe }},
-              }],
-              chart: {
-                  height: 350,
-                  type: 'bar',
-              },
-              plotOptions: {
-                  bar: {
-                      horizontal: false,
-                      columnWidth: '55%',
-                      endingShape: 'rounded'
-                  },
-              },
-              dataLabels: {
-                  enabled: false
-              },
-              stroke: {
-                  show: true,
-                  width: 2,
-                  colors: ['transparent']
-              },
-              xaxis: {
-                  categories: {{ branch_names|safe }},
-              },
-              yaxis: {
-                  title: {
-                      text: 'Number of Students'
-                  }
-              },
-              fill: {
-                  opacity: 1
-              },
-              tooltip: {
-                  y: {
-                      formatter: function (val) {
-                          return val + " students"
-                      }
+                      position: 'bottom'
                   }
               }
-          };
+          }]
+      };
+      var chartAllDetails = new ApexCharts(document.querySelector("#all_details"), optionsAllDetails);
+      chartAllDetails.render();
 
-          var barChart = new ApexCharts(document.querySelector("#stud_gender"), barOptions);
-          barChart.render();
-    
-        }
-      
-        var chartBar = new ApexCharts(document.querySelector('#stud_gender'), optionsBar);
-        chartBar.render();
-        }
+      // Bar chart for Number of Students
+      var barOptions = {
+          series: [{
+              name: 'Students',
+              data: {{ student_counts|safe }},
+          }],
+          chart: {
+              height: 350,
+              type: 'bar',
+          },
+          plotOptions: {
+              bar: {
+                  horizontal: false,
+                  columnWidth: '55%',
+                  endingShape: 'rounded'
+              },
+          },
+          dataLabels: {
+              enabled: false
+          },
+          stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent']
+          },
+          xaxis: {
+              categories: {{ branch_names|safe }},
+          },
+          yaxis: {
+              title: {
+                  text: 'Number of Students'
+              }
+          },
+          fill: {
+              opacity: 1
+          },
+          tooltip: {
+              y: {
+                  formatter: function (val) {
+                      return val + " students"
+                  }
+              }
+          }
+      };
+      var barChart = new ApexCharts(document.querySelector("#stud_gender"), barOptions);
+      barChart.render();
 
-        // Student and Staff
-
-        var options = {
-            series: [{{student_count}},{{subject_count}}],
-            chart: {
-            type: 'donut',
-            height:350,
+      // Donut chart for Student and Staff
+      var optionsStudStaff = {
+          series: [{{ student_count }}, {{ subject_count }}],
+          chart: {
+              type: 'donut',
+              height: 350,
           },
           labels: ['Student', 'Staff'],
           responsive: [{
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 150
-              },
-              legend: {
-                position: 'bottom'
+              breakpoint: 480,
+              options: {
+                  chart: {
+                      width: 150
+                  },
+                  legend: {
+                      position: 'bottom'
+                  }
               }
-            }
           }]
-          };
-  
-          var chart = new ApexCharts(document.querySelector("#stud_staff"), options);
-          chart.render();
-          
-          // Course and Subject
+      };
+      var chartStudStaff = new ApexCharts(document.querySelector("#stud_staff"), optionsStudStaff);
+      chartStudStaff.render();
 
-          var options = {
-            series: [{{course_count}},{{subject_count}}],
-            chart: {
-            width: '100%',
-            height:350,
-            type: 'donut',
+      // Donut chart for Course and Subject
+      var optionsCourseSubject = {
+          series: [{{ course_count }}, {{ subject_count }}],
+          chart: {
+              width: '100%',
+              height: 350,
+              type: 'donut',
           },
-          labels: ['course','branch'],
+          labels: ['Course', 'Branch'],
           plotOptions: {
-            pie: {
-              startAngle: -90,
-              endAngle: 270
-            }
+              pie: {
+                  startAngle: -90,
+                  endAngle: 270
+              }
           },
           dataLabels: {
-            enabled: false
+              enabled: false
           },
           fill: {
-            type: 'gradient',
+              type: 'gradient',
           },
           legend: {
-            formatter: function(val, opts) {
-              return val + " - " + opts.w.globals.series[opts.seriesIndex]
-            }
+              formatter: function(val, opts) {
+                  return val + " - " + opts.w.globals.series[opts.seriesIndex]
+              }
           },
           title: {
-            text: 'Gradient Donut with custom Start-angle',
+              text: 'Gradient Donut with custom Start-angle',
           },
           responsive: [{
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200
-              },
-              legend: {
-                position: 'bottom'
+              breakpoint: 480,
+              options: {
+                  chart: {
+                      width: 200
+                  },
+                  legend: {
+                      position: 'bottom'
+                  }
               }
-            }
-          },]
-          };
-  
-          var chart = new ApexCharts(document.querySelector("#course_subject"), options);
-          chart.render();
-    });
-
-
-
+          }]
+      };
+      var chartCourseSubject = new ApexCharts(document.querySelector("#course_subject"), optionsCourseSubject);
+      chartCourseSubject.render();
+  });
 </script>

@@ -46,3 +46,6 @@ class Testimonal(models.Model):
     
     def __str__(self):
         return self.name
+    
+class AffLogo(models.Model):
+    logo = models.ImageField(upload_to='logos')

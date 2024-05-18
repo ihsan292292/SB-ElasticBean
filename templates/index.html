@@ -279,15 +279,13 @@
         <p class="">Affiliated to</p>
         <div class="container">
           <!-- Add img tags for logos -->
-          <center><img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1715681739/media/logos/qsmwa8yvshwzfsxtcocd.png" alt="Affiliated Logo 1" class="logo-img" style = "width:150px;">
-          <img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1715681206/media/logos/qlqriai7uslul8acr2wn.png" alt="Affiliated Logo 2" class="logo-img" style = "width:150px;">
-          <img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1715681206/media/logos/bgdych0oohiwqcfafgxa.png" alt="Affiliated Logo 1" class="logo-img" style = "width:150px;">
-          <img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1715681205/media/logos/jfekocsmoqh76pwuyqan.png" alt="Affiliated Logo 2" class="logo-img" style = "width:150px;">
-          <img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1715681204/media/logos/kzf9yelfqzdw4h0npno7.png" alt="Affiliated Logo 1" class="logo-img" style = "width:150px;">
-          <img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1715681204/media/logos/jugrc82idvcdyy8zvrcv.jpg" alt="Affiliated Logo 2" class="logo-img" style = "width:150px;">
-          <img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1715681203/media/logos/l44qge3sock0v7dbhls7.png" alt="Affiliated Logo 1" class="logo-img" style = "width:150px;">
-          <img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1715681203/media/logos/s4ovxypfc3xllzytmlmc.png" alt="Affiliated Logo 2" class="logo-img" style = "width:150px;">
-          <img src="https://res.cloudinary.com/dbcmhstkl/image/upload/v1715681203/media/logos/wquedtutjfah42ypjrw3.png" alt="Affiliated Logo 1" class="logo-img" style = "width:150px;"></center>
+          <center>
+            {% for i in logos%}
+            {% if i.logo %}
+            <img src="{{i.logo.url}}" alt="Affiliated Logo 1" class="logo-img" style = "width:150px;">
+            {% endif %}
+            {% endfor %}
+          </center>
           <!-- Add more img tags for additional logos as needed -->
         </div>
       </div>
