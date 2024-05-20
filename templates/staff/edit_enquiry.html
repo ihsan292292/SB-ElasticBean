@@ -7,37 +7,30 @@
           <div class="card-body">
             <form action="{% url 'edit-enquiry' enq.id %}" method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                   <div class="col-12">
-                      <h5 class="form-title"><span>Edit Enquiry</span></h5>
-                   </div>
-                        {% include 'includes/messages.html' %}
-                   
-                   <div class="col-12 col-sm-6">
-                      <div class="form-group">
-                         <label>Name</label>
-                         <input type="text" class="form-control" name="name" value="{{enq.name}}">
-                      </div>
-                   </div>
-                 <div class="col-12 col-sm-6">
+                <div class="col-12">
+                    <h5 class="form-title"><span>Edit Enquiry</span></h5>
+                </div>
+                {% include 'includes/messages.html' %}
+                
+                <div class="col-12 col-sm-6">
                     <div class="form-group">
-                       <label>Phone</label>
-                       <input type="text" class="form-control" name="phone" value="{{enq.phone}}">
+                        <label>Name</label>
+                        <input type="text" class="form-control" name="name" value="{{enq.name}}">
                     </div>
-                 </div>
-                 <div class="col-12 col-sm-6">
-                   <div class="form-group">
-                         <label>Course</label>
-                         <select class="form-control" name="course_id">
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="text" class="form-control" name="phone" value="{{enq.phone}}">
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6">
+                    <div class="form-group">
+                        <label>Course</label>
+                        <select class="form-control" name="course_id">
                             {% if enq.course %}
                                 {% for course in courses %}
-                                    {% if course.id == enq.course %}
-                                        <option value="{{ course.id }}" selected>{{ course.name }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for course in courses %}
-                                    {% if course.id != enq.course %}
-                                        <option value="{{ course.id }}">{{ course.name }}</option>
-                                    {% endif %}
+                                    <option value="{{ course.id }}" {% if course.id == enq.course.id %}selected{% endif %}>{{ course.name }}</option>
                                 {% endfor %}
                             {% else %}
                                 <option>Select Course</option>
@@ -46,21 +39,19 @@
                                 {% endfor %}
                             {% endif %}
                         </select>
-                      </div>
                     </div>
-                    <button src="#" class="btn btn-primary">Send Message</button>
-                   </div>                   
-                 </div>
-                 <div class="col-12 col-sm-6">
+                </div>
+                <div class="col-12 col-sm-6">
                     <div class="form-group">
-                       <label>Remarks</label>
-                       <textarea class="form-control" name="remarks" placeholder="{{enq.remarks}}">{{enq.remarks}}</textarea>
+                        <label>Remarks</label>
+                        <textarea class="form-control" name="remarks">{{enq.remarks}}</textarea>
                     </div>
-                 </div>
-                 
-                   <div class="col-12">
-                      <button type="submit" class="btn btn-primary">Update Enquiry</button>
-                   </div>
+                </div>
+                
+                <div class="col-12">
+                    <button type="submit" name="send_message" class="btn btn-primary">Send Message</button>
+                    <button type="submit" name="update_enquiry" class="btn btn-primary">Update Enquiry</button>
+                </div>
              </form>
           </div>
        </div>

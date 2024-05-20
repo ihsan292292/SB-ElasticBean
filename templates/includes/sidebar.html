@@ -3,12 +3,11 @@
 <div class="sidebar" id="sidebar">
     <div class="sidebar-inner slimscroll">
        <div id="sidebar-menu" class="sidebar-menu">
-         {% comment %} {%if user.user_type == '1'%} {% endcomment %}
           <ul>
              <li class="menu-title">
                 <span>Main Menu</span>
              </li>
-               <li class="{% active_link 'admin_home' 'active' %}">
+             <li class="{% active_link 'admin_home' 'active' %}">
                 <a href="{% url 'admin_home' %}"><i class="fas fa-holly-berry"></i> <span> Dashboard</span> </a>
              </li>
              
@@ -20,12 +19,16 @@
                    <li><a href="{% url 'payed_list' %}">Payed Students List</a></li>
                 </ul>
              </li>
-             <li class="submenu {% active_link 'enquiry' 'active' %} {% active_link 'enquiry' 'active' %}">
+
+             {% if user.is_staff and not user.is_superuser %}
+             <li class="submenu {% active_link 'enquiry' 'active' %}">
                <a href="#"><i class="fas fa-info-circle"></i> <span>Enquiry</span> <span class="menu-arrow"></span></a>
                <ul>
                   <li><a href="{% url 'enquiry' %}">Enquiry List and Add</a></li>
                </ul>
             </li>
+            {% endif %}
+
              {% if user.is_superuser %}
              <li class="submenu {% active_link 'view_staff' 'active' %} {% active_link 'add_staff' 'active' %}">
                <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Staff </span> <span class="menu-arrow"></span></a>
@@ -39,7 +42,6 @@
                 <ul>
                    <li><a href="{% url 'add_branch' %}">Branch list and edit</a></li>
                 </ul>
-                
              </li>
              <li class="submenu {% active_link 'scheme' 'active' %}">
                <a href="#"><i class="fas fa-envelope"></i> <span> Schemes </span> <span class="menu-arrow"></span></a>
@@ -81,96 +83,6 @@
                   </ul>
                </li>
                {% endif %}
-            {% comment %} <li class="submenu {% active_link 'view_subject' 'active' %} {% active_link 'add_subject' 'active' %}">
-                  <a href=""><i class="fas fa-book-reader"></i> <span>Subjects</span> <span class="menu-arrow"></span></a>
-                  <ul>
-                     <li><a href="">Subject List</a></li>
-                     <li><a href="">Add Subject</a></li>
-                  </ul>
-               </li>
-             </li>
-             <li class="submenu {% active_link 'add_session' 'active' %} {% active_link 'view_session' 'active' %}">
-               <a href=""><i class="fas fa-clock"></i> <span>Session</span> <span class="menu-arrow"></span></a>
-               <ul>
-                  <li><a href="">Add Session</a></li>
-                  <li><a href="">View Session</a></li>
-               </ul>
-            </li>
-             <li class="{% active_link 'staff_send_notification' 'active' %}">
-                <a href=""><i class="fa fa-bell"></i> <span>Send Staff Notification</span></a>
-             </li>
-             <li class="{% active_link 'student_send_notification' 'active' %}">
-                <a href="}"><i class="fa fa-bell "></i> <span>Send Student Notification</span></a>
-             </li>
-             <li class="{% active_link 'view_attendance' 'active' %}">
-                <a href=""><i class="fa fa-calendar"></i> <span>View Attendance</span></a>
-             </li>
-             <li class="{% active_link 'staff_feedback_replay' 'active' %}">
-                <a href=""><i class="fa fa-calendar"></i> <span>Staff feedback</span></a>
-             </li>
-             <li class="{% active_link 'student_feedback_replay' 'active' %}">
-                <a href=""><i class="fas fa-table"></i> <span>Student feedback</span></a>
-             </li>
-             <li class="{% active_link 'staff_leave_view' 'active' %}">
-               <a href=""><i class="fas fa-envelope"></i> <span>Staff leave</span></a>
-             </li>
-             <li class="{% active_link 'student_leave_view' 'active' %}">
-               <a href=""><i class="fas fa-envelope"></i> <span>Student leave</span></a>
-             </li> {% endcomment %}
-             
-          {% comment %} {% elif user.user_type == '2' %}
-          <ul>
-            <li class="menu-title">
-               <span>Main Menu</span>
-            </li>
-              <li class="{% active_link 'staff_home' 'active' %}">
-               <a href="\"><i class="fas fa-holly-berry"></i> <span> Dashboard</span> </a>
-            </li>
-            <li class="{% active_link 'staff_take_attendance' 'active' %}">
-               <a href=""><i class="fas fa-calendar"></i> <span>Take Attendance</span> </a>
-            </li>
-            <li class="{% active_link 'staff_view_attendance' 'active' %}">
-               <a href=""><i class="fas fa-calendar-alt"></i> <span>View/Update attendance</span> </a>
-            </li>
-            <li class="{% active_link 'staff_add_result' 'active' %}">
-               <a href=""><i class="fas fa-poll"></i> <span>Add Result</span> </a>
-            </li>
-            <li class="{% active_link 'staff_apply_leave' 'active' %}">
-               <a href=""><i class="fas fa-envelope-open"></i> <span>Apply for a leave</span> </a>
-            </li>
-            <li class="{% active_link 'staff_feedback' 'active' %}">
-               <a href=""><i class="fas fa-comment"></i> <span>Send Feedback</span> </a>
-            </li>
-            <li class="{% active_link 'notifications' 'active' %}">
-               <a href=""><i class="fas fa-bell"></i> <span>Notification</span> </a>
-            </li>
-         </ul>
-          {% else %}
-
-          <ul>
-            <li class="menu-title">
-               <span>Main Menu</span>
-            </li>
-              <li class="{% active_link 'student_home' 'active' %}">
-               <a href=""><i class="fas fa-holly-berry"></i> <span> Dashboard</span> </a>
-            </li>
-            <li class="{% active_link 'view_student_leave' 'active' %}">
-               <a href="" ><i class="fas fa-calendar"></i> <span>View Attendance</span></a>
-            </li>
-            <li class="{% active_link 'student_view_result' 'active' %}">
-               <a href="" ><i class="fas fa-calendar"></i><span>View Result</span></a>
-            </li>
-            <li class="{% active_link 'student_leave' 'active' %}">
-               <a href="" ><i class="fas fa-pray"></i><span>Applay For A leave</span></a>
-            </li>
-            <li class="{% active_link 'student_feedback' 'active' %}">
-               <a href="" ><i class="fas fa-comment"></i><span>Send Feedback</span></a>
-            </li>
-            <li class="{% active_link 'student_notification' 'active' %}">
-               <a href="" ><i class="fas fa-bell"></i><span>Notification</span></a>
-            </li>
-         </ul>
-          {% endif %} {% endcomment %}
        </div>
     </div>
  </div>

@@ -15,6 +15,8 @@ from django.template.loader import render_to_string
 from django.contrib.auth.hashers import check_password,make_password
 
 from twilio.rest import Client
+from twilio.base.exceptions import TwilioRestException
+
 import os
 from django.utils import timezone
 
@@ -1135,28 +1137,58 @@ def add_enquiry(request):
     return render(request, 'staff/enquiry_form.html', context=context)
 
 @login_required
-def edit_enquiry(request,id):
+def edit_enquiry(request, id):
     courses = Course.objects.all()
-    enq = Enquiry.objects.get(id=id)
+    enq = get_object_or_404(Enquiry, id=id)
+
     if request.method == 'POST':
         name = request.POST.get('name')
         phone = request.POST.get('phone')
         remarks = request.POST.get('remarks')
-        course = request.POST.get('course_id')
-        selected_course = Course.objects.get(id=course)
-        
+        course_id = request.POST.get('course_id')
+        selected_course = get_object_or_404(Course, id=course_id)
+
         enq.name = name
         enq.phone = phone
         enq.remarks = remarks
         enq.course = selected_course
-        enq.save()
-        messages.success(request,"Enquiry Updated Successfully!!")
-        return redirect('enquiry')
+
+        if 'update_enquiry' in request.POST:
+            enq.save()
+            messages.success(request, "Enquiry Updated Successfully!!")
+            return redirect('enquiry')
+
+        elif 'send_message' in request.POST:
+            try:
+                # Send course details to the phone number using Twilio
+                send_course_details(phone, selected_course,name)
+                messages.success(request, "Message sent successfully!")
+            except Exception as e:
+                messages.error(request, f"Failed to send message: {e}")
+            return redirect('edit-enquiry', id=id)
+
     context = {
-        'enq':enq,
-        'courses':courses
+        'enq': enq,
+        'courses': courses
     }
-    return render(request,'staff/edit_enquiry.html',context=context)
+    return render(request, 'staff/edit_enquiry.html', context=context)
+
+def send_course_details(phone, course,name):
+    account_sid = os.getenv('TWILIO_ACCOUNT_SID')
+    auth_token = os.getenv('TWILIO_AUTH_TOKEN')
+    client = Client(account_sid, auth_token)
+
+    try:
+        message = client.messages.create(
+            body=f"Hi *{name}*,\n\n*Greetings from Skillboard Education*\n\n\nHere is Your Course Details:\n\nCourse Name: *{course.name}*\n\nWe will cover: \n{course.description}\n\nDuration : {course.duration}\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nHappy Learning ☺️📚📚!!\n\n*SKILLBOARD EDUCATION* 🎓",
+            from_='whatsapp:+14155238886',  # Your Twilio number
+            to=f"whatsapp:+91{phone}"
+        )
+    except TwilioRestException as e:
+        raise Exception(f"Twilio error: {e.msg}")
+    except Exception as e:
+        raise Exception(f"Unexpected error: {str(e)}")
+    
 
 @login_required
 def delete_enquiry(request,id):
