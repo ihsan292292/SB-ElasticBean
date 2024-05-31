@@ -37,7 +37,11 @@ class About(models.Model):
 class Bgimages(models.Model):
     bgimage = models.ImageField(upload_to='Background')
     
-
+    
+class ImgGallary(models.Model):
+    image = models.ImageField(upload_to='ImageGallary')
+    
+    
 class Testimonal(models.Model):
     photo = models.ImageField(upload_to='testimonals')
     name = models.CharField(max_length=50)

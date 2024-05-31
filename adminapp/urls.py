@@ -11,11 +11,15 @@ urlpatterns = [
     path('',logout, name='logout'),
     
     path('admin/home',home,name='admin_home'),
+    
+    # student
     path('student-admission/',student_admission,name='student_admission'),
     path('view-students/',view_student,name='view_student'),
     path('edit-student/<int:id>',edit_student,name='edit_student'),
     path('update-student/',update_student,name='update_student'),
     path('delete-student/<int:admin>',delete_student,name='delete_student'),
+    path('student-certificate/<int:id>',view_certificate, name="student_certificate"),
+    
     
     # course
     path('add-course/',add_course,name='add_course'),

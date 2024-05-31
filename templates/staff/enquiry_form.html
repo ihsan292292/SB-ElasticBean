@@ -60,8 +60,7 @@
  {% comment %} list {% endcomment %}
 
 {% if enq %}
-{% for i in enq %}
-{% if i.created_by == user %}
+
 
  <div class="row">
     <div class="col-sm-12">
@@ -82,8 +81,8 @@
                       </tr>
                    </thead>
                    <tbody>
-                    {% if enq %}
                      {% for i in enq %}
+                     {% if i.created_by == user %}
                       <tr>
                          <td>SB{{i.id}}</td>
                          <td>{{i.name}}</td>
@@ -108,8 +107,9 @@
                          </div>
                         </td>
                       </tr>
-                      {% endfor %}
                       {% endif %}
+                      {% endfor %}
+                      
                    </tbody>
                 </table>
              </div>
@@ -119,8 +119,7 @@
  </div>
 </div>
 {% endif %}
-{% endfor %}
-{% endif %}
+
 
 
 {% endblock %}

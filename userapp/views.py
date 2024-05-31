@@ -103,3 +103,14 @@ def course(request):
         'about':about
     }
     return render(request,'courses.html',context=context)
+
+# certificate verification
+
+def certificate_issue(request):
+    if request.method == 'POST':
+        email = request.POST.get('email') 
+        if Student.objects.filter(email=email).exists():
+            student = Student.objects.get(email==email)
+        print("Email,,,,,,, : ",student.email)
+        return redirect('certificate_issue') 
+    return render (request,'certificate_issue.html')

@@ -226,7 +226,6 @@ def edit_student(request,id):
     }
     return render(request,'admin/student/edit_student.html',context)
 
-
 @login_required
 def update_student(request):
     if request.method == 'POST':
@@ -301,6 +300,14 @@ def delete_student(request,admin):
     messages.success(request,'Record are Successfully Deleted !')
     return redirect('view_student')
 
+
+@login_required
+def view_certificate(request,id):
+    student = Student.objects.get(id=id)
+    context = {
+        'student':student
+    }
+    return render(request,'admin/certificate/certificate_of_completion.html',context=context)
 
 # course
 @login_required
@@ -1065,7 +1072,6 @@ def delete_home_qoute(request,id):
 
 
 # Logos 
-
 @login_required
 def add_logo(request):
     log = AffLogo.objects.all()
@@ -1101,11 +1107,11 @@ def add_enquiry(request):
             enquiry_file = request.FILES['enquiry_file']
             if enquiry_file.name.endswith('.xlsx'):
                 try:
-                    df = pd.read_excel(enquiry_file,header=0)  # Read Excel file
-                    print("columns  :",df.columns)
+                    df = pd.read_excel(enquiry_file, header=0)  # Read Excel file
                     for index, row in df.iterrows():
                         name = row['NAME']
                         phone = row['PHONE']
+                        # Set the created_by field to the current user
                         enquiry = Enquiry(name=name, phone=phone, created_by=request.user)
                         enquiry.save()
                     messages.success(request, 'Bulk Enquiries Successfully Added!')
@@ -1124,7 +1130,8 @@ def add_enquiry(request):
         course_id = request.POST.get('course_id')
         selected_course = Course.objects.get(id=course_id)
         
-        enquiry = Enquiry(name=name, phone=phone, remarks=remarks, course=selected_course)
+        # Set the created_by field to the current user
+        enquiry = Enquiry(name=name, phone=phone, remarks=remarks, course=selected_course, created_by=request.user)
         enquiry.save()
         messages.success(request, 'Enquiry Added successfully!!')
         return redirect('enquiry')
