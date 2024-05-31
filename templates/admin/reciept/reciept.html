@@ -7,123 +7,225 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
 
 <style>
-    body{margin-top:20px;
-        background-color:#eee;
-        }
-        
-        .card {
-            box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
-        }
-        .card {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            min-width: 0;
-            word-wrap: break-word;
-            background-color: #fff;
-            background-clip: border-box;
-            border: 0 solid rgba(0,0,0,.125);
-            border-radius: 1rem;
-        }
+    body {
+        margin-top: 20px;
+        background-color: #eee;
+    }
+    
+    .card {
+        box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0, 0, 0, .125);
+        border-radius: 1rem;
+    }
+    
+    .invoice-title h4 {
+        color: #2c3e50;
+        font-weight: bold;
+    }
+    
+    .invoice-title h2 {
+        color: #2980b9;
+        font-weight: bold;
+    }
+    
+    .text-muted {
+        color: #7f8c8d !important;
+    }
+    
+    .text-muted h5 {
+        color: #2c3e50 !important;
+        font-weight: bold;
+    }
+    
+    .table thead th {
+        background-color: #2980b9;
+        color: #fff;
+        font-weight: bold;
+    }
+    
+    .table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    
+    .table tbody tr td {
+        color: #2c3e50;
+        font-weight: bold;
+    }
+    
+    .badge {
+        background-color: #27ae60;
+        color: #fff;
+        font-weight: bold;
+    }
 </style>
 
 <div id="content">
-<div class="container">
-<div class="row">
-        <div class="col-lg-12">
-            <div class="card">
-                <div class="card-body">
-                    <div class="invoice-title">
-                        <h4 class="float-end font-size-15">Invoice #SB{{payment.student.branch_id.branch_code}}{{payment.student.id}}{{payment.id}} <span class="badge bg-success font-size-12 ms-2">Paid</span></h4>
-                        <div class="mb-4">
-                           <h2 class="mb-1 text-muted">SKILL BOARD EDUCATION {{payment.student.branch_id.branch_name|upper}}</h2>
-                           <img src="{% static 'assets/img/LOGO.jpg' %}" alt="libpowertech" width="100" height="100">
-                        </div>
-                        <div class="text-muted">
-                            <p class="mb-1">{{payment.student.branch_id.address1}}</p>
-                            <p class="mb-1"><i class="uil uil-envelope-alt me-1"></i>{{payment.student.branch_id.address2}}, {{payment.student.branch_id.address3}}</p>
-                            <p><i class="uil uil-phone me-1"></i> {{payment.student.branch_id.contact_no1}}, {{payment.student.branch_id.contact_no2}}</p>
-                        </div>
-                    </div>
-
-                    <hr class="my-4">
-
-                    <div class="row">
-                        <div class="col-sm-6">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="invoice-title">
+                            <h4 class="float-end font-size-15">Invoice #SB{{payment.student.branch_id.branch_code}}{{payment.student.id}}{{payment.id}} <span class="badge bg-success font-size-12 ms-2">Paid</span></h4>
+                            <div class="mb-4">
+                               <h2 class="mb-1 text-muted">SKILL BOARD EDUCATION {{payment.student.branch_id.branch_name|upper}}</h2>
+                               <img src="{% static 'assets/img/LOGO.jpg' %}" alt="libpowertech" width="100" height="100">
+                            </div>
                             <div class="text-muted">
-                                <h5 class="font-size-16 mb-3">Billed To: {{payment.student.name}}</h5>
-                                <p class="mb-1">{{payment.student.address}}</p>
-                                <p class="mb-1">{{payment.student.email}}</p>
-                                <p>{{payment.student.phone}}</p>
+                                <p class="mb-1">{{payment.student.branch_id.address1}}</p>
+                                <p class="mb-1"><i class="uil uil-envelope-alt me-1"></i>{{payment.student.branch_id.address2}}, {{payment.student.branch_id.address3}}</p>
+                                <p><i class="uil uil-phone me-1"></i> {{payment.student.branch_id.contact_no1}}, {{payment.student.branch_id.contact_no2}}</p>
                             </div>
                         </div>
-                        <!-- end col -->
-                        <div class="col-sm-6">
-                            <div class="text-muted text-sm-end">
-                                <div>
-                                    <h5 class="font-size-15 mb-1">Register No:</h5>
-                                    <p>SB{{branch_code}}{{ student_id}}</p>
+
+                        <hr class="my-4">
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="text-muted">
+                                    <h5 class="font-size-16 mb-3">Billed To: {{payment.student.name}}</h5>
+                                    <p class="mb-1">{{payment.student.address}}</p>
+                                    <p class="mb-1">{{payment.student.email}}</p>
+                                    <p>{{payment.student.phone}}</p>
                                 </div>
-                                <div class="mt-4">
-                                    <h5 class="font-size-15 mb-1">Payed Date:</h5>
-                                    <p>{{ payment.created_at|date:"F d, Y" }}</p>
-                                </div>
-                                <div class="mt-4">
-                                    <h5 class="font-size-15 mb-1">Reciept No:</h5>
-                                    <p>SB{{payment.student.branch_id.branch_code}}{{payment.student.id}}{{payment.id}}</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-muted text-sm-end">
+                                    <div>
+                                        <h5 class="font-size-15 mb-1">Register No:</h5>
+                                        <p>SB{{payment.student.id|add:561488}}</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h5 class="font-size-15 mb-1">Payed Date:</h5>
+                                        <p>{{ payment.created_at|date:"F d, Y" }}</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <!-- end col -->
-                    </div>
-                    <!-- end row -->
+                        
+                        <div class="py-2">
+                            <h5 class="font-size-15">Order Summary</h5>
+                            <div class="table-responsive">
+                                <table class="table align-middle table-nowrap table-centered mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 70px;">No.</th>
+                                            <th>Fee</th>
+                                            <th>Amount</th>
+                                            <th>Way of Payment</th>
+                                            <th class="text-end" style="width: 120px;">Total</th>
+                                            <th class="text-end" style="width: 120px;">Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">01</th>
+                                            <td>
+                                                <div>
+                                                    <h5 class="text-truncate font-size-14 mb-1">Course Fee</h5>
+                                                    <p class="text-muted mb-0">Tution Fee</p>
+                                                </div>
+                                            </td>
+                                            <td>₹{{payment.amount}}</td>
+                                            <td>{{payment.pay_option}}</td>
+                                            <td class="text-end">₹ {{payment.amount}}</td>
+                                            <td class="text-end">₹ {{payment.student.final_fee}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     
-                    <div class="py-2">
-                        <h5 class="font-size-15">Order Summary</h5>
-
-                        <div class="table-responsive">
-                            <table class="table align-middle table-nowrap table-centered mb-0">
-                                <thead>
-                                    <tr>
-                                        <th style="width: 70px;">No.</th>
-                                        <th>Fee</th>
-                                        <th>Amount</th>
-                                        <th>Way of Payment</th>
-                                        <th class="text-end" style="width: 120px;">Total</th>
-                                        <th class="text-end" style="width: 120px;">Balance</th>
-                                    </tr>
-                                </thead><!-- end thead -->
-                                <tbody>
-
-                                    <tr>
-                                        <th scope="row">01</th>
-                                        <td>
-                                            <div>
-                                                <h5 class="text-truncate font-size-14 mb-1">Course Fee</h5>
-                                                <p class="text-muted mb-0">Tution Fee</p>
-                                            </div>
-                                        </td>
-                                        <td>₹{{payment.amount}}</td>
-                                        <td>{{payment.pay_option}}</td>
-                                        <td class="text-end">₹ {{payment.amount}}</td>
-                                        <td class="text-end">₹ {{payment.student.final_fee}}</td>
-                                    </tr>
-                                    <!-- end tr -->
-                                </tbody><!-- end tbody -->
-                            </table><!-- end table -->
-                        </div><!-- end table responsive -->
-                        <div class="d-print-none mt-4">
-                            <div class="float-end">
-                                <button class="btn btn-success me-1" onclick="printInvoice()"><i class="fa fa-print"></i></button>
+                    </div>
+                    <div class="card-body">
+                        <div class="invoice-title">
+                            <h4 class="float-end font-size-15">Invoice #SB{{payment.student.branch_id.branch_code}}{{payment.student.id}}{{payment.id}} <span class="badge bg-success font-size-12 ms-2">Paid</span></h4>
+                            <div class="mb-4">
+                               <h2 class="mb-1 text-muted">SKILL BOARD EDUCATION {{payment.student.branch_id.branch_name|upper}}</h2>
+                               <img src="{% static 'assets/img/LOGO.jpg' %}" alt="libpowertech" width="100" height="100">
+                            </div>
+                            <div class="text-muted">
+                                <p class="mb-1">{{payment.student.branch_id.address1}}</p>
+                                <p class="mb-1"><i class="uil uil-envelope-alt me-1"></i>{{payment.student.branch_id.address2}}, {{payment.student.branch_id.address3}}</p>
+                                <p><i class="uil uil-phone me-1"></i> {{payment.student.branch_id.contact_no1}}, {{payment.student.branch_id.contact_no2}}</p>
                             </div>
                         </div>
+
+                        <hr class="my-4">
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="text-muted">
+                                    <h5 class="font-size-16 mb-3">Billed To: {{payment.student.name}}</h5>
+                                    <p class="mb-1">{{payment.student.address}}</p>
+                                    <p class="mb-1">{{payment.student.email}}</p>
+                                    <p>{{payment.student.phone}}</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="text-muted text-sm-end">
+                                    <div>
+                                        <h5 class="font-size-15 mb-1">Register No:</h5>
+                                        <p>SB{{payment.student.id|add:561488}}</p>
+                                    </div>
+                                    <div class="mt-4">
+                                        <h5 class="font-size-15 mb-1">Payed Date:</h5>
+                                        <p>{{ payment.created_at|date:"F d, Y" }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="py-2">
+                            <h5 class="font-size-15">Order Summary</h5>
+                            <div class="table-responsive">
+                                <table class="table align-middle table-nowrap table-centered mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 70px;">No.</th>
+                                            <th>Fee</th>
+                                            <th>Amount</th>
+                                            <th>Way of Payment</th>
+                                            <th class="text-end" style="width: 120px;">Total</th>
+                                            <th class="text-end" style="width: 120px;">Balance</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <th scope="row">01</th>
+                                            <td>
+                                                <div>
+                                                    <h5 class="text-truncate font-size-14 mb-1">Course Fee</h5>
+                                                    <p class="text-muted mb-0">Tution Fee</p>
+                                                </div>
+                                            </td>
+                                            <td>₹{{payment.amount}}</td>
+                                            <td>{{payment.pay_option}}</td>
+                                            <td class="text-end">₹ {{payment.amount}}</td>
+                                            <td class="text-end">₹ {{payment.student.final_fee}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    
+                    </div>
+                </div>
+                <div class="d-print-none mt-4">
+                    <div class="float-end">
+                        <button class="btn btn-success me-1" onclick="printInvoice()"><i class="fa fa-print"></i></button>
                     </div>
                 </div>
             </div>
-        </div><!-- end col -->
+        </div>
     </div>
-</div>
-
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
@@ -131,11 +233,11 @@
     function printInvoice() {
         var printContents = document.querySelector('.container').innerHTML;
         var originalContents = document.body.innerHTML;
-    
+
         document.body.innerHTML = printContents;
-    
+
         window.print();
-    
+
         document.body.innerHTML = originalContents;
     }
 </script>

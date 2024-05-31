@@ -50,13 +50,13 @@
                       <tbody>
                         {% for i in student %}
                          <tr>
-                            <td>{{i.id}}</td>
+                           <td>{{ i.id|add:561488 }}</td>
                             <td>
                                <h2 class="table-avatar">
                                  {% if i.profile_pic %}
-                                  <a href="student-details.html" class="avatar avatar-sm mr-2"><img class="avatar-img rounded-circle" src="{{i.profile_pic.url}}"></a>
+                                  <img class="avatar-img rounded-circle" src="{{i.profile_pic.url}}">
                                  {% endif %}
-                                  <a href="student-details.html">{{i.name}}</a>
+                                  <a>{{i.name}}</a>
                                </h2>
                             </td>
                             <td>{{i.email}}</td>
