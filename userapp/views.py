@@ -24,6 +24,8 @@ def INDEX(request):
     testimonials = Testimonal.objects.all()
     branches = Branch.objects.all()
     logos = AffLogo.objects.all()
+    img_gallery = ImgGallary.objects.all()
+    
     # home = Home.objects.get(id=1)
     context = {
         'courses':selected_courses,
@@ -32,7 +34,8 @@ def INDEX(request):
         'home':home,
         'testimonials':testimonials,
         'branches':branches,
-        'logos':logos
+        'logos':logos,
+        'img_gallery':img_gallery
     }
 
     return render(request,'index.html',context=context)

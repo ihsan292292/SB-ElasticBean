@@ -9,6 +9,7 @@
   <meta content="" name="keywords">
 
   <!-- Favicons -->
+  <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
   <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
 
@@ -85,28 +86,12 @@
 
     <!-- Carousel Section -->
     <section id="carousel" class="carousel section">
-        <div class="container section-title" data-aos="fade-up">
-            <h2>Gallery</h2>
-            <p class="">Our Gallery</p>
-        </div>
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-            <div class="swiper-container">
-                <div class="swiper-wrapper">
-                    <!-- Add your images inside swiper-slide divs -->
-                    {% for image in gallery_images %}
-                    <div class="swiper-slide">
-                        <img src="{{ image.url }}" class="img-fluid" alt="Gallery Image">
-                    </div>
-                    {% endfor %}
-                </div>
-                <!-- Add Pagination -->
-                <div class="swiper-pagination"></div>
-                <!-- Add Navigation -->
-                <div class="swiper-button-next"></div>
-                <div class="swiper-button-prev"></div>
-            </div>
-        </div>
-    </section>
+      <div class="pic-ctn">
+        {% for i in img_gallery %}
+        <img src="{{i.image.url}}" alt="" class="pic" width="300px">
+        {% endfor %}
+      </div>
+  </section>
     <!-- /Carousel Section -->
 
     <!-- Courses Section -->
@@ -448,36 +433,7 @@
     });
   }
 </script>
-<script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
-<script>
-    var swiper = new Swiper('.swiper-container', {
-        loop: true,
-        speed: 600,
-        autoplay: {
-            delay: 5000,
-        },
-        slidesPerView: 'auto',
-        pagination: {
-            el: '.swiper-pagination',
-            type: 'bullets',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        breakpoints: {
-            320: {
-                slidesPerView: 1,
-                spaceBetween: 40,
-            },
-            1200: {
-                slidesPerView: 2,
-                spaceBetween: 20,
-            },
-        },
-    });
-</script>
+
   <style>
     .hidden {
       display: none;

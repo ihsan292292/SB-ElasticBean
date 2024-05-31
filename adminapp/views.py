@@ -1009,6 +1009,7 @@ def add_bg_image(request):
         return redirect('add_bg_image')
     return render(request,'admin/home/bg_image.html',context=context)
 
+
 @login_required
 def delete_bg_image(request,id):
     bg = Bgimages.objects.get(id = id)
@@ -1214,3 +1215,24 @@ def enq_to_admission(request,id):
         'course':course
     }
     return render(request,'admin/student/student_admission.html',context=context)
+
+@login_required
+def add_image_gallery(request):
+    imgs = ImgGallary.objects.all()
+    context = {
+        'imgs':imgs
+    }
+    if request.method == 'POST':
+        image = request.FILES.get('image')
+        bgimages = ImgGallary(image = image)
+        bgimages.save()
+        messages.success(request,"Image added successfully!!")
+        return redirect('img_gallery')
+    return render(request,'admin/home/image_gallery.html',context=context)
+
+@login_required
+def delete_image(request,id):
+    img = ImgGallary.objects.get(id = id)
+    img.delete()
+    messages.success(request,'Image Deleted !!')
+    return redirect('img_gallery')

@@ -78,5 +78,9 @@ urlpatterns = [
     path('add-enquiry/',add_enquiry,name='enquiry'),
     path('edit-enquiry/<int:id>',edit_enquiry,name='edit-enquiry'),
     path('delete-enquiry/<int:id>',delete_enquiry,name='delete-enquiry'),
-    path('enquiry-admission/<int:id>',enq_to_admission,name='enq_to_admission')
+    path('enquiry-admission/<int:id>',enq_to_admission,name='enq_to_admission'),
+    
+    # img gallery
+    path('img-gallary',add_image_gallery, name="img_gallery"),
+    path('delete-image/<int:id>',delete_image,name='delete_image')
 ] 

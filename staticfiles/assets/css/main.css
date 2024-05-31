@@ -812,7 +812,7 @@ section,
   overflow: hidden; /* Ensures video doesn't overflow */
   position: relative;
   overflow: hidden;
-  height: 500px;
+  height: 230px;
 }
 
 .hero img {
@@ -882,7 +882,7 @@ section,
   }
 
   .hero h2 {
-    font-size: 32px; /* Smaller font size for smaller screens */
+    font-size: 20px; /* Smaller font size for smaller screens */
   }
 
   .hero p {
