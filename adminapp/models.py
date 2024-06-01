@@ -84,6 +84,7 @@ class Payment(models.Model):
     amount = models.IntegerField()
     pay_option = models.CharField(max_length=50)
     phone_number = models.CharField(max_length=50,null=True)
+    is_admission_fee = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     
