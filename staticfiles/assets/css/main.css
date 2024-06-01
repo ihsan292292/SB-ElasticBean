@@ -894,10 +894,6 @@ section,
     padding: 6px 25px 8px 25px;
     margin-top: 20px;
   }
-
-  .hero img {
-    height: 500px; /* Ensure the image adjusts its height */
-  }
 }
 
 /*--------------------------------------------------------------
@@ -1552,6 +1548,20 @@ section,
   color: var(--accent-color);
 }
 
+/* Media Queries for Tablet */
+@media (max-width: 768px) {
+  .courses-list .course-item {
+    flex-basis: 50%; /* Two items per row */
+  }
+}
+
+/* Media Queries for Mobile Phones */
+@media (max-width: 576px) {
+  .courses-list .course-item {
+    flex-basis: 100%; /* One item per row */
+  }
+}
+
 /*--------------------------------------------------------------
 # Tabs Section
 --------------------------------------------------------------*/
@@ -1991,6 +2001,33 @@ section,
 /*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
-.starter-section {
-  /* Add your styles here */
+/* carousel */
+
+@media (max-width: 768px) {
+  .pic-ctn {
+    position: relative;
+    width: 100vw;
+    height: 300px;
+  }
+
+  .pic-ctn > img {
+    position: absolute;
+    top: 0;
+    left: calc(37% - 100px);
+    opacity: 0;
+    animation: display 10s infinite;
+  }
+
+  img:nth-child(2) {
+    animation-delay: 2s;
+  }
+  img:nth-child(3) {
+    animation-delay: 4s;
+  }
+  img:nth-child(4) {
+    animation-delay: 6s;
+  }
+  img:nth-child(5) {
+    animation-delay: 8s;
+  }
 }

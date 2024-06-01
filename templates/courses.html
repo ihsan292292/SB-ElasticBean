@@ -51,7 +51,7 @@
           <li><a href="{% url 'home' %}" class="">Home</a></li>
           <li><a href="{% url 'about' %}" >About</a></li>
           <li><a href="{% url 'course' %}" class="active">Courses</a></li>
-          <li><a href="{% url 'certificate_issue' %}">Certificate Issue</a></li>
+          <li><a href="{% url 'certificate_issue' %}">Track Student Details</a></li>
           <li><a href="{% url 'contact' %}">Contact</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -150,27 +150,36 @@
 
     <div class="container footer-top">
       <div class="row gy-4">
+        {% for branch in branches %}
         <div class="col-lg-4 col-md-6 footer-about">
-          <a href="index.html" class="logo d-flex align-items-center">
-            <span class="">Skill Board</span>
+          <a href="{% url 'home' %}" class="logo d-flex align-items-center">
+            <span class="">{{ branch.branch_name }}</span>
           </a>
           <div class="footer-contact pt-3">
-            <p>2nd Floor City Tower</p>
-            <p>Perinthalmanna Road</p>
-            <p>PANDIKKAD</p>
-            <p class="mt-3"><strong>Phone:</strong> <span>9846428151, 9562798151</span></p>
-            <p><strong>Email:</strong> <span>skillboardpandikkad@gmail.com</span></p>
+            <p>{{ branch.address1 }}</p>
+            <p>{{ branch.address2 }}</p>
+            <p>{{ branch.address3 }}</p>
+            <p class="mt-3"><strong>Phone:</strong> <span>{{ branch.contact_no1 }}, {{ branch.contact_no2 }}</span></p>
+            <p><strong>Email:</strong> <span>{{ branch.mail }}</span></p>
           </div>
           <div class="social-links d-flex mt-4">
-            <a href="https://www.instagram.com/skill_board_pandikkad/?hl=en"><i class="bi bi-instagram"></i></a>
+            {% if branch.instagram %}
+            <a href="{{ branch.instagram }}"><i class="bi bi-instagram"></i></a>
+            {% endif %}
+            {% if branch.facebook %}
+            <a href="{{ branch.facebook }}"><i class="bi bi-facebook"></i></a>
+            {% endif %}
+            {% if branch.linkedin %}
+            <a href="{{ branch.linkedin }}"><i class="bi bi-linkedin"></i></a>
+            {% endif %}
           </div>
         </div>
+        {% endfor %}
       </div>
     </div>
 
     <div class="container copyright text-center mt-4">
-      <p>© <span>Copyright</span> <strong class="px-1">SiteName</strong> <span>All Rights Reserved</span></p>
-      <div class="credits">
+      <p>© <span>Copyright</span> <strong class="px-1">skillboardedu.in</strong> <span>All Rights Reserved</span></p>
         <!-- All the links in the footer should remain intact. -->
         <!-- You can delete the links only if you've purchased the pro version. -->
         <!-- Licensing information: https://bootstrapmade.com/license/ -->

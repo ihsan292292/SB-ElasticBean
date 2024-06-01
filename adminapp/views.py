@@ -39,41 +39,28 @@ def custom_login(request):
         except User.DoesNotExist:
             return render(request, 'registration/login.html', {'error': 'User does not exist.'})
 
-        if not check_password(password, user.password):
-            print("pass1",password,"user.password",user.password)
-            return render(request, 'registration/login.html', {'error': 'Invalid password.'})
-
-        if not user.is_active:
-            return render(request, 'registration/login.html', {'error': 'User account is not active.'})
-
+        user = authenticate(request, username=user.username, password=password)
         if user is not None:
-            login(request, user)
-            request.session['user_id'] = user.id
-            print("pass1",password,"user.password",user.password)
-            return redirect('admin_home')
+            if user.is_active:
+                login(request, user)
+                return redirect('admin_home')  # Redirect to the home page
+            else:
+                return render(request, 'registration/login.html', {'error': 'User account is not active.'})
         else:
-            return render(request, 'registration/login.html', {'error': 'Unable to log in.'})
+            return render(request, 'registration/login.html', {'error': 'Invalid login credentials.'})
     else:
         return render(request, 'registration/login.html')
     
 
 def dologout(request):
     logout(request)
+    request.session.flush()  # Ensure the session is completely cleared
     return redirect('login') 
 
-
+@login_required
 def home(request):
-    try:
-        user_id = request.session['user_id']
-        user = User.objects.get(id=user_id)
-    except KeyError:
-        # User_id is not found in session
-        return render(request, 'registration/login.html', {'error': 'User ID not found in session. Please log in.'})
-    except User.DoesNotExist:
-        # User with the provided ID does not exist
-        return render(request, 'registration/login.html', {'error': 'User does not exist.'})
-    
-    # Proceed with other logic if the user is found
+    user = request.user  # Get the logged-in user
+
     staff_count = Staff.objects.all().count()
     student_count = Student.objects.all().count()
     branch_count = Branch.objects.all().count()
@@ -89,7 +76,6 @@ def home(request):
     branch_names = [item['branch_id__branch_name'] for item in student_branch_counts]
     student_counts = [item['student_count'] for item in student_branch_counts]
 
-
     student_gender_male = Student.objects.filter(gender='Male').count()
     student_gender_female = Student.objects.filter(gender='Female').count()
 
@@ -97,25 +83,23 @@ def home(request):
         'student_count': student_count,
         'course_count': course_count,
         'branch_count': branch_count,
-        'subject_count':staff_count,
+        'subject_count': staff_count,
         'student_gender_male': student_gender_male,
         'student_gender_female': student_gender_female,
         'student': student,
         'pkd_students': pkd_students,
         'pmna_students': pmna_students,
         'user': user,
-        'branch':branch,
-        'branch_names':branch_names,
-        'student_counts':student_counts
-        
+        'branch': branch,
+        'branch_names': branch_names,
+        'student_counts': student_counts
     }
     return render(request, 'admin/home.html', context=context)
 
 
 @login_required
 def student_admission(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     course = Course.objects.all()
     branches = Branch.objects.all()
     schemes = Scheme.objects.all()
@@ -191,8 +175,7 @@ def student_admission(request):
 
 @login_required    
 def view_student(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     if user.is_superuser:
         student = Student.objects.all()
     else:
@@ -214,8 +197,7 @@ def edit_student(request,id):
     branches = Branch.objects.all()
     branch = student.branch_id
     course = student.course_id
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     context = {
         "student":student,
         "courses":courses,
@@ -312,9 +294,9 @@ def view_certificate(request,id):
 # course
 @login_required
 def add_course(request):
-    user_id = request.session.get('user_id')
-    if user_id:
-        user = User.objects.get(id=user_id)
+    user = request.user
+    if user:
+        user = request.user
     else:
         user = None
     
@@ -365,8 +347,7 @@ def add_course(request):
 
 @login_required
 def view_course(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     course = Course.objects.all()
     context = {
         'course':course,
@@ -378,8 +359,7 @@ def view_course(request):
 @login_required
 def edit_course(request,id):
     course = Course.objects.get(id = id)
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     context = {
         'course':course,
         "user":user
@@ -425,8 +405,7 @@ def delete_course(request, id):
 
 @login_required
 def fee_payment(request,id):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     student = Student.objects.get(id=id)
     final_fee = student.final_fee
     payments = Payment.objects.filter(student=id)
@@ -474,8 +453,7 @@ def fee_payment(request,id):
 
 @login_required
 def view_reciept(request,id):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     payment = Payment.objects.get(id=id)
     student_id =payment.student.id
     branch_code = payment.student.branch_id.branch_code
@@ -490,8 +468,7 @@ def view_reciept(request,id):
 
 @login_required
 def payed_list(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     if user.is_superuser:
         payments = Payment.objects.all()
     
@@ -537,8 +514,7 @@ def payed_list(request):
 @login_required
 def add_branch(request):
     branches = Branch.objects.all()
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     if request.method == "POST":
         name  = request.POST.get('branch_name')
         code = request.POST.get('branch_code')
@@ -556,7 +532,7 @@ def add_branch(request):
         gmap = request.POST.get('gmap')
         branch = Branch(branch_name=name,branch_code=code,photo=photo,address1=address1,address2=address2,address3=address3,mail=mail,contact_no1=contact1,contact_no2=contact2,facebook=fb,instagram=insta,linkedin=linkdn,gmap=gmap)
         branch.save()
-        messages.success(request, "Branch Added Successfully !!",{'user':request.session['user_id']})
+        messages.success(request, "Branch Added Successfully !!",{'user':request.user})
         return redirect('add_branch')
     context = {
         'branches':branches,
@@ -567,8 +543,7 @@ def add_branch(request):
 @login_required
 def update_branch(request,id):
     branch = Branch.objects.get(id=id)
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     if request.method == "POST":
         name  = request.POST.get('branch_name')
         code = request.POST.get('branch_code')
@@ -599,7 +574,7 @@ def update_branch(request,id):
         branch.linkedin=linkdn
         branch.gmap = gmap
         branch.save()
-        messages.success(request, "Branch Updated Successfully !!",{'user':request.session['user_id']})
+        messages.success(request, "Branch Updated Successfully !!",{'user':request.user})
         return redirect('add_branch')
     context = {
         'branch':branch,
@@ -618,8 +593,7 @@ def delete_branch(request,id):
 
 @login_required
 def view_contacts(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     user_dtl = contacted_user.objects.all()
     context = {
         'user':user,
@@ -629,8 +603,7 @@ def view_contacts(request):
 
 @login_required
 def contact_followup(request,id):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     courses = Course.objects.all()
     cuser = contacted_user.objects.get(id=id)
     context = {
@@ -675,8 +648,7 @@ def delete_contact(request,id):
 # addstaff
 @login_required
 def add_staff(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     department = Department.objects.all()
     branches = Branch.objects.all()
     if request.method == 'POST':
@@ -748,8 +720,7 @@ def add_staff(request):
     
 @login_required
 def view_staff(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     staff = Staff.objects.all()
     
     context = {
@@ -761,9 +732,7 @@ def view_staff(request):
 
 @login_required
 def edit_staff(request,id):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
-    print("user  :",user_id)
+    user = request.user
     staff = Staff.objects.get(id=id)
     departments = Department.objects.all()
     branches = Branch.objects.all()
@@ -838,8 +807,7 @@ def delete_staff(request,admin):
 
 @login_required
 def add_department(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     if request.method == 'POST':
         department_name = request.POST.get('department_name')
         department = Department(
@@ -853,8 +821,7 @@ def add_department(request):
 
 @login_required
 def view_department(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     department = Department.objects.all()
     context = {
         'department':department,
@@ -865,8 +832,7 @@ def view_department(request):
 
 @login_required
 def edit_department(request,id):
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     department = Department.objects.get(id = id)
 
     context = {
@@ -901,8 +867,7 @@ def delete_department(request,id):
 @login_required
 def scheme(request):
     schemes = Scheme.objects.all()
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     scheme_id = []
     scheme_names = []
     scheme_amount = []
@@ -932,8 +897,7 @@ def scheme(request):
 @login_required
 def edit_scheme(request,id):
     schemes = Scheme.objects.get(id=id)
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     if request.method == "POST":
         scheme_name  = request.POST.get('scheme_name')
         scheme = request.POST.get('scheme')
@@ -967,8 +931,7 @@ def delete_scheme(request,id):
 @login_required
 def testimonals(request):
     tests = Testimonal.objects.all()
-    user_id = request.session['user_id']
-    user = User.objects.get(id=user_id)
+    user = request.user
     if request.method == "POST":
         name  = request.POST.get('name')
         designation = request.POST.get('designation')

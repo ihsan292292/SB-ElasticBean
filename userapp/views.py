@@ -43,8 +43,10 @@ def INDEX(request):
     
 def contact(request):
     courses = Course.objects.all()
+    branches = Branch.objects.all()
     context = {
-        'courses':courses
+        'courses':courses,
+        'branches':branches
     }
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -78,42 +80,51 @@ def about(request):
     students = Student.objects.all().count()
     staffs = Staff.objects.all().count()
     courses = Course.objects.all().count()
-    branches = Branch.objects.all().count()
+    branches = Branch.objects.all()
     testimonials = Testimonal.objects.all()
     about = About.objects.first()
     team = Staff.objects.all()
     context = {
-        'testimonials':testimonials,
-        'about':about,
-        'students':students,
-        'staffs':staffs,
-        'courses':courses,
-        'branches':branches,
-        'team':team
+        'testimonials': testimonials,
+        'about': about,
+        'students': students,
+        'staffs': staffs,
+        'courses': courses,
+        'branches': branches,
+        'team': team
     }
-    return render(request,'about.html',context=context)
+    return render(request, 'about.html', context=context)
 
 
 def course(request):
     about = Home.objects.all()
     courses = Course.objects.all()
+    branches = Branch.objects.all()
     pho = []
     for i in courses:
         pho.append(i.photo)
     print(pho)
     context = {
         'courses':courses,
-        'about':about
+        'about':about,
+        'branches':branches
     }
     return render(request,'courses.html',context=context)
 
 # certificate verification
 
 def certificate_issue(request):
+    context = {}
     if request.method == 'POST':
-        email = request.POST.get('email') 
-        if Student.objects.filter(email=email).exists():
-            student = Student.objects.get(email==email)
-        print("Email,,,,,,, : ",student.email)
-        return redirect('certificate_issue') 
-    return render (request,'certificate_issue.html')
+        phone = request.POST.get('phone')
+        if Student.objects.filter(phone=phone).exists():
+            student = Student.objects.get(phone=phone)
+            context['student'] = student
+        else:
+            context['error'] = "Student not found."
+    
+    # Add branch information to the context
+    branches = Branch.objects.all()
+    context['branches'] = branches
+    
+    return render(request, 'certificate_issue.html', context)
