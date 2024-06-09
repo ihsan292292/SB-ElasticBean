@@ -219,6 +219,7 @@ def update_student(request):
         address = request.POST.get('address')
         gender = request.POST.get('gender')
         course_id = request.POST.get('course_id')
+        branch_id = request.POST.get('branch_id')
         phone = request.POST.get('phone')
         
         course_completed = request.POST.get('course_completed')
@@ -252,6 +253,8 @@ def update_student(request):
             student.profile_pic = profile_pic
         course = Course.objects.get(id=course_id)
         student.course_id = course
+        branch = Branch.objects.get(id=branch_id)
+        student.branch_id = branch
         student.save()
         
         if student.examination_date:
