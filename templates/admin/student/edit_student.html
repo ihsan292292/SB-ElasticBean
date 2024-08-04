@@ -54,6 +54,18 @@
                   </div>
                  </div>
                  <div class="col-12 col-sm-6">
+                  <div class="form-group">
+                     <label>Education</label>
+                     <select class="form-control" name="education">
+                        <option>Select</option>
+                        <option value="ten" {% if student.education == 'ten' %} selected {% endif %}>10th</option>
+                        <option value="plustwo" {% if student.education == 'plustwo' %} selected {% endif %}>Plus Two</option>
+                        <option value="degree" {% if student.education == 'degree' %} selected {% endif %}>Degree</option>
+                        <option value="Othpgers" {% if student.education == 'pg' %} selected {% endif %}>PG</option>
+                     </select>
+                  </div>
+                 </div>
+                 <div class="col-12 col-sm-6">
                     <div class="form-group">
                        <label>Gender</label>
                        <select class="form-control" name="gender">

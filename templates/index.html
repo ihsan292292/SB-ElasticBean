@@ -191,55 +191,29 @@
     <!-- Testimonials Section -->
 
     <!-- Trainers Index Section -->
-    <section id="trainers-index" class="section trainers-index">
-        <div class="container section-title" data-aos="fade-up">
-            <h2>Our Team</h2>
-            <p class="">Our team</p>
-        </div>
-        <div class="container">
-            <div id="trainersRow" class="row trainers-row second-row">
-                {% for staff in staffs %}
-                {% if staff.name == "Jayadhas V" %}
-                <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up">
-                    <div class="member">
-                        <div class="member-content">
-                            <h4>{{ staff.name }}</h4>
-                            <span>{{ staff.department }}</span>
-                            <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
-                        </div>
-                    </div>
-                </div><!-- End Team Member -->
-                {% endif %}
-                {% endfor %}
-                {% for staff in staffs %}
-                {% if staff.name == "Prajeesh V" %}
-                <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up">
-                    <div class="member">
-                        <div class="member-content">
-                            <h4>{{ staff.name }}</h4>
-                            <span>{{ staff.department }}</span>
-                            <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
-                        </div>
-                    </div>
-                </div><!-- End Team Member -->
-                {% endif %}
-                {% endfor %}
-                {% for staff in staffs %}
-                {% if staff.name == "Dhanalakshmi" %}
-                <div class="col-lg-4 col-md-6 d-flex" data-aos="fade-up">
-                    <div class="member">
-                        <div class="member-content">
-                            <h4>{{ staff.name }}</h4>
-                            <span>{{ staff.department }}</span>
-                            <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
-                        </div>
-                    </div>
-                </div><!-- End Team Member -->
-                {% endif %}
-                {% endfor %}
-            </div>
-        </div>
-    </section>
+<section id="trainers-index" class="section trainers-index">
+  <div class="container section-title" data-aos="fade-up">
+      <h2>Our Team</h2>
+      <p class="">Our team</p>
+  </div>
+  <div class="container">
+      <div id="trainersRow" class="row trainers-row second-row">
+          {% for staff in staffs %}
+          <div class="col-lg-3 col-md-6 d-flex" data-aos="fade-up">
+              <div class="member">
+                  <div class="member-content">
+                      <img src="{{ staff.profile_pic.url }}" alt="{{ staff.name }}" class="img-fluid rounded-circle staff-photo">
+                      <h4>{{ staff.name }}</h4>
+                      <span>{{ staff.department }}</span>
+                      <p>{{ staff.user.email }}<br>phone: {{ staff.phone }}</p>
+                  </div>
+              </div>
+          </div><!-- End Team Member -->
+          {% endfor %}
+      </div>
+  </div>
+</section>
+<!-- /Trainers Index Section -->
     <!-- /Trainers Index Section -->
 
     <section id="affiliated" class="section affiliated">

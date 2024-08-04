@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,get_object_or_404
 from .models import *
 from django.contrib import messages
 from datetime import datetime
+from django.utils.dateparse import parse_date
 from userapp.models import *
 from django.http import HttpResponse
 
@@ -21,6 +22,8 @@ import os
 from django.utils import timezone
 
 import pandas as pd
+
+from django.core.exceptions import ValidationError
 
 # Create your views here.
 
@@ -113,6 +116,7 @@ def student_admission(request):
         email = request.POST.get('email')
         phone = request.POST.get('phone')
         address = request.POST.get('address')
+        education = request.POST.get('education')
         gender = request.POST.get('gender')
         other_fee = request.POST.get('other_fee', 0)
         course_id = request.POST.get('course_id')
@@ -140,6 +144,7 @@ def student_admission(request):
             email=email,
             gaurd_name=gaurd_name,
             address=address,
+            education=education,
             course_id=course,
             branch_id=branch,
             scheme_id=scheme,
@@ -207,7 +212,6 @@ def edit_student(request,id):
         "user":user
     }
     return render(request,'admin/student/edit_student.html',context)
-
 @login_required
 def update_student(request):
     if request.method == 'POST':
@@ -218,63 +222,94 @@ def update_student(request):
         email = request.POST.get('email')
         address = request.POST.get('address')
         gender = request.POST.get('gender')
+        education = request.POST.get('education')
         course_id = request.POST.get('course_id')
         branch_id = request.POST.get('branch_id')
         phone = request.POST.get('phone')
         
-        course_completed = request.POST.get('course_completed')
-        certificate_issued = request.POST.get('certificate_issued')
+        course_completed = request.POST.get('course_completed') == 'on'
+        certificate_issued = request.POST.get('certificate_issued') == 'on'
         examination_date = request.POST.get('examination_date')
         
-        if course_completed == 'on':
-            course_completed = True
-        else:
-            course_completed = False
-            
-        if certificate_issued == 'on':
-            certificate_issued = True
-        else:
-            certificate_issued = False
-
-
-        student = Student.objects.get(id = student_id)
-        student.name = name
-        student.gaurd_name = gaurd_name
-        student.email = email
-        student.address = address
-        student.gender = gender
-        student.phone = phone
+        if examination_date:
+            try:
+                examination_date = parse_date(examination_date)
+                if not examination_date:
+                    raise ValidationError("Invalid date format. It must be in YYYY-MM-DD format.")
+            except ValidationError as e:
+                messages.error(request, e.message)
+                return redirect('edit_student', student_id=student_id)
         
-        student.course_completed = course_completed
-        student.certificate_issued = certificate_issued
-        student.examination_date = examination_date
-
+        student = Student.objects.get(id=student_id)
+        
+        fields_updated = False
+        
+        if name and student.name != name:
+            student.name = name
+            fields_updated = True
+        if gaurd_name and student.gaurd_name != gaurd_name:
+            student.gaurd_name = gaurd_name
+            fields_updated = True
+        if email and student.email != email:
+            student.email = email
+            fields_updated = True
+        if address and student.address != address:
+            student.address = address
+            fields_updated = True
+        if gender and student.gender != gender:
+            student.gender = gender
+            fields_updated = True
+        if education and student.education != education:
+            student.education = education
+            fields_updated = True
+        if phone and student.phone != phone:
+            student.phone = phone
+            fields_updated = True
+        if student.course_completed != course_completed:
+            student.course_completed = course_completed
+            fields_updated = True
+        if student.certificate_issued != certificate_issued:
+            student.certificate_issued = certificate_issued
+            fields_updated = True
+        if examination_date and student.examination_date != examination_date:
+            student.examination_date = examination_date
+            fields_updated = True
         if profile_pic:
             student.profile_pic = profile_pic
-        course = Course.objects.get(id=course_id)
-        student.course_id = course
-        branch = Branch.objects.get(id=branch_id)
-        student.branch_id = branch
-        student.save()
+            fields_updated = True
         
-        if student.examination_date:
-            try:
-                # Sending WhatsApp message
-                client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
+        course = Course.objects.get(id=course_id)
+        if student.course_id != course:
+            student.course_id = course
+            fields_updated = True
+        branch = Branch.objects.get(id=branch_id)
+        if student.branch_id != branch:
+            student.branch_id = branch
+            fields_updated = True
+        
+        if fields_updated:
+            student.save()
             
-                message = client.messages.create(
-                    from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
-                    body = f'Hi *{name}*,\nYour Exams for {student.course_id.name} is Scheduled on\n\n*{student.examination_date}*\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nBe prepared, All the best! 🌟*\n\n*SKILLBOARD EDUCATION {student.branch_id.branch_name.upper()} 🎓*',
-                    to=f'whatsapp:+91{phone}'  # Phone number of the student
-                )
-                print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging
-            except Exception as e:
-                print("Error sending WhatsApp message:", e)
+            if examination_date:
+                try:
+                    # Sending WhatsApp message
+                    client = Client(os.getenv('TWILIO_ACCOUNT_SID'), os.getenv('TWILIO_AUTH_TOKEN'))
+                    message = client.messages.create(
+                        from_='whatsapp:+14155238886',  # Your Twilio WhatsApp number
+                        body=f'Hi *{name}*,\nYour Exams for {student.course_id.name} is Scheduled on\n\n*{student.examination_date}*\n\nIf You Have any Query\nfeel free to contact :+91 6238 627 545 \n\nBe prepared, All the best! 🌟*\n\n*SKILLBOARD EDUCATION {student.branch_id.branch_name.upper()} 🎓*',
+                        to=f'whatsapp:+91{phone}'  # Phone number of the student
+                    )
+                    print("WhatsApp message SID:", message.sid)  # Log the message SID for debugging
+                except Exception as e:
+                    print("Error sending WhatsApp message:", e)
             
-        messages.success(request,"Record Are Successfully Updated !")
+            messages.success(request, "Record Are Successfully Updated!")
+        else:
+            print("nothing updated")
+        
         return redirect('view_student')
         
-    return render(request,'admin/student/edit_student.html')
+    return render(request, 'admin/student/edit_student.html')
 
 
 @login_required
