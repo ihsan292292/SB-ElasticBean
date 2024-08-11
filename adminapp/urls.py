@@ -82,5 +82,9 @@ urlpatterns = [
     
     # img gallery
     path('img-gallary',add_image_gallery, name="img_gallery"),
-    path('delete-image/<int:id>',delete_image,name='delete_image')
+    path('delete-image/<int:id>',delete_image,name='delete_image'),
+
+    #placements
+    path('placements',placement, name="placement"),
+    path('placement-delete/<int:id>',delete_placement, name="placement-delete")
 ] 

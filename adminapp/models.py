@@ -125,4 +125,15 @@ class Enquiry(models.Model):
     def __str__(self):
         return self.name 
     
+class Placement(models.Model):
+    company_name = models.CharField(max_length=50)
+    place =  models.CharField(max_length=50)
+    position =  models.CharField(max_length=50)
+    description =  models.TextField(null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.company_name 
+    
     

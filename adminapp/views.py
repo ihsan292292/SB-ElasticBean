@@ -923,7 +923,7 @@ def scheme(request):
         schemed = float(scheme)*(1/100)
         schem = Scheme(name=scheme_name,scheme=schemed,photo=photo)
         schem.save()
-        messages.success(request, "Scheme Added Successfully !!",{'user':request.session['user_id']})
+        messages.success(request, "Scheme Added Successfully !!",{'user':user})
         return redirect('scheme')
     context = {
         'schemes':schemes,
@@ -945,7 +945,7 @@ def edit_scheme(request,id):
         schemes.scheme=schemed
         schemes.photo=photo
         schemes.save()
-        messages.success(request, "Scheme Updated Successfully !!",{'user':request.session['user_id']})
+        messages.success(request, "Scheme Updated Successfully !!",{'user':user})
         return redirect('scheme')
     context = {
         'schemes':schemes,
@@ -1237,3 +1237,51 @@ def delete_image(request,id):
     img.delete()
     messages.success(request,'Image Deleted !!')
     return redirect('img_gallery')
+
+####################### placements ###########
+# scheme
+@login_required
+def placement(request):
+    placement = Placement.objects.all()
+    user = request.user
+    p_id = []
+    company_name = []
+    place = []
+    position = []
+    description = []
+    placement_created = []
+    for i in placement:
+        p_id.append(i.id)
+        company_name.append(i.company_name)
+        place.append(i.place)
+        position.append(i.position)
+        description.append(i.description)
+        placement_created.append(i.created_at)
+    display_placement = zip(p_id,company_name,place,position,description,placement_created)
+    if request.method == "POST":
+        company_name  = request.POST.get('company_name')
+        place = request.POST.get('place')
+        position  = request.POST.get('position')
+        description = request.POST.get('description')
+        placement = Placement(company_name=company_name,place=place,position=position,description=description)
+        placement.save()
+        messages.success(request, "Vacancy Added Successfully !!",{'user':user})
+        return redirect('placement')
+    context = {
+        'placements':placement,
+        'user':user,
+        'display_placement':display_placement
+    }
+    return render(request,'admin/placements/add_placements.html',context=context)
+
+
+@login_required
+def delete_placement(request,id):
+    try:
+        placement = Placement.objects.get(id = id)
+        placement.delete()
+        messages.success(request,'Vacancy Deleted !!')
+    except Exception:
+        messages.error(request,'You Cant Delete this scheme because this scheme is used by students, please add new scheme and change scheme in student edit section!!')
+    
+    return redirect('placement')

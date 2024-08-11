@@ -72,6 +72,7 @@
                   </ul>
                </li>
                
+               
                {% if user.is_superuser %}
                <li class="submenu {% active_link 'test' 'active' %}">
                   <a href="#"><i class="fas fa-home"></i> <span>Home Page </span> <span class="menu-arrow"></span></a>
@@ -81,6 +82,12 @@
                      <li><a href="{% url 'home_titles' %}">Home Titles</a></li>
                      <li><a href="{% url 'logo_index' %}">Affiliated Logos</a></li>
                      <li><a href="{% url 'img_gallery' %}">Image Gallery</a></li>
+                  </ul>
+               </li>
+               <li class="submenu {% active_link 'placement' 'active' %}">
+                  <a href="#"><i class="fas fa-chalkboard-teacher"></i> <span> Placements </span> <span class="menu-arrow"></span></a>
+                  <ul>
+                     <li><a href="{% url 'placement' %}">Add and View Vacancies</a></li>
                   </ul>
                </li>
                {% endif %}
