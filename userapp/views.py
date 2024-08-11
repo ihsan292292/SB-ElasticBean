@@ -128,3 +128,10 @@ def certificate_issue(request):
     context['branches'] = branches
     
     return render(request, 'certificate_issue.html', context)
+
+def vacancies(request):
+    placements = Placement.objects.all()
+    context = {
+        "placements":placements
+    }
+    return render(request,"placements.html",context)
